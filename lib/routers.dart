@@ -1,0 +1,17 @@
+const String splashscreen = '/';
+const String signinpage = '/Signin';
+const String register = '/Register';
+const String homepage = '/Homepage';
+const String mysavedarticles = '/Mysavedarticles';
+const String termandcondition = '/Termandcondition';
+const String privacypolicy = '/Privacypolicy';
+const String quizes = '/Quizes';
+const String allquizpage = '/Allquizpage';
+const String quizalreadytaken = '/Quizalreadytaken';
+const String profilepage = '/Profilepage';
+const String myinterest = '/Myinterest';
+const String localsigninpage = '/Localsigninpage';
+const String selectyourintrest = '/Selectyourintrest';
+const String articledetailpage = '/Articledetailpage';
+const String funandgamespage = '/Funandgamespage';
+const String poles = '/Poles';

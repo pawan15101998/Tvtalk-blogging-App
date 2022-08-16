@@ -1,0 +1,25 @@
+<svg id="icon_myfeed" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_119" data-name="Rectangle 119" width="24" height="24" transform="translate(4570 5003)" fill="#949494"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <rect id="Rectangle_121" data-name="Rectangle 121" width="12" height="12" transform="translate(-3483 3133.752)" fill="none" stroke="#000" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_42" data-name="Mask Group 42" transform="translate(-4570 -5003)" clip-path="url(#clip-path)">
+    <g id="Path_124" data-name="Path 124" transform="translate(4572 5003)" fill="none">
+      <path d="M4,0H16a4,4,0,0,1,4,4V20a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z" stroke="none"/>
+      <path d="M 4 2 C 2.897199630737305 2 2 2.897199630737305 2 4 L 2 20 C 2 21.1028003692627 2.897199630737305 22 4 22 L 16 22 C 17.1028003692627 22 18 21.1028003692627 18 20 L 18 4 C 18 2.897199630737305 17.1028003692627 2 16 2 L 4 2 M 4 0 L 16 0 C 18.20914077758789 0 20 1.790859222412109 20 4 L 20 20 C 20 22.20914077758789 18.20914077758789 24 16 24 L 4 24 C 1.790859222412109 24 0 22.20914077758789 0 20 L 0 4 C 0 1.790859222412109 1.790859222412109 0 4 0 Z" stroke="none" fill="#000"/>
+    </g>
+    <path id="Path_121" data-name="Path 121" d="M4574.149,5019.141h10" transform="translate(2.852 -10.522)" fill="none" stroke="#000" stroke-width="2"/>
+    <path id="Path_122" data-name="Path 122" d="M4574.149,5019.141h10" transform="translate(2.852 -6.467)" fill="none" stroke="#000" stroke-width="2"/>
+    <g id="Mask_Group_43" data-name="Mask Group 43" transform="translate(8059 1880.248)" clip-path="url(#clip-path-2)">
+      <g id="Rectangle_120" data-name="Rectangle 120" transform="translate(-3481.909 3141.388)" fill="none" stroke="#000" stroke-width="2">
+        <rect width="9.818" height="8.727" rx="4.364" stroke="none"/>
+        <rect x="1" y="1" width="7.818" height="6.727" rx="3.364" fill="none"/>
+      </g>
+      <circle id="Ellipse_26" data-name="Ellipse 26" cx="2" cy="2" r="2" transform="translate(-3479 3135.952)"/>
+    </g>
+  </g>
+</svg>

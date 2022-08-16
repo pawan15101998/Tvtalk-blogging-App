@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1075547711031",
+    "project_id": "tvtalk-2df95",
+    "storage_bucket": "tvtalk-2df95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075547711031:android:8898626c5ebf150197c1b2",
+        "android_client_info": {
+          "package_name": "com.example.tvtalk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075547711031-jmfahc282bfc96d4djoaplpn5otap07s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAX9enYyivKZBqzZs3M1aPJ_XFHxjVQero"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075547711031-jmfahc282bfc96d4djoaplpn5otap07s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

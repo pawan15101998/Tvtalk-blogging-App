@@ -1,0 +1,227 @@
+name: tvtalk
+description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  animated_bottom_navigation_bar: ^1.0.1
+  another_flushbar: ^1.10.29
+  carousel_slider: ^4.1.1
+  cupertino_icons: ^1.0.2
+  curved_navigation_bar: ^1.0.3
+  dio: ^4.0.6
+  firebase_auth: ^3.5.1
+  flutter:
+    sdk: flutter
+  flutter_easyloading: ^3.0.5
+  flutter_facebook_auth: ^4.4.0+1
+  flutter_html: ^2.2.1
+  flutter_staggered_grid_view: ^0.6.2
+  get: ^4.6.5
+  go_router: ^3.1.1
+  google_sign_in: ^5.4.0
+  http: ^0.13.4
+  provider: ^6.0.3
+  share_plus: ^4.0.10+1
+  shared_preferences: ^2.0.15
+  smooth_page_indicator: ^1.0.0+2
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+# The following section is specific to Flutter packages.
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/images/
+    - assets/icons/
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins-ThinItalic.ttf
+        - asset: fonts/Poppins-Black.ttf
+        - asset: fonts/Poppins-BlackItalic.ttf
+        - asset: fonts/Poppins-Bold.ttf
+        - asset: fonts/Poppins-BoldItalic.ttf
+        - asset: fonts/Poppins-ExtraBold.ttf
+        - asset: fonts/Poppins-ExtraBoldItalic.ttf
+        - asset: fonts/Poppins-ExtraLight.ttf
+        - asset: fonts/Poppins-ExtraLightItalic.ttf
+        - asset: fonts/Poppins-Italic.ttf
+        - asset: fonts/Poppins-Light.ttf
+        - asset: fonts/Poppins-LightItalic.ttf
+        - asset: fonts/Poppins-Medium.ttf
+        - asset: fonts/Poppins-MediumItalic.ttf
+        - asset: fonts/Poppins-Regular.ttf
+        - asset: fonts/Poppins-SemiBold.ttf
+        - asset: fonts/Poppins-SemiBoldItalic.ttf
+        - asset: fonts/Poppins-Thin.ttf
+          style: italic
+    - family: Quicksand
+      fonts:
+        - asset: fonts/Quicksand_Dash.otf
+        - asset: fonts/Quicksand-Bold.otf
+        - asset: fonts/Quicksand-BoldItalic.otf
+        - asset: fonts/Quicksand-Italic.otf
+        - asset: fonts/Quicksand-Light.otf
+        - asset: fonts/Quicksand-LightItalic.otf
+        - asset: fonts/Quicksand-Regular.otf
+
+    # - family: Vidaloka
+    #   fonts:
+    #     - asset: fonts/Vidaloka-Regular.ttf
+    - family: Montserrat
+      fonts:
+        - asset: fonts/MontserratAlternates-Black.otf
+        - asset: fonts/MontserratAlternates-BlackItalic.otf
+        - asset: fonts/MontserratAlternates-Bold.otf
+        - asset: fonts/MontserratAlternates-BoldItalic.otf
+        - asset: fonts/MontserratAlternates-ExtraBold.otf
+        - asset: fonts/MontserratAlternates-ExtraBoldItalic.otf
+        - asset: fonts/MontserratAlternates-ExtraLight.otf
+        - asset: fonts/MontserratAlternates-ExtraLightItalic.otf
+        - asset: fonts/MontserratAlternates-Italic.otf
+        - asset: fonts/MontserratAlternates-Light.otf
+        - asset: fonts/MontserratAlternates-LightItalic.otf
+        - asset: fonts/MontserratAlternates-Medium.otf
+        - asset: fonts/MontserratAlternates-MediumItalic.otf
+        - asset: fonts/MontserratAlternates-Regular.otf
+        - asset: fonts/MontserratAlternates-SemiBold.otf
+        - asset: fonts/MontserratAlternates-SemiBoldItalic.otf
+        - asset: fonts/MontserratAlternates-Thin.otf
+        - asset: fonts/MontserratAlternates-ThinItalic.otf
+        - asset: fonts/Montserrat-Black.otf
+        - asset: fonts/Montserrat-BlackItalic.otf
+        - asset: fonts/Montserrat-Bold.otf
+        - asset: fonts/Montserrat-BoldItalic.otf
+        - asset: fonts/Montserrat-ExtraBold.otf
+        - asset: fonts/Montserrat-ExtraBoldItalic.otf
+        - asset: fonts/Montserrat-ExtraLight.otf
+        - asset: fonts/Montserrat-ExtraLightItalic.otf
+        - asset: fonts/Montserrat-Italic.otf
+        - asset: fonts/Montserrat-Light.otf
+        - asset: fonts/Montserrat-LightItalic.otf
+        - asset: fonts/Montserrat-Medium.otf
+        - asset: fonts/Montserrat-MediumItalic.otf
+        - asset: fonts/Montserrat-Regular.otf
+        - asset: fonts/Montserrat-SemiBold.otf
+        - asset: fonts/Montserrat-SemiBoldItalic.otf
+        - asset: fonts/Montserrat-Thin.otf
+        - asset: fonts/Montserrat-ThinItalic.otf
+
+    - family: Noto Serif
+      fonts:
+        - asset: fonts/NotoSerif-Black.ttf
+        - asset: fonts/NotoSerif-ThinItalic.ttf
+        - asset: fonts/NotoSerif-BlackItalic.ttf
+        - asset: fonts/NotoSerif-Bold.ttf
+        - asset: fonts/NotoSerif-BoldItalic.ttf
+        - asset: fonts/NotoSerif-Condensed.ttf
+        - asset: fonts/NotoSerif-CondensedBlack.ttf
+        - asset: fonts/NotoSerif-CondensedBlackItalic.ttf
+        - asset: fonts/NotoSerif-CondensedBold.ttf
+        - asset: fonts/NotoSerif-CondensedBoldItalic.ttf
+        - asset: fonts/NotoSerif-CondensedExtraBold.ttf
+        - asset: fonts/NotoSerif-CondensedExtraBoldItalic.ttf
+        - asset: fonts/NotoSerif-CondensedExtraLight.ttf
+        - asset: fonts/NotoSerif-CondensedExtraLightItalic.ttf
+        - asset: fonts/NotoSerif-CondensedItalic.ttf
+        - asset: fonts/NotoSerif-CondensedLight.ttf
+        - asset: fonts/NotoSerif-CondensedLightItalic.ttf
+        - asset: fonts/NotoSerif-CondensedMedium.ttf
+        - asset: fonts/NotoSerif-CondensedMediumItalic.ttf
+        - asset: fonts/NotoSerif-CondensedSemiBold.ttf
+        - asset: fonts/NotoSerif-CondensedSemiBoldItalic.ttf
+        - asset: fonts/NotoSerif-CondensedThin.ttf
+        - asset: fonts/NotoSerif-CondensedThinItalic.ttf
+        - asset: fonts/NotoSerif-ExtraBold.ttf
+        - asset: fonts/NotoSerif-ExtraBoldItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensed.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedBlack.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedBlackItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedBold.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedBoldItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedExtraBold.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedExtraBoldItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedExtraLight.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedExtraLightItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedLight.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedLightItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedMedium.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedMediumItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedSemiBold.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedSemiBoldItalic.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedThin.ttf
+        - asset: fonts/NotoSerif-ExtraCondensedThinItalic.ttf
+        - asset: fonts/NotoSerif-ExtraLight.ttf
+        - asset: fonts/NotoSerif-ExtraLightItalic.ttf
+        - asset: fonts/NotoSerif-Italic.ttf
+        - asset: fonts/NotoSerif-Light.ttf
+        - asset: fonts/NotoSerif-LightItalic.ttf
+        - asset: fonts/NotoSerif-Medium.ttf
+        - asset: fonts/NotoSerif-MediumItalic.ttf
+        - asset: fonts/NotoSerif-Regular.ttf
+        - asset: fonts/NotoSerif-SemiBold.ttf
+        - asset: fonts/NotoSerif-SemiBoldItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensed.ttf
+        - asset: fonts/NotoSerif-SemiCondensedBlack.ttf
+        - asset: fonts/NotoSerif-SemiCondensedBlackItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensedBold.ttf
+        - asset: fonts/NotoSerif-SemiCondensedBoldItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensedExtraBold.ttf
+        - asset: fonts/NotoSerif-SemiCondensedExtraBoldItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensedExtraLight.ttf
+        - asset: fonts/NotoSerif-SemiCondensedExtraLightItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensedItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensedLight.ttf
+        - asset: fonts/NotoSerif-SemiCondensedLightItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensedMedium.ttf
+        - asset: fonts/NotoSerif-SemiCondensedMediumItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensedSemiBold.ttf
+        - asset: fonts/NotoSerif-SemiCondensedSemiBoldItalic.ttf
+        - asset: fonts/NotoSerif-SemiCondensedThin.ttf
+        - asset: fonts/NotoSerif-SemiCondensedThinItalic.ttf
+        - asset: fonts/NotoSerif-Thin.ttf
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
