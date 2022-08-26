@@ -14,42 +14,40 @@ TextStyle textStyleForgot = const TextStyle(
     // fontFamily: 'Quicksand',
     color: Color(0xfff0701BF));
 
-    TextStyle textStyleForgotMail = const TextStyle(
+TextStyle textStyleForgotMail = const TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w100,
     // fontFamily: 'Quicksand',
-    color: Colors.black
-    );
+    color: Colors.black);
 
-  TextStyle textStyleButton =  TextStyle(
+TextStyle textStyleButton = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w100,
     // fontFamily: 'Quicksand',
     color: whiteColor);
 
-    TextStyle textStyleButton2 =  TextStyle(
+TextStyle textStyleButton2 = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w100,
     // fontFamily: 'Quicksand',
     color: Colors.black);
 
-  TextStyle textStyleDetailHead =  TextStyle(
+TextStyle textStyleDetailHead = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w700,
     // fontFamily: 'Quicksand',
     color: Colors.black);
 
-   TextStyle detailStyle = TextStyle(
-                  fontSize: 16,
-                  fontFamily: detailpageController.fontFamily == 1 ?
-                    "QUICKSAND" :
-                   detailpageController.fontFamily == 2 ?
-                    "NOTO SERIF": 
-                    detailpageController.fontFamily == 3 ?  
-                    "Montserrat":
-                    detailpageController.fontFamily == 4 ?
-                    "VIDALOKA"  : "POPPINS",
-                   color: detailpageController.isDark.value
-                                    ? Colors.white
-                                    : Colors.black,
-                  );
+TextStyle detailStyle = TextStyle(
+  fontSize: 16,
+  fontFamily: detailpageController.fontFamily == 1
+      ? "QUICKSAND"
+      : detailpageController.fontFamily == 2
+          ? "NOTO SERIF"
+          : detailpageController.fontFamily == 3
+              ? "Montserrat"
+              : detailpageController.fontFamily == 4
+                  ? "VIDALOKA"
+                  : "POPPINS",
+  color: detailpageController.isDark.value ? Colors.white : Colors.black,
+);
