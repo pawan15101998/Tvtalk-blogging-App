@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tvtalk/model/get_comment_model.dart';
 
 class DetailPageController extends GetxController{
   RxInt DetailScroll = 0.obs;
@@ -10,6 +11,8 @@ class DetailPageController extends GetxController{
   RxInt fontFamily = 1.obs;
   RxInt fontSize = 16.obs;
   RxBool articleRead = false.obs;
+  RxBool islike = false.obs;
+  GetComment? commentData;
 
  fontfamily(color){
     return TextStyle(
@@ -22,7 +25,11 @@ class DetailPageController extends GetxController{
                   fontSize.value == 18?
                   18: 
                   fontSize.value == 20?
-                  20 :null,
+                  20:
+                  fontSize.value == 22?
+                  22:
+                  fontSize.value == 24?
+                  24:null,
                   fontFamily: fontFamily.value == 1 ?
                     "QUICKSAND" :
                    fontFamily.value == 2 ?

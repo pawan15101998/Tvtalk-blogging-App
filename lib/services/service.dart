@@ -6,24 +6,32 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/getxcontroller/detail_page_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/model/all_tags_model.dart';
+import 'package:tvtalk/model/get_comment_model.dart';
 import 'package:tvtalk/model/post_model.dart';
 
 class ApiProvider{
 String baseUrl = 'http://142.93.219.133/the_tv_talk/api/v1';
 String siteurl = 'https://www.thetvtalk.com';
 var RegisterResponse;
+ int? statuscode;
 String? resetToken;
 var allTags = [];
 List? allPost = [];
+Map usertag = {};
+  final getallcommment = GetComment();
+// Map? allcomment;
  Dio dio =  Dio();
 final yourIntrestController = Get.find<YourIntrestController>();
 final homepage1controller = Get.find<HomePage1Controller>();
+final detailpagecontroller  = Get.find<DetailPageController>();
 
 Future Post(String url, Map<String, String>body) async{
-  print("response ULS");
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  print("response ULSss");
   print(url);
   print(body);
   print(jsonEncode(body));
@@ -36,14 +44,16 @@ Future Post(String url, Map<String, String>body) async{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(body)
-  );
+);
   EasyLoading.dismiss();
   RegisterResponse = json.decode(response.body);
-  print(response.statusCode);
+  print("resssssss");
+  // print(RegisterResponse['data']['reset_token']);
   // statuscode = response.statusCode;
-  if (response.statusCode == 200) {
+  if (response.statusCode == 200){
+  // sharedPreferences.setString('reset_token', RegisterResponse['data']['reset_token']);
     print("responseee");
-    print(response.body);
+    print(RegisterResponse['message']);
   }
     return RegisterResponse;
 } on Exception catch (e) {
@@ -52,8 +62,44 @@ Future Post(String url, Map<String, String>body) async{
 }
 }
 
+Future PostSocial(String url, Map<String, String>body) async{
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  print("response ULSss");
+  print(url);
+  print(body);
+  print(jsonEncode(body));
+  EasyLoading.show(status: 'loading');
+  try {
+  final response = await http.post(
+    Uri.parse(baseUrl+url),
+    // /user/signup
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(body)
+);
+  EasyLoading.dismiss();
+  RegisterResponse = json.decode(response.body);
+  print("resssssss");
+  // print(RegisterResponse['data']['reset_token']);
+  // statuscode = response.statusCode;
+  if (response.statusCode == 200){
+  sharedPreferences.setString('reset_token', RegisterResponse['data']['reset_token']);
+    print("responseee");
+  }
+    return RegisterResponse;
+} on Exception catch (e) {
+  print("error");
+    print(e);
+}
+}
+
+
 Future postApi(String url, Map<String, dynamic>body) async{
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
   print("response ULS");
+  print(resetToken);
   print(url);
   print(body);
   print(jsonEncode(body));
@@ -66,11 +112,13 @@ Future postApi(String url, Map<String, dynamic>body) async{
       'Content-Type': 'application/x-www-form-urlencoded',
       'authorization': 'Bearer ${resetToken!}',
     },
-    body: jsonEncode(body)
+    body: body
   );
   // EasyLoading.dismiss();
+  print("hbjhsdjks");
   print(response.body);
   RegisterResponse = json.decode(response.body);
+  statuscode = response.statusCode;
   print(response.statusCode);
   // statuscode = response.statusCode;
   if (response.statusCode == 200) {
@@ -137,11 +185,12 @@ get()async {
         allTags.add(AllTagsModel.fromJson(item));
         print("item");
         print(allTags);
-        yourIntrestController.allTagsModel = allTags;
+        yourIntrestController.allTagsModel.value = allTags;
+        yourIntrestController.copyTags.value = allTags;
       }
       // yourIntrestController.allTagsModel = allTags;
       print("data sucessfuly");
-      print(yourIntrestController.allTagsModel![0]);
+      print(yourIntrestController.allTagsModel[0]);
       // print(allTags.data![2].tagname);
       print(result);
     }else{
@@ -157,21 +206,19 @@ get()async {
   }
 }
 
-
-
-getPost()async {
+getPost(sendingTags)async{
+  print("taggggggggggggggg");
+  print(sendingTags);
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   resetToken = sharedPreferences.getString('reset_token');
   try{
     print("111111");
     // isDataLoading(true);
-    http.Response response = await http.get(
-        Uri.parse('$siteurl/wp-json/wp/v2/posts/?tags=36'),
-        // headers: {'Authorization': 'Bearer $resetToken',
-        // 'Content-Type': 'application/json; charset=UTF-8',
-        // },
+    http.Response response = await http.get(Uri.parse('$siteurl/wp-json/wp/v2/posts/?tags=${sendingTags}, 36, 37'),
+        headers: {'Authorization': 'Bearer $resetToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
     );
-    print("datallllllll");
     if(response.statusCode == 200){
       ///data successfully
       var result = jsonDecode(response.body);
@@ -179,15 +226,104 @@ getPost()async {
       for (var item in result){
         print("jkxcdsas");
         allPost!.add(HomePagePost.fromJson(item));
-        print("item");
+        // allPost!.add({"status": 0});
+        print("itemmmmmm");
+        print(allPost);
         // print(allTags);
-       homepage1controller.allpostdata = allPost!;
+       homepage1controller.allpostdata.value = allPost!;
+       homepage1controller.copydata.value = allPost!;
       }
       // yourIntrestController.allTagsModel = allTags;
       // print(result);
       print("data sucessfuly");
       print(homepage1controller.allpostdata);
       // print(allTags.data![2].tagname);
+      // print(result);
+    }else{
+      //error
+      print("err");
+    }
+  }catch(e){
+    // log('Error while getting data is $e');
+    print('Error while getting data is $e');
+  }finally{
+    // isDataLoading(false);
+    print("object");
+  }
+}
+
+getTags()async {
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
+  try{
+    print("111111");
+    // isDataLoading(true);
+    http.Response response = await http.get(Uri.parse('$baseUrl/user/get-user-tags'),
+        headers: {'Authorization': 'Bearer $resetToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+    );
+    if(response.statusCode == 200){
+      ///data successfully
+      var result = jsonDecode(response.body);
+      // print(result);
+      // for (var item in result){
+      //   print("jkxcdsas");
+      //   allPost!.add(HomePagePost.fromJson(item));
+      //   print("item");
+      //   // print(allTags);
+      //  homepage1controller.copydata.value = allPost!;
+      // }
+  print(result);
+
+
+      // yourIntrestController.allTagsModel = allTags;
+      // print(result);
+      print("data sucessfuly");
+      // print(homepage1controller.allpostdata);
+      // print(allTags.data![2].tagname);
+      // print(result);
+      return result;
+    }else{
+      //error
+      print("err");
+    }
+  }catch(e){
+    // log('Error while getting data is $e');
+    print('Error while getting data is $e');
+  }finally{
+    // isDataLoading(false);
+    print("object");
+  }
+}
+
+getComment(postId)async {
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
+    print("comment");
+  print(postId);
+  print(resetToken);
+  try{
+    print("111111");
+    // isDataLoading(true);
+    http.Response response = await http.get(Uri.parse('$baseUrl/post/get-data?postId=$postId'),
+        headers: {'Authorization': 'Bearer $resetToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+    );
+    if(response.statusCode == 200){
+      ///data successfully
+      statuscode = response.statusCode;
+      var result = jsonDecode(response.body);
+      print("data sucessfuly");
+      print(result);
+      final details = GetComment.fromJson(result);
+      detailpagecontroller.commentData = details;
+      print("commenttttt");
+      print(detailpagecontroller.commentData);
+      return detailpagecontroller.commentData;
+      //  print(detailpagecontroller.commentData!.data);
+      // detailpagecontroller.commentData.value = result;
       // print(result);
     }else{
       //error

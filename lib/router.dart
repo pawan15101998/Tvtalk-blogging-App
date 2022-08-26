@@ -97,7 +97,7 @@ class CustomRouter{
       GoRoute(
       name: 'ARTICLEDETAILPAGE',
         path: articledetailpage,
-        builder: (context, state) =>  ArticleDetailPage(postData: state.extra),
+        builder: (context, state) =>  ArticleDetailPage(postData: state.extra, feedindex: state.queryParams, ),
       ),
        GoRoute(
       name: 'FUNANDGAMES',

@@ -144,6 +144,7 @@ class _HomePage4State extends State<HomePage4> {
                     itemCount: homePage1Controller.allpostdata.length,
                     itemBuilder:(context, index) {
                       return  BlogCard(
+                        indexx: index,
                     context: context,
                     blogDetail: homePage1Controller.allpostdata[index]
                   );

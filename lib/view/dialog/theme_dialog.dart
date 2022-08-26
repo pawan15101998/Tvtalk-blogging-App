@@ -67,11 +67,15 @@ class ThemeDialog {
                    (fontSize == '18' && detailpageController.fontSize.value == 18)?
                    Colors.green:
                    (fontSize == '20' && detailpageController.fontSize.value == 20)?
+                   Colors.green : 
+                   (fontSize == '22' && detailpageController.fontSize.value == 22)?
+                   Colors.green : 
+                   (fontSize == '24' && detailpageController.fontSize.value == 24)?
                    Colors.green : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
                 color: detailpageController.isDark.value
-                    ? (fontSize == '12' && detailpageController.fontSize.value == 12)?
+                    ?(fontSize == '12' && detailpageController.fontSize.value == 12)?
                    Colors.green :
                    (fontSize == '14' && detailpageController.fontSize.value == 14)?
                    Colors.green:
@@ -90,6 +94,10 @@ class ThemeDialog {
                    (fontSize == '18' && detailpageController.fontSize.value == 18)?
                    Colors.green:
                    (fontSize == '20' && detailpageController.fontSize.value == 20)?
+                   Colors.green:
+                   (fontSize == '22' && detailpageController.fontSize.value == 22)?
+                   Colors.green:
+                   (fontSize == '24' && detailpageController.fontSize.value == 24)?
                    Colors.green : Colors.black)),
       ),
     );
@@ -455,6 +463,12 @@ class ThemeDialog {
                           }),
                           FontSizeBox("20",(){
                             detailpageController.fontSize.value = 20;
+                          }),
+                          FontSizeBox("22",(){
+                            detailpageController.fontSize.value = 22;
+                          }),
+                          FontSizeBox("24",(){
+                            detailpageController.fontSize.value = 24;
                           }),
                           SizedBox(
                               width: 65,

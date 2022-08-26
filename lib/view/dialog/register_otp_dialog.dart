@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,7 +13,7 @@ class RegisterOtpDialog {
   var submitdialog = SubmitDialog();
   var apiProvider = ApiProvider();
   TextEditingController otpController = TextEditingController();
-  void showBottomDialog(BuildContext context, email) {
+  void showBottomDialog(BuildContext context, email, name,  password, cnfpassword ) {
     showGeneralDialog(
       barrierLabel: "showGeneralDialog",
       barrierDismissible: true,
@@ -51,7 +52,7 @@ class RegisterOtpDialog {
                               // text: "An email has been sent to your email",
                               children: <TextSpan>[
                                 TextSpan(
-                                  text: 'An email has been sent to your email ',
+                                  text: 'An OTP has been sent to your email ',
                                   style: TextStyle(
                                       fontSize: 16, color: Colors.black),
                                 ),
@@ -100,7 +101,7 @@ class RegisterOtpDialog {
                                                 side:const BorderSide(
                                                     color: Colors.black)))),
                                     child:const Text(
-                                      "Cancle",
+                                      "Cancel",
                                       style: TextStyle(color: Colors.black),
                                     )),
                               ),
@@ -130,6 +131,8 @@ class RegisterOtpDialog {
                                             },
                                           ),
                                         );
+                                        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                        sharedPreferences.setString("email", email);
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
                                         Router.neglect(context, () {
@@ -140,7 +143,6 @@ class RegisterOtpDialog {
                                         // context.pushNamed('HOMEPAGE');
                                         // String resetToken = emailVerify['data'].reset_token;
                                         print(emailVerify['data'].reset_token);
-                                        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                                         sharedPreferences.setString('email', email);
                                         // sharedPreferences.setString("reset_token", resetToken);
                                       }else if(emailVerify['message'] == 'Email already verified.'){
@@ -219,6 +221,34 @@ class RegisterOtpDialog {
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.black)),
                               TextSpan(
+                                recognizer: TapGestureRecognizer()..onTap = ()async{
+                          print("object");
+                          if(password == cnfpassword){
+                              await apiProvider.Post('/user/signup', {
+                                'name':name,
+                                'email':email,
+                                'password':password,
+                                'confirm_password':cnfpassword   
+                                 });
+                                 if(apiProvider.RegisterResponse['message'] =='Email already exists and otp sent again'){
+                                  Flushbar(
+                                      backgroundColor: Colors.green,
+                                      message: "Email already exists and otp sent again",
+                                      duration: Duration(seconds: 1),
+                                    ).show(context);
+                                 }
+                          }
+                          print(apiProvider.RegisterResponse['message']);
+                           print("rrgisterrr");
+                           print(apiProvider.RegisterResponse['message']);
+                           if(apiProvider.RegisterResponse['message'] == 'Mail sent successfully.'){
+                             Flushbar(
+          backgroundColor: Colors.green,
+          message: "otp resend to your mail",
+          duration: Duration(seconds: 1),
+        ).show(context);
+                           }
+                        },
                                   text: "Resend",
                                   style: TextStyle(
                                       fontSize: 14, color: Color(0xfff0FC59A)))
@@ -235,6 +265,9 @@ class RegisterOtpDialog {
                                   style: TextStyle(
                                       fontSize: 14, color: Colors.black)),
                               TextSpan(
+                                  recognizer: TapGestureRecognizer()..onTap = (){
+                                  Navigator.pop(context);
+                                   },
                                   text: "Change Email",
                                   style: TextStyle(
                                       fontSize: 14, color: Color(0xfff0FC59A)))

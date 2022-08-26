@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/services/service.dart';
+import 'package:tvtalk/theme/text_style.dart';
+import 'package:tvtalk/view/profile_page.dart';
 import 'package:tvtalk/widgets/blog_card.dart';
 import '../getxcontroller/home_page1_controller.dart';
+import '../getxcontroller/signin_controller.dart';
 
 class HomePage1 extends StatefulWidget {
   const HomePage1({Key? key}) : super(key: key);
@@ -15,10 +19,24 @@ class HomePage1 extends StatefulWidget {
   State<HomePage1> createState() => _HomePage1State();
 }
 
+
 class _HomePage1State extends State<HomePage1> {
   var homePage1Controller = Get.find<HomePage1Controller>();
-
+final  apiprovider = ApiProvider();
+ var yourIntrestController = Get.find<YourIntrestController>();
   // var homePage1 = Get.find<HomePage1>();
+final signincontroller = Get.find<SignInController>();
+
+  @override
+  void initState(){
+    // TODO: implement initState
+    super.initState();
+    // for(int i=0; i<=homePage1Controller.allpostdata.length; i++){
+    // homePage1Controller.allpostdata.add({"status": 0});
+    // }
+    print("stsusss");
+    print(homePage1Controller.allpostdata);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,23 +55,17 @@ class _HomePage1State extends State<HomePage1> {
                     const SizedBox(
                       width: 20,
                     ),
-                    upperList("The Boys", ""),
-                    const SizedBox(
-                      width: 20,
+                    Obx(() {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: yourIntrestController.allTagsModel.length,
+                          itemBuilder: (context, index) {
+                          return upperList(yourIntrestController.allTagsModel[index].name.toString(), "");
+                        },);
+                      }
                     ),
-                    upperList("Raised by Wolves", ""),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    upperList("Vikings", ""),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    upperList("The Boys", ""),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    upperList("Raised by Wolves", ""),
+                    
                   ],
                 ),
               ),
@@ -65,10 +77,15 @@ class _HomePage1State extends State<HomePage1> {
                         horizontal: 15, vertical: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          "Featured article",
-                          style: TextStyle(fontSize: 14),
+                      children:  [
+                        InkWell(
+                          onTap: () {
+                            apiprovider.getTags();
+                          },
+                          child: Text(
+                            "Featured article",
+                            style: TextStyle(fontSize: 14),
+                          ),
                         ),
                         Text(
                           "View All",
@@ -83,23 +100,37 @@ class _HomePage1State extends State<HomePage1> {
                   // }),
                 // Obx(() {
                 //     return 
-                if(homePage1Controller.allpostdata != null)
-                    CarouselSlider.builder(
-                          options: CarouselOptions(
-                              height: 400.0,
-                              // viewportFraction: 1,
-                              // autoPlay: true,
-                              onPageChanged: ((index, reason) {
-                                // homePage1 = index;
-                                homePage1Controller.carouselSliderIndex.value =
-                                    index;
-                              })),
-                          itemCount: homePage1Controller.allpostdata.length,
-                          itemBuilder: ((context, index, realIndex) {
-                            // final urlImage = homePage1Controller.like[index].image;
-                            return buildImage(context, index);
-                          }),
-                        ),
+                     StreamBuilder<Object>(
+                       stream: null,
+                       builder: (context, snapshot) {
+                         return Obx(() {
+                          
+                            return CarouselSlider.builder(
+                                  options: CarouselOptions(
+                                      height: 400.0,
+                                      // viewportFraction: 1,
+                                      // autoPlay: true,
+                                      onPageChanged: ((index, reason) {
+                                        // homePage1 = index;
+                                        
+                                        // if(homePage1Controller.carouselSliderIndex.value != null)
+                                        homePage1Controller.carouselSliderIndex.value = index;
+                                      })),
+                                  itemCount: homePage1Controller.copydata.length,
+                                  itemBuilder: ((context, index, realIndex) {
+                                        // Stream streamController() => Stream.fromFuture(
+                                        // apiprovider.getComment(homePage1Controller.copydata[index].id)
+                                        //   );
+                                    print("Inexxx");
+                                    print(index);
+                                    // final urlImage = homePage1Controller.like[index].image;
+                                    return buildImage(context, index);
+                                  }),
+                                );
+                          }
+                                         );
+                       }
+                     ),
                 //   }
                 // ),  
                   const SizedBox(
@@ -130,15 +161,21 @@ class _HomePage1State extends State<HomePage1> {
                       ],
                     ),
                   ), 
-                  ListView.builder(
-                    shrinkWrap:  true,
-                    itemCount: homePage1Controller.allpostdata.length,
-                    itemBuilder:(context, index) {
-                      return  BlogCard(
-                    context: context,
-                    blogDetail: homePage1Controller.allpostdata[index]
-                  );
-                    },),
+                  Obx((){
+                      return ListView.builder(
+                        shrinkWrap:  true,
+                        physics: const ScrollPhysics(),
+                        // scrollDirection: Axis.vertical,
+                        itemCount: homePage1Controller.allpostdata.length,
+                        itemBuilder:(context,index){
+                          return  BlogCard(
+                               indexx: index,
+                               context: context,
+                               blogDetail: homePage1Controller.allpostdata[index]
+                           );
+                        },);
+                    }
+                  ),
                 ],
               ),
             ],
@@ -149,25 +186,35 @@ class _HomePage1State extends State<HomePage1> {
   }
 
   Widget buildIndicator(int sliderVal) {
-      return AnimatedSmoothIndicator(
-        activeIndex: sliderVal,
-        count: homePage1Controller.allpostdata.length,
-        effect: const JumpingDotEffect(
-            dotColor: Colors.grey,
-            dotHeight: 6,
-            dotWidth: 6,
-            activeDotColor: Colors.black),
+      return SizedBox(
+        child: AnimatedSmoothIndicator(
+          activeIndex: sliderVal,
+          count: 10,
+          effect: const JumpingDotEffect(
+              dotColor: Colors.grey,
+              dotHeight: 6,
+              dotWidth: 6,
+              activeDotColor: Colors.black),
+        ),
       );
     }
 
-    Widget buildImage(BuildContext context, int index,) {
+    Widget buildImage(BuildContext context, int index) {
         return Stack(
           children: [
           InkWell(
-            onTap: (){
+            onTap: ()async{
+            // if(signincontroller.isGuest.value == 'guest'){
+              Router.neglect(context, () {context.goNamed('SIGNINPAGE');});
+            // }else{
               print("Moving");
-              print(homePage1Controller.allpostdata[index]);
-              context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.allpostdata[index], );
+              print(homePage1Controller.copydata[index].id);
+              // print(homePage1Controller.allpostdata[index]);
+            await apiprovider.getComment(homePage1Controller.copydata[index].id);
+            print("sddddddddddsdddddd");
+            print(apiprovider.statuscode);
+              context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.copydata[index],queryParams: {"index": "$index"});
+            // }
             },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 12),
@@ -180,14 +227,14 @@ class _HomePage1State extends State<HomePage1> {
           ),
           Positioned(
             top: 10,
-            left: MediaQuery.of(context).size.width*58/100,
+            left: MediaQuery.of(context).size.width*55/100,
             child: Column(
               children: [
                 Align(
                     alignment: Alignment.topRight,
                     child: Row(
                       children:  [
-                      const  Text(
+                     const Text(
                           "2.5k",
                           style: TextStyle(
                             color: Colors.white,
@@ -197,9 +244,12 @@ class _HomePage1State extends State<HomePage1> {
                        const SizedBox(width: 4,),
                        InkWell(
                         onTap: (){
-                        //  homePage1Controller.like[index].isLike.toggle();
-                         print("object");
-                         print(homePage1Controller.like[index].isLike.value);
+                        apiprovider.postApi('/post/like-post', {
+                          "postId": homePage1Controller.copydata[index].id.toString()
+                        });
+                        setState(() {
+                          
+                        });
                         },
                          child: 
                         //  Obx(() {
@@ -229,16 +279,20 @@ class _HomePage1State extends State<HomePage1> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Viking",
-                    style: TextStyle(color: Color(0xff0FC59A)),
-                    // maxLines: ,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    homePage1Controller.allpostdata[index].title.rendered.toString(),
-                    style: TextStyle(color: Colors.white),
-                  )
+                  // const Text(
+                  //   "Viking",
+                  //   style: TextStyle(color: Color(0xff0FC59A)),
+                  //   // maxLines:,
+                  //   overflow: TextOverflow.ellipsis,
+                  // ),
+                      Obx(() {
+                          return 
+                          Text(
+                            homePage1Controller.copydata[index].title.rendered,
+                            style: TextStyle(color: Colors.white),
+                          );
+                        }
+                      ),  
                 ],
               ),
             ),

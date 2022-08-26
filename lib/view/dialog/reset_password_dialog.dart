@@ -98,7 +98,7 @@ class SubmitDialog {
                                         side:
                                             BorderSide(color: Colors.black)))),
                             child: const Text(
-                              "Cancle",
+                              "Cancel",
                               style: TextStyle(color: Colors.black),
                             )),
                       ),

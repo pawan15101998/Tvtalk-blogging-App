@@ -1,10 +1,14 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/view/dialog/register_otp_dialog.dart';
 
 class RegisterNetwork{
   var apiProvider = ApiProvider();
+  final signincontroller = Get.find<SignInController>();
    registerFunction(context, passwordController,cnfpasswordController, nameController, emailController) async {
     print("object");
     if (passwordController == cnfpasswordController) {
@@ -18,12 +22,20 @@ class RegisterNetwork{
       print(RegisterResponse['message']);
       if (RegisterResponse['message'] ==
           "User created successfully and otp sent to mail.") {
+            signincontroller.isGuest.value = '';
         Flushbar(
           backgroundColor: Colors.green,
           message: "user created successfully and otp sent to mail",
           duration: Duration(seconds: 2),
         ).show(context);
-        RegisterOtpDialog().showBottomDialog(context, emailController);
+        print("Responsessssssssss");
+       print(RegisterResponse['data']['reset_token']);
+        RegisterOtpDialog().showBottomDialog(context, emailController, nameController, passwordController, cnfpasswordController);
+        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+       sharedPreferences.setString("reset_token", RegisterResponse['data']['reset_token']);
+       sharedPreferences.setString("name", RegisterResponse['data']['name']);
+       signincontroller.userName = RegisterResponse['data']['name'];
+       signincontroller.userEmail = RegisterResponse['data']['email'];
       }else if(RegisterResponse['message'] =='User already exist please login.'){
           Flushbar(
           backgroundColor: Colors.green,
@@ -36,7 +48,7 @@ class RegisterNetwork{
           message: "user created successfully and otp sent to mail",
           duration: Duration(seconds: 2),
         ).show(context);
-        RegisterOtpDialog().showBottomDialog(context, emailController);
+        RegisterOtpDialog().showBottomDialog(context, emailController, nameController, passwordController, cnfpasswordController);
       } else if (RegisterResponse['message'] ==
           'Sign up validation Name Empty') {
         final snackBar = SnackBar(

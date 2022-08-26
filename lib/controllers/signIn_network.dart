@@ -1,7 +1,9 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/routers.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/view/dialog/forgot_password_dialog.dart';
@@ -10,6 +12,7 @@ import 'package:tvtalk/view/home_page.dart';
 class SignInNetwork {
   var apiProvider = ApiProvider();
   var bottomDialog = BottomDialog();
+  final signincontroller = Get.find<SignInController>();
 
   forgotPassword(context, loginEmailController) async {
     if (loginEmailController != ""){
@@ -143,10 +146,17 @@ class SignInNetwork {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       String resetToken = LoginResponse['data']['reset_token'];
+      String userName = LoginResponse['data']['name'];
       final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setString('email', loginEmailController);
+      sharedPreferences.setString("name", LoginResponse['data']['name']);
       sharedPreferences.setString("reset_token", resetToken);
+      signincontroller.userName = LoginResponse['data']['name'];
+      signincontroller.userEmail = loginEmailController;
+      print("tokennnn");
+      print(resetToken);
       // context.pushNamed('HOMEPAGE');
+     signincontroller.isGuest.value = '';
       Router.neglect(context, () {context.goNamed('HOMEPAGE');});
     } else if(LoginResponse['message'] ==
         'Wrong password entered.') {

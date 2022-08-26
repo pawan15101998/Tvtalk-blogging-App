@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page2_controller.dart';
+import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/widgets/blog_card.dart';
 
 class HomePage2 extends StatefulWidget {
@@ -20,6 +22,7 @@ class _HomePage2State extends State<HomePage2> {
     'assets/images/slider3.png',
     'assets/images/slider4.png',
   ];
+  final apiprovider = ApiProvider();
   var homepage2Controller = Get.find<HomePage2Controller>();
     var homePage1Controller = Get.find<HomePage1Controller>();
   int activeIndex = 0;
@@ -39,10 +42,10 @@ class _HomePage2State extends State<HomePage2> {
                       onPageChanged: ((index, reason) {
                           homepage2Controller.sliderHome2index.value = index;
                       })),
-                  itemCount: urlImages.length,
+                  itemCount: homePage1Controller.copydata.length,
                   itemBuilder: ((context, index, realIndex) {
-                    final urlImage = urlImages[index];
-                    return buildImage(urlImage, index);
+                    // final urlImage = urlImages[index];
+                    return buildImage(context, index);
                   }),
                 ),
               ],
@@ -55,7 +58,7 @@ class _HomePage2State extends State<HomePage2> {
               }
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 30 ),
               child: GridView.builder(
                 itemCount: 9,
                 shrinkWrap: true,
@@ -67,11 +70,19 @@ class _HomePage2State extends State<HomePage2> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: () {
+                    onTap: () async{
                       // yourIntrestController.choices[index].select.toggle();
                       // choices[index].select = yourIntrestController.yourIntrest.value;
-
                       // print(yourIntrestController.choices[index].select);
+                       var response = await apiprovider.getComment(homePage1Controller.copydata[index].id);
+                       print("sddddddddddsdddddd");
+                       print(apiprovider.statuscode);
+                  
+              if(signincontroller.isGuest.value == 'guest'){
+              Router.neglect(context, () {context.goNamed('SIGNINPAGE');});
+            }else{
+              context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.copydata[index],queryParams: {"index": "$index"});
+            }
                     },
                     child: Container(
                       height: MediaQuery.of(context).size.height * 19 / 100,
@@ -84,12 +95,21 @@ class _HomePage2State extends State<HomePage2> {
                             Container(
                               height: 32,
                               width: 32,
+                              decoration: const BoxDecoration(
                               color: Colors.grey,
+                                image: DecorationImage(image: AssetImage("assets/images/slider2.png"),fit: BoxFit.cover)
+                              ),
                             ),
-                            const Text(
-                              "FEATURED ARTICLES",
-                              textAlign: TextAlign.center,
-                            )
+                             Padding(
+                               padding: const EdgeInsets.all(8.0),
+                               child: Text(
+                                homePage1Controller.copydata[index].title.rendered,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 8
+                                ),
+                            ),
+                             )
                           ],
                         ),
                       ),
@@ -100,7 +120,7 @@ class _HomePage2State extends State<HomePage2> {
             ),
             Padding( 
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
+                          horizontal: 20,),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: const [
@@ -175,21 +195,27 @@ class _HomePage2State extends State<HomePage2> {
                     // Obx(() {
                     //   return 
                     // }),
-                  CarouselSlider.builder(
-                        options: CarouselOptions(
-                            height: 400.0,
-                            // autoPlay: true,
-                            onPageChanged: ((index, reason) {
-                              // homePage1 = index;
-                              homepage2Controller.SliderHome2Featured.value =
-                                  index;
-                            })),
-                        itemCount: urlImages.length,
-                        itemBuilder: ((context, index, realIndex) {
-                          final urlImage = urlImages[index];
-                          return buildfeaturedImage(urlImage, index, context);
-                        }),
-                      ),
+                  Obx(() {
+                        return CarouselSlider.builder(
+                              options: CarouselOptions(
+                                  height: 400.0,
+                                  // viewportFraction: 1,
+                                  // autoPlay: true,
+                                  onPageChanged: ((index, reason) {
+                                    // homePage1 = index;
+                                    // if(homePage1Controller.carouselSliderIndex.value != null)
+                                    homePage1Controller.carouselSliderIndex.value = index;
+                                  })),
+                              itemCount: homePage1Controller.copydata.length,
+                              itemBuilder: ((context, index, realIndex) {
+                                print("Inexxx");
+                                print(index);
+                                // final urlImage = homePage1Controller.like[index].image;
+                                return buildImage(context, index);
+                              }),
+                            );
+                      }
+                    ),
                       const SizedBox(
                       height: 32,
                     ),
@@ -262,9 +288,11 @@ class _HomePage2State extends State<HomePage2> {
                     ),
                 ListView.builder(
                   shrinkWrap: true,
+                  physics: const ScrollPhysics(),
                     itemCount: homePage1Controller.allpostdata.length,
                     itemBuilder:(context, index) {
                       return  BlogCard(
+                        indexx: index,
                     context: context,
                     blogDetail: homePage1Controller.allpostdata[index]
                   );
@@ -275,48 +303,103 @@ class _HomePage2State extends State<HomePage2> {
     );
   }
 
-  Widget buildImage(String image, int index) {
-    return Stack(children: [
-      Container(
-        margin: const EdgeInsets.symmetric(),
-        height: 400,
-        decoration: BoxDecoration(
-            color: Colors.red,
-            image: DecorationImage(image: AssetImage(image), fit: BoxFit.fill)),
-      ),
-      Positioned(
-        bottom: 10,
-        left: 10,
-        width: MediaQuery.of(context).size.width*65/100,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    Widget buildImage(BuildContext context, int index) {
+        return Stack(
           children: [
-            const Text(
-              "The Boys",
-              style: TextStyle(color: Color(0xff0FC59A)),
+          InkWell(
+            onTap: ()async{
+              print("Moving");
+              print(homePage1Controller.copydata[index].id);
+              // print(homePage1Controller.allpostdata[index]);
+            var response = await apiprovider.getComment(homePage1Controller.copydata[index].id);
+            print("sddddddddddsdddddd");
+            print(apiprovider.statuscode);
+              if(signincontroller.isGuest.value == 'guest'){
+              Router.neglect(context, () {context.goNamed('SIGNINPAGE');});
+            }else{
+              context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.copydata[index],queryParams: {"index": "$index"});
+            }
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 12),
+              height: 400,
+              // width: 200,
+              decoration:const BoxDecoration(
+                  image:
+                      DecorationImage(image: AssetImage("assets/images/slider1.png"), fit: BoxFit.fill)),
             ),
-            const Text(
-              "Bright vixens jump; dozy fowl quack. Wafting for zephyrs vex bold Jim.",
-              style: TextStyle(color: Colors.white),
+          ),
+          // Positioned(
+          //   top: 10,
+          //   left: MediaQuery.of(context).size.width*58/100,
+          //   child: Column(
+          //     children: [
+          //       Align(
+          //           alignment: Alignment.topRight,
+          //           child: Row(
+          //             children:  [
+          //             const  Text(
+          //                 "2.5k",
+          //                 style: TextStyle(
+          //                   color: Colors.white,
+          //                 ),
+          //                 textAlign: TextAlign.center,
+          //               ),
+          //              const SizedBox(width: 4,),
+          //              InkWell(
+          //               onTap: (){
+          //               //  homePage1Controller.like[index].isLike.toggle();
+          //                print("object");
+          //                print(homePage1Controller.like[index].isLike.value);
+          //               },
+          //                child: 
+          //               //  Obx(() {
+          //               //      return 
+          //                    const SizedBox(
+          //                     height: 25,
+          //                     width: 25,
+          //                     child: 
+          //                     // homePage1Controller.like[index].isLike.value ?
+          //                      Image(image: AssetImage("assets/icons/heart.png",))
+          //                       // :
+          //                     //  Image(image: AssetImage("assets/icons/color_heart.ico",), fit: BoxFit.cover,)
+          //                      ),
+          //               //    }
+          //               //  ),
+          //              )
+          //             ],
+          //           )),
+          //     ],
+          //   ),
+          // ),
+          Positioned(
+            bottom: 10,
+            width: MediaQuery.of(context).size.width*65/100,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "",
+                    style: TextStyle(color: Color(0xff0FC59A)),
+                    // maxLines:,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                      Obx(() {
+                          return 
+                          Text(
+                            homePage1Controller.copydata[index].title.rendered,
+                            style: TextStyle(color: Colors.white),
+                          );
+                        }
+                      ),  
+                ],
+              ),
             ),
-            Row(
-              children: const [
-               SizedBox(
-                          height: 25,
-                          width: 25,
-                          child: Image(image: AssetImage("assets/icons/heart.png"), color: Colors.white,)),
-                          SizedBox(width: 4,),
-                Text(
-                  "2.5k",
-                  style: TextStyle(color: Colors.white),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    ]);
-  }
+          )
+        ]);
+      }
 Widget buildfeaturedImage(String image, int index, context) {
       return Stack(
         children: [
@@ -363,7 +446,7 @@ Widget buildfeaturedImage(String image, int index, context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const [
                 Text(
-                  "Viking",
+                  "",
                   style: TextStyle(color: Color(0xff0FC59A)),
                   // maxLines: ,
                   overflow: TextOverflow.ellipsis,
@@ -446,7 +529,7 @@ Widget buildfeaturedImage(String image, int index, context) {
   Widget buildIndicator() {
     return AnimatedSmoothIndicator(
       activeIndex: homepage2Controller.sliderHome2index.value,
-      count: urlImages.length,
+      count: 10,
       effect: JumpingDotEffect(
           dotColor: Colors.grey,
           dotHeight: 6,

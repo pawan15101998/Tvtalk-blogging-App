@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +8,9 @@ import 'package:tvtalk/services/service.dart';
 
 class YourIntrestController extends GetxController{
   RxBool yourIntrest = false.obs;
-  List? allTagsModel;
+  RxBool activeTextfield = false.obs;
+ RxList allTagsModel = [].obs;
+ RxList copyTags = [].obs;
 //  final apiProvider = ApiProvider();
 // @override
 // void onInit(){
@@ -26,6 +28,7 @@ RxList images = [
  Choice(title: 'assets/images/intrest3.jpg', icon: Icons.map, select: false.obs),  
  Choice(title: 'assets/images/intrest4.webp', icon: Icons.phone, select: false.obs),  
  Choice(title: 'assets/images/intrest5.jpg', icon: Icons.camera_alt, select: false.obs),  
+ Choice(title: 'assets/images/intrest6.jpg', icon: Icons.settings, select: false.obs),  
  Choice(title: 'assets/images/intrest6.jpg', icon: Icons.settings, select: false.obs),  
 //  Choice(title: 'GPS', icon: Icons.gps_fixed),  
 ].obs;

@@ -36,7 +36,7 @@ class _HomePageTextFieldState extends State<HomePageTextField> {
         widget.textName == "New Password") {
       return IconButton(
         icon: Icon(
-        passwordController.passwordVisiblity.value
+        (passwordController.passwordVisiblity.value && (widget.textName == 'Password' || widget.textName == "New Password"))
          ? Icons.visibility : Icons.visibility_off,
           color: Colors.black,
         ),
@@ -72,8 +72,13 @@ class _HomePageTextFieldState extends State<HomePageTextField> {
                   label: Text(widget.textName),
                   suffixIcon:sufixIcon(
                     (){
+                      if(widget.textName == 'Password'){
                       passwordController.passwordVisiblity.toggle();
-                      // pass
+                      }else if(widget.textName == 'confirm Password'){
+                      passwordController.cnfpasswordVisiblity.toggle();
+                      }else if(widget.textName == 'New Password'){
+                      passwordController.passwordVisiblity.toggle();
+                      }
                       print("toggle");
                     }
                     )

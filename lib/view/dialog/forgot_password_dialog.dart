@@ -2,7 +2,9 @@
 import 'dart:ui';
 
 import 'package:another_flushbar/flushbar.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/view/dialog/reset_password_dialog.dart';
 import 'package:tvtalk/widgets/text_field.dart';
@@ -112,7 +114,7 @@ class BottomDialog {
                                         borderRadius: BorderRadius.circular(12.0),
                                         side: BorderSide(color: Colors.black)))),
                             child: Text(
-                              "Cancle",
+                              "Cancel",
                               style: TextStyle(color: Colors.black),
                             )),
                       ),
@@ -204,6 +206,21 @@ class BottomDialog {
                           text: "Haven't received email yet?",
                           style: TextStyle(fontSize: 14, color: Colors.black)),
                       TextSpan(
+                        recognizer: TapGestureRecognizer()..onTap = ()async{
+                          print("object");
+                         await apiProvider.Post('/user/forgot-password', {
+                           'email': otpEmail
+                           });
+                           print("rrgisterrr");
+                           print(apiProvider.RegisterResponse['message']);
+                           if(apiProvider.RegisterResponse['message'] == 'Mail sent successfully.'){
+                             Flushbar(
+          backgroundColor: Colors.green,
+          message: "otp resend to your mail",
+          duration: Duration(seconds: 1),
+        ).show(context);
+                           }
+                        },
                           text: "Resend",
                           style:
                               TextStyle(fontSize: 14, color: Color(0xfff0FC59A)))
@@ -219,6 +236,9 @@ class BottomDialog {
                           text: "Wanna change above email?",
                           style: TextStyle(fontSize: 14, color: Colors.black)),
                       TextSpan(
+                          recognizer: TapGestureRecognizer()..onTap = (){
+                            Navigator.pop(context);
+                          },
                           text: "Change Email",
                           style:
                               TextStyle(fontSize: 14, color: Color(0xfff0FC59A)))
