@@ -21,6 +21,7 @@ class HomePage1Controller extends GetxController {
   searchFunction(String? val) {
     searchArticle.clear();
     if (val!.isEmpty) {
+      searchArticle.clear();
       return;
     }
 

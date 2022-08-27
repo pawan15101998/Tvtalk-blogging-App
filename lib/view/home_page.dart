@@ -98,7 +98,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getUSerDetails() async {
       // final SharedPreferences sharedPreferences =
@@ -287,7 +286,8 @@ class _HomePageState extends State<HomePage> {
               return IconButton(
                   onPressed: () {
                     homePageController.searchIcon.toggle();
-                    searchcontroller.clear();
+                    homePage1Controller.searchArticle.clear();
+
                     // homePage1Controller.allpostdata = [];
                     apiProvider.getPost(homePage1Controller.userTags.value);
                   },
@@ -298,6 +298,7 @@ class _HomePageState extends State<HomePage> {
                         )
                       : InkWell(
                           onTap: () {
+                            searchcontroller.clear();
                             homePage1Controller.searchArticle.clear();
                           },
                           child: Icon(
