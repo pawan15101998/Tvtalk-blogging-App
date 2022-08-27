@@ -314,7 +314,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                       height: 10,
                                     ),
                                     Html(
-                                      
                                       data: homepage1controller
                                           .copydata[pageindex].content.rendered,
                                       style: {

@@ -63,7 +63,7 @@ class _ProfilepageState extends State<Profilepage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     Text("Username", style: TextStyle(
                       color: Colors.grey
                     ),),

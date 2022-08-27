@@ -194,6 +194,7 @@ class _SignInPageState extends State<SignInPage> {
                 onPress: ()async{
                   final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                 await  provider.googleLogin();
+                // await provider.getGender();
                   print("userinfo from googl");
                   print(provider.user);
                   print(provider.user.displayName);

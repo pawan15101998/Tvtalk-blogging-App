@@ -32,7 +32,7 @@ class GoogleSignInProvider extends ChangeNotifier {
       final UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
       users = userCredential.user;
-      print(userCredential.user!.email);
+      print(userCredential.user!);
 
       // EasyLoading.dismiss();
       print("jdhsdjsbfhs");

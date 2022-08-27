@@ -197,7 +197,10 @@ class _HomePage1State extends State<HomePage1> {
                                   physics: const ScrollPhysics(),
                                   // scrollDirection: Axis.vertical,
                                   itemCount:
-                                      homePage1Controller.allpostdata.length,
+                                      homePage1Controller.allpostdata.length > 9
+                                          ? 9
+                                          : homePage1Controller
+                                              .allpostdata.length,
                                   itemBuilder: (context, index) {
                                     print(
                                         'obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');

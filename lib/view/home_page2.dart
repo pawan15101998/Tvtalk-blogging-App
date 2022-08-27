@@ -60,7 +60,7 @@ class _HomePage2State extends State<HomePage2> {
             Padding(
               padding: const EdgeInsets.only(left: 20, right: 20, top: 30 ),
               child: GridView.builder(
-                itemCount: 9,
+                itemCount: homePage1Controller.allpostdata.length > 9 ? 9 :homePage1Controller.allpostdata.length,
                 shrinkWrap: true,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,

@@ -296,9 +296,14 @@ class _HomePageState extends State<HomePage> {
                           image: AssetImage("assets/icons/icon_search.png"),
                           height: 24,
                         )
-                      : Icon(
-                          Icons.cancel,
-                          color: Colors.black,
+                      : InkWell(
+                          onTap: () {
+                            homePage1Controller.searchArticle.clear();
+                          },
+                          child: Icon(
+                            Icons.cancel,
+                            color: Colors.black,
+                          ),
                         ));
             }),
             SizedBox(
