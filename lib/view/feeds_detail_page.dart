@@ -34,6 +34,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   ];
 
 
+
   Stream streamController()=> Stream.fromFuture(
         apiprovider.getComment(widget.postData.id)
   );
@@ -49,12 +50,19 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   final textSize = AdaptiveTextSize();
   final getcomment = GetComment();
   PageController? pageController;
-
+  // var  homepage1controller.copydata[pageindex].content.rendered  = '<img[^>]* src=\"([^\"]*)\"[^>]*>';
+  final imagesize = RegExp(r'<img[^>]* src=\"([^\"]*)\"[^>]*">', caseSensitive: false);
+  imagesizefnc(){
+    print("helllll");
+    print(imagesize);
+    // print(homepage1controller.copydata[0].content.rendered.match(RegExp(r'<img[^>]* src=\"([^\"]*)\"[^>]*">')),'');
+  }
+             
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //  scrollController = ScrollController()..addListener(_reachend);
+    imagesizefnc();
     print("inxxxxxxx");
     print(widget.feedindex['index']);
     apiprovider.getComment(widget.postData.id);
@@ -65,7 +73,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   }
   }
   final homepage1controller = Get.find<HomePage1Controller>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +139,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                   );
                                 })))),
                     Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        padding:const EdgeInsets.symmetric(horizontal: 5),
                         child: InkWell(
                           onTap: () {
                             print(detailpageController
@@ -323,6 +330,11 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                   Html(
                                       data: homepage1controller.copydata[pageindex].content.rendered,
                                       style: {
+                                        'figure': Style(
+                                          padding: EdgeInsets.zero,
+                                          margin:EdgeInsets.zero,
+                                          width: MediaQuery.of(context).size.width
+                                        ),
                                         'p': Style(
                                             fontSize: FontSize(detailpageController
                                                         .fontSize ==
