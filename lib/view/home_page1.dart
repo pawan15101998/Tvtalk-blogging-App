@@ -205,7 +205,7 @@ final signincontroller = Get.find<SignInController>();
           InkWell(
             onTap: ()async{
             // if(signincontroller.isGuest.value == 'guest'){
-              Router.neglect(context, () {context.goNamed('SIGNINPAGE');});
+              // Router.neglect(context,(){context.goNamed('SIGNINPAGE');});
             // }else{
               print("Moving");
               print(homePage1Controller.copydata[index].id);
@@ -287,9 +287,17 @@ final signincontroller = Get.find<SignInController>();
                   // ),
                       Obx(() {
                           return 
-                          Text(
-                            homePage1Controller.copydata[index].title.rendered,
-                            style: TextStyle(color: Colors.white),
+                          InkWell(
+                            onTap: ()async{
+                                  await apiprovider.getComment(homePage1Controller.copydata[index].id);
+                                 print("sddddddddddsdddddd");
+                                 print(apiprovider.statuscode);
+                                 context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.copydata[index],queryParams: {"index": "$index"});
+                            },
+                            child: Text(
+                              homePage1Controller.copydata[index].title.rendered,
+                              style: TextStyle(color: Colors.white),
+                            ),
                           );
                         }
                       ),  

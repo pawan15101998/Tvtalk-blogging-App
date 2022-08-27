@@ -225,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                                            ),
+                         ),
                         ),
                       );
       //             : Expanded(
@@ -319,7 +319,7 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: signincontroller.image == null
-                              ? NetworkImage(
+                              ?const NetworkImage(
                                   "https://szabul.edu.pk/dataUpload/863noimage.png")
                               : NetworkImage(signincontroller.image.toString()),
                           fit: BoxFit.cover),

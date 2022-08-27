@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -38,7 +37,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   Stream streamController()=> Stream.fromFuture(
         apiprovider.getComment(widget.postData.id)
   );
-
+  ScrollController scrollController = ScrollController();
   List<TextEditingController>? replayController;
   final themedialog = ThemeDialog();
   bool commentShow = false;
@@ -55,6 +54,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //  scrollController = ScrollController()..addListener(_reachend);
     print("inxxxxxxx");
     print(widget.feedindex['index']);
     apiprovider.getComment(widget.postData.id);
@@ -65,7 +65,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   }
   }
   final homepage1controller = Get.find<HomePage1Controller>();
-  
+
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +99,10 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                     decoration: BoxDecoration(
                         color: detailpageController.isDark.value
                             ? Colors.black
-                            : Color(0xffFFDC5C)),
+                            : const Color(0xffFFDC5C)),
                     child: FlexibleSpaceBar(
-                      // title: ,
                       collapseMode: CollapseMode.parallax,
                       background: Container(
-                        // color: Colors.white,
                         decoration: const BoxDecoration(
                             image: DecorationImage(
                           image: AssetImage("assets/images/myint1.png"),
@@ -125,7 +123,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                 width: 25,
                                 child: Obx(() {
                                   return Image(
-                                    image: AssetImage(
+                                    image:const AssetImage(
                                       "assets/icons/font_family.png",
                                     ),
                                     color: detailpageController.isDark.value
@@ -145,7 +143,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                               width: 25,
                               child: Obx(() {
                                 return Image(
-                                  image: AssetImage(
+                                  image:const AssetImage(
                                     "assets/icons/heart.png",
                                   ) ,
                                   color: detailpageController.isDark.value
@@ -155,7 +153,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                               })),
                         )),
                     Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        padding:const EdgeInsets.symmetric(horizontal: 10),
                         child: InkWell(
                           onTap: () async {
                             print(widget.postData.link);
@@ -193,7 +191,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               ),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
+                    (BuildContext context, int index) {
                     return Obx(() {
                       return Container(
                         color: detailpageController.isDark.value
@@ -202,6 +200,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                              Center(child: buildIndicator( pageindex)),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 10),
@@ -257,14 +256,26 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                       ),
                                       Row(
                                         children: [
-                                          Text(
-                                            "${detailpageController.commentData?.data?.comments?.rows?.length} Comments",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color:
-                                                  detailpageController.isDark.value
-                                                      ? Colors.white
-                                                      : Colors.black,
+                                          InkWell(
+                                            onTap: (){
+                                              print(scrollController.hasClients);
+                                              // print(scrollController.position);
+                                              if(scrollController.hasClients){
+                                                scrollController.animateTo(500,
+                                             duration: const Duration(milliseconds: 500),
+                                             curve: Curves.easeInOut);
+                                              }
+                                             
+                                            },
+                                            child: Text(
+                                              "${detailpageController.commentData?.data?.comments?.rows?.length} Comments",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color:
+                                                    detailpageController.isDark.value
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                              ),
                                             ),
                                           ),
                                           Icon(
@@ -278,7 +289,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                       ),
                                       Row(
                                         children: [
-                                          Text(
+                                         const Text(
                                             "Saved",
                                             style:
                                                 TextStyle(color: Color(0xff949494)),
@@ -717,7 +728,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                                         SizedBox(
                                                           height: 20,
                                                         ),
-                                                        
                                                              ListView.builder(
                                                               shrinkWrap: true,
                                                               physics:
@@ -1186,8 +1196,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               ),
               ListView.builder(
                 physics: const ScrollPhysics(),
-                itemCount: detailpageController
-                    .commentData!.data!.comments!.rows![index].replies!.length,
+                itemCount: detailpageController.commentData!.data!.comments!.rows![index].replies!.length,
                 shrinkWrap: true,
                 itemBuilder: (context, ind) {
                   return CommentReply(index, ind);
@@ -1196,7 +1205,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             ],
           ),
         ),
-        Divider()
+             Divider()
       ],
     );
   }
@@ -1205,6 +1214,18 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     return AnimatedSmoothIndicator(
       activeIndex: detailpageController.DetailScroll.value,
       count: urlImages.length,
+      effect: const JumpingDotEffect(
+          dotColor: Colors.grey,
+          dotHeight: 6,
+          dotWidth: 6,
+          activeDotColor: Colors.black),
+    );
+  }
+
+  Widget buildIndicator(ind) {
+    return AnimatedSmoothIndicator(
+      activeIndex: ind,
+      count: homepage1controller.copydata.length,
       effect: JumpingDotEffect(
           dotColor: Colors.grey,
           dotHeight: 6,

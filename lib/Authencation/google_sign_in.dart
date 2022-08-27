@@ -44,7 +44,20 @@ class GoogleSignInProvider extends ChangeNotifier{
   notifyListeners();
 }
 
-    facebookLogin() async {
+  // Future<String> getGender() async {
+  //   final headers = await googleSignIn.currentUser!.authHeaders;
+  //   final r = await http.get(Uri.parse("https://people.googleapis.com/v1/people/me?personFields=genders&key="),
+  //     headers: {
+  //       "Authorization": headers["Authorization"]!
+  //     }
+  //   );
+  //   final response = json.decode(r.body);
+  //   print("dob");
+  //   print(response["genders"][0]["formattedValue"]);
+  //   return response["genders"][0]["formattedValue"];
+  // }
+
+    facebookLogin()async{
     print("FaceBook");
     try {
       final result =
