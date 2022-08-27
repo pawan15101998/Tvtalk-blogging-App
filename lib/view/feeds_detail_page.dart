@@ -314,168 +314,168 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                       height: 10,
                                     ),
                                     Html(
-                                        data: homepage1controller
-                                            .copydata[pageindex]
-                                            .content
-                                            .rendered,
-                                        style: {
-                                          'p': Style(
-                                              fontSize: FontSize(detailpageController.fontSize ==
-                                                      12
-                                                  ? 12
-                                                  : detailpageController.fontSize ==
-                                                          14
-                                                      ? 14
-                                                      : detailpageController.fontSize ==
-                                                              16
-                                                          ? 16
-                                                          : detailpageController.fontSize ==
-                                                                  18
-                                                              ? 18
-                                                              : detailpageController.fontSize ==
-                                                                      20
-                                                                  ? 20
-                                                                  : detailpageController.fontSize ==
-                                                                          22
-                                                                      ? 22
-                                                                      : detailpageController.fontSize ==
-                                                                              24
-                                                                          ? 24
-                                                                          : null),
-                                              fontFamily: detailpageController
-                                                          .fontFamily.value ==
-                                                      1
-                                                  ? "QUICKSAND"
-                                                  : detailpageController.fontFamily.value ==
-                                                          2
-                                                      ? "NOTO SERIF"
-                                                      : detailpageController
-                                                                  .fontFamily
-                                                                  .value ==
-                                                              3
-                                                          ? "Montserrat"
-                                                          : detailpageController
-                                                                      .fontFamily
-                                                                      .value ==
-                                                                  4
-                                                              ? "VIDALOKA"
-                                                              : "POPPINS",
-                                              color:
-                                                  detailpageController.isDark.value
-                                                      ? Colors.white
-                                                      : Colors.black),
-                                          'h2': Style(
-                                              fontSize: FontSize(detailpageController.fontSize ==
-                                                      12
-                                                  ? 12
-                                                  : detailpageController.fontSize ==
-                                                          14
-                                                      ? 14
-                                                      : detailpageController.fontSize ==
-                                                              16
-                                                          ? 16
-                                                          : detailpageController.fontSize ==
-                                                                  18
-                                                              ? 18
-                                                              : detailpageController.fontSize ==
-                                                                      20
-                                                                  ? 20
-                                                                  : detailpageController.fontSize ==
-                                                                          22
-                                                                      ? 22
-                                                                      : detailpageController.fontSize ==
-                                                                              24
-                                                                          ? 24
-                                                                          : null),
-                                              fontFamily: detailpageController
-                                                          .fontFamily.value ==
-                                                      1
-                                                  ? "QUICKSAND"
-                                                  : detailpageController.fontFamily.value ==
-                                                          2
-                                                      ? "NOTO SERIF"
-                                                      : detailpageController
-                                                                  .fontFamily
-                                                                  .value ==
-                                                              3
-                                                          ? "Montserrat"
-                                                          : detailpageController
-                                                                      .fontFamily
-                                                                      .value ==
-                                                                  4
-                                                              ? "VIDALOKA"
-                                                              : "POPPINS",
-                                              color:
-                                                  detailpageController.isDark.value
-                                                      ? Colors.white
-                                                      : Colors.black),
-                                          'figcaption': Style(
-                                              fontSize: const FontSize(12),
-                                              color: Colors.grey,
-                                              fontStyle: FontStyle.italic),
-                                          'img src': Style(
-                                            //  color: Colors.blue
-                                            width: 20,
-                                          ),
-                                          'li': Style(
-                                              fontSize: FontSize(detailpageController.fontSize ==
-                                                      12
-                                                  ? 12
-                                                  : detailpageController.fontSize ==
-                                                          14
-                                                      ? 14
-                                                      : detailpageController.fontSize ==
-                                                              16
-                                                          ? 16
-                                                          : detailpageController.fontSize ==
-                                                                  18
-                                                              ? 18
-                                                              : detailpageController.fontSize ==
-                                                                      20
-                                                                  ? 20
-                                                                  : detailpageController.fontSize ==
-                                                                          22
-                                                                      ? 22
-                                                                      : detailpageController.fontSize ==
-                                                                              24
-                                                                          ? 24
-                                                                          : null),
-                                              fontFamily: detailpageController
-                                                          .fontFamily.value ==
-                                                      1
-                                                  ? "QUICKSAND"
-                                                  : detailpageController.fontFamily.value ==
-                                                          2
-                                                      ? "NOTO SERIF"
-                                                      : detailpageController
-                                                                  .fontFamily
-                                                                  .value ==
-                                                              3
-                                                          ? "Montserrat"
-                                                          : detailpageController
-                                                                      .fontFamily
-                                                                      .value ==
-                                                                  4
-                                                              ? "VIDALOKA"
-                                                              : "POPPINS",
-                                              color:
-                                                  detailpageController.isDark.value
-                                                      ? Colors.white
-                                                      : Colors.black)
-                                        },
-                                        onAnchorTap: (url, context, attributes,
-                                            element) {
-                                          print(attributes.values);
-                                        },
-                                        onLinkTap: (String? url,
-                                            RenderContext context,
-                                            Map<String, String> attributes,
-                                            dom.Element? element) {
-                                          print(url);
-                                          print(attributes.entries);
-                                          print(element);
-                                          //open URL in webview, or launch URL in browser, or any other logic here
-                                        }),
+                                      
+                                      data: homepage1controller
+                                          .copydata[pageindex].content.rendered,
+                                      style: {
+                                        'p': Style(
+                                            fontSize: FontSize(detailpageController
+                                                        .fontSize ==
+                                                    12
+                                                ? 12
+                                                : detailpageController.fontSize ==
+                                                        14
+                                                    ? 14
+                                                    : detailpageController.fontSize ==
+                                                            16
+                                                        ? 16
+                                                        : detailpageController.fontSize ==
+                                                                18
+                                                            ? 18
+                                                            : detailpageController.fontSize ==
+                                                                    20
+                                                                ? 20
+                                                                : detailpageController.fontSize ==
+                                                                        22
+                                                                    ? 22
+                                                                    : detailpageController.fontSize ==
+                                                                            24
+                                                                        ? 24
+                                                                        : null),
+                                            fontFamily: detailpageController
+                                                        .fontFamily.value ==
+                                                    1
+                                                ? "QUICKSAND"
+                                                : detailpageController.fontFamily.value ==
+                                                        2
+                                                    ? "NOTO SERIF"
+                                                    : detailpageController
+                                                                .fontFamily
+                                                                .value ==
+                                                            3
+                                                        ? "Montserrat"
+                                                        : detailpageController
+                                                                    .fontFamily
+                                                                    .value ==
+                                                                4
+                                                            ? "VIDALOKA"
+                                                            : "POPPINS",
+                                            color: detailpageController.isDark.value
+                                                ? Colors.white
+                                                : Colors.black),
+                                        'h2': Style(
+                                            fontSize: FontSize(detailpageController
+                                                        .fontSize ==
+                                                    12
+                                                ? 12
+                                                : detailpageController.fontSize ==
+                                                        14
+                                                    ? 14
+                                                    : detailpageController.fontSize ==
+                                                            16
+                                                        ? 16
+                                                        : detailpageController.fontSize ==
+                                                                18
+                                                            ? 18
+                                                            : detailpageController.fontSize ==
+                                                                    20
+                                                                ? 20
+                                                                : detailpageController.fontSize ==
+                                                                        22
+                                                                    ? 22
+                                                                    : detailpageController.fontSize ==
+                                                                            24
+                                                                        ? 24
+                                                                        : null),
+                                            fontFamily: detailpageController
+                                                        .fontFamily.value ==
+                                                    1
+                                                ? "QUICKSAND"
+                                                : detailpageController.fontFamily.value ==
+                                                        2
+                                                    ? "NOTO SERIF"
+                                                    : detailpageController
+                                                                .fontFamily
+                                                                .value ==
+                                                            3
+                                                        ? "Montserrat"
+                                                        : detailpageController
+                                                                    .fontFamily
+                                                                    .value ==
+                                                                4
+                                                            ? "VIDALOKA"
+                                                            : "POPPINS",
+                                            color: detailpageController.isDark.value
+                                                ? Colors.white
+                                                : Colors.black),
+                                        'figcaption': Style(
+                                            fontSize: const FontSize(12),
+                                            color: Colors.grey,
+                                            fontStyle: FontStyle.italic),
+                                        'img src': Style(
+                                          //  color: Colors.blue
+                                          width: 20,
+                                        ),
+                                        'li': Style(
+                                            fontSize: FontSize(detailpageController
+                                                        .fontSize ==
+                                                    12
+                                                ? 12
+                                                : detailpageController.fontSize ==
+                                                        14
+                                                    ? 14
+                                                    : detailpageController.fontSize ==
+                                                            16
+                                                        ? 16
+                                                        : detailpageController.fontSize ==
+                                                                18
+                                                            ? 18
+                                                            : detailpageController.fontSize ==
+                                                                    20
+                                                                ? 20
+                                                                : detailpageController.fontSize ==
+                                                                        22
+                                                                    ? 22
+                                                                    : detailpageController.fontSize ==
+                                                                            24
+                                                                        ? 24
+                                                                        : null),
+                                            fontFamily: detailpageController
+                                                        .fontFamily.value ==
+                                                    1
+                                                ? "QUICKSAND"
+                                                : detailpageController.fontFamily.value ==
+                                                        2
+                                                    ? "NOTO SERIF"
+                                                    : detailpageController
+                                                                .fontFamily
+                                                                .value ==
+                                                            3
+                                                        ? "Montserrat"
+                                                        : detailpageController
+                                                                    .fontFamily
+                                                                    .value ==
+                                                                4
+                                                            ? "VIDALOKA"
+                                                            : "POPPINS",
+                                            color: detailpageController.isDark.value
+                                                ? Colors.white
+                                                : Colors.black)
+                                      },
+                                      onAnchorTap:
+                                          (url, context, attributes, element) {
+                                        print(attributes.values);
+                                      },
+                                      onLinkTap: (String? url,
+                                          RenderContext context,
+                                          Map<String, String> attributes,
+                                          dom.Element? element) {
+                                        print(url);
+                                        print(attributes.entries);
+                                        print(element);
+                                        //open URL in webview, or launch URL in browser, or any other logic here
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
