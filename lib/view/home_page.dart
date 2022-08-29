@@ -298,6 +298,8 @@ class _HomePageState extends State<HomePage> {
                         )
                       : InkWell(
                           onTap: () {
+                            homePageController.searchIcon.toggle();
+
                             searchcontroller.clear();
                             homePage1Controller.searchArticle.clear();
                           },
@@ -473,6 +475,8 @@ class _HomePageState extends State<HomePage> {
               currentIndex: homePageController.bootomNav.value,
               type: BottomNavigationBarType.fixed,
               elevation: 0,
+              selectedFontSize: 12,
+              unselectedFontSize: 12,
               selectedItemColor: Color(0xffF1B142),
               selectedIconTheme: IconThemeData(color: Color(0xffF1B142)),
               backgroundColor: Colors.transparent,

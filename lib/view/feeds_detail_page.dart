@@ -650,104 +650,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                               )
                                             ],
                                           ),
-                                          Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                90 /
-                                                100,
-                                            height:
-                                                textSize.getadaptiveTextSize(
-                                                    context, 45),
-                                            padding: const EdgeInsets.fromLTRB(
-                                                10, 0, 10, 0),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                color: TextFieldColor),
-                                            child: TextFormField(
-                                                controller: commentController,
-                                                // controller: widget.controller,
-                                                decoration: InputDecoration(
-                                                  suffixIcon: InkWell(
-                                                      onTap: () {
-                                                        print("res");
-                                                        apiprovider.postApi(
-                                                            '/post/create-comment',
-                                                            {
-                                                              'postId': widget
-                                                                  .postData.id
-                                                                  .toString(),
-                                                              'content':
-                                                                  commentController
-                                                                      .text
-                                                            });
-                                                        if (apiprovider
-                                                                .statuscode ==
-                                                            200) {
-                                                          if (commentController
-                                                                  .text !=
-                                                              "") {
-                                                            final snackBar =
-                                                                SnackBar(
-                                                              backgroundColor:
-                                                                  Colors.green,
-                                                              content: const Text(
-                                                                  "Comment add sucessfully"),
-                                                              action:
-                                                                  SnackBarAction(
-                                                                label: '',
-                                                                onPressed: () {
-                                                                  // Some code to undo the change.
-                                                                },
-                                                              ),
-                                                            );
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    snackBar);
-                                                          } else {
-                                                            final snackBar =
-                                                                SnackBar(
-                                                              backgroundColor:
-                                                                  Colors.red,
-                                                              content: const Text(
-                                                                  "Write something to add comment"),
-                                                              action:
-                                                                  SnackBarAction(
-                                                                label: '',
-                                                                onPressed: () {
-                                                                  // Some code to undo the change.
-                                                                },
-                                                              ),
-                                                            );
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(
-                                                                    snackBar);
-                                                          }
-
-                                                          setState(() {});
-                                                        }
-                                                        commentController
-                                                            .clear();
-                                                        apiprovider.getComment(
-                                                            widget.postData.id);
-                                                      },
-                                                      child: const SizedBox(
-                                                          height: 10,
-                                                          width: 10,
-                                                          child: Image(
-                                                              image: AssetImage(
-                                                                  "assets/icons/icon_check.png")))),
-                                                  fillColor:
-                                                      const Color(0xffFEDC5D),
-                                                  border: InputBorder.none,
-                                                  label: Text(
-                                                    "Add your comment ",
-                                                  ),
-                                                )),
-                                          ),
+                                          SizedBox(height: 12),
                                           detailpageController.commentData!
                                                       .data!.comments!.count !=
                                                   0
@@ -756,9 +659,8 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                                           .CommentShow.value
                                                       ? Column(
                                                           children: [
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
+                                                            textComment(
+                                                                context),
 
                                                             SizedBox(
                                                               height: 20,
@@ -779,15 +681,32 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                                                   (context,
                                                                       index) {
                                                                 return ExpendedComment(
-                                                                    index,
-                                                                    detailpageController
-                                                                        .commentData!
-                                                                        .data!
-                                                                        .comments!
-                                                                        .rows![
-                                                                            index]
-                                                                        .replies!
-                                                                        .length);
+                                                                  index,
+                                                                  detailpageController
+                                                                      .commentData!
+                                                                      .data!
+                                                                      .comments!
+                                                                      .rows![
+                                                                          index]
+                                                                      .replies!
+                                                                      .length,
+                                                                  name: detailpageController
+                                                                      .commentData!
+                                                                      .data!
+                                                                      .comments!
+                                                                      .rows![
+                                                                          index]
+                                                                      .user!
+                                                                      .name,
+                                                                  image: detailpageController
+                                                                      .commentData!
+                                                                      .data!
+                                                                      .comments!
+                                                                      .rows![
+                                                                          index]
+                                                                      .user!
+                                                                      .image,
+                                                                );
                                                               },
                                                             )
 
@@ -795,7 +714,32 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                                             // ExpendedComment(1),
                                                           ],
                                                         )
-                                                      : SmallContainer();
+                                                      : SmallContainer(
+                                                          name:
+                                                              detailpageController
+                                                                  .commentData!
+                                                                  .data!
+                                                                  .comments!
+                                                                  .rows![index]
+                                                                  .user!
+                                                                  .name,
+                                                          image:
+                                                              detailpageController
+                                                                  .commentData!
+                                                                  .data!
+                                                                  .comments!
+                                                                  .rows![index]
+                                                                  .user!
+                                                                  .image,
+                                                          date:
+                                                              detailpageController
+                                                                  .commentData!
+                                                                  .data!
+                                                                  .comments!
+                                                                  .rows![index]
+                                                                  .user!
+                                                                  .createdAt,
+                                                        );
                                                 })
                                               : Text("no comment yet")
                                         ],
@@ -837,7 +781,71 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     );
   }
 
-  Widget SmallContainer() {
+  Container textComment(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 90 / 100,
+      height: textSize.getadaptiveTextSize(context, 45),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5), color: TextFieldColor),
+      child: TextFormField(
+          controller: commentController,
+          // controller: widget.controller,
+          decoration: InputDecoration(
+            suffixIcon: InkWell(
+                onTap: () {
+                  print("res");
+                  apiprovider.postApi('/post/create-comment', {
+                    'postId': widget.postData.id.toString(),
+                    'content': commentController.text
+                  });
+                  if (apiprovider.statuscode == 200) {
+                    if (commentController.text != "") {
+                      final snackBar = SnackBar(
+                        backgroundColor: Colors.green,
+                        content: const Text("Comment add sucessfully"),
+                        action: SnackBarAction(
+                          label: '',
+                          onPressed: () {
+                            // Some code to undo the change.
+                          },
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    } else {
+                      final snackBar = SnackBar(
+                        backgroundColor: Colors.red,
+                        content: const Text("Write something to add comment"),
+                        action: SnackBarAction(
+                          label: '',
+                          onPressed: () {
+                            // Some code to undo the change.
+                          },
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+
+                    setState(() {});
+                  }
+                  commentController.clear();
+                  apiprovider.getComment(widget.postData.id);
+                },
+                child: const SizedBox(
+                    height: 10,
+                    width: 10,
+                    child: Image(
+                        image: AssetImage("assets/icons/icon_check.png")))),
+            fillColor: const Color(0xffFEDC5D),
+            border: InputBorder.none,
+            label: Text(
+              "Add your comment ",
+            ),
+          )),
+    );
+  }
+
+  Widget SmallContainer({name, image, date}) {
     return Column(
       children: [
         const SizedBox(
@@ -848,17 +856,15 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  backgroundImage:
-                      NetworkImage('https://picsum.photos/id/237/200/300'),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      image ?? 'https://picsum.photos/id/237/200/300'),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Text(
-                  detailpageController
-                      .commentData!.data!.comments!.rows![0].user!.name
-                      .toString(),
+                  name ?? '',
                   style: TextStyle(
                     color: detailpageController.isDark.value
                         ? Colors.white
@@ -868,9 +874,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
               ],
             ),
             Text(
-              detailpageController
-                  .commentData!.data!.comments!.rows![0].createdAt
-                  .toString(),
+              date ?? '',
               style: TextStyle(color: Color(0xff949494)),
             )
           ],
@@ -923,6 +927,9 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                           'assets/icons/icon_interest.png'),
                                     )),
                         ),
+                      SizedBox(
+                        width: 4,
+                      ),
                       Text(
                         detailpageController
                             .commentData!.data!.comments!.rows![0].commentLikes
@@ -1047,7 +1054,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     );
   }
 
-  Widget ExpendedComment(int index, int ReplyNum) {
+  Widget ExpendedComment(int index, int ReplyNum, {name, image}) {
     return Column(
       children: [
         Row(
@@ -1056,16 +1063,14 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundImage:
-                      NetworkImage('https://picsum.photos/id/237/200/300'),
+                  backgroundImage: NetworkImage(
+                      image ?? 'https://picsum.photos/id/237/200/300'),
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Text(
-                  detailpageController
-                      .commentData!.data!.comments!.rows![index].user!.name
-                      .toString(),
+                  name ?? '',
                   style: TextStyle(
                       color: detailpageController.isDark.value
                           ? Colors.white
