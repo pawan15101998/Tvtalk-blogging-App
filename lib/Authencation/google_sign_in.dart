@@ -46,13 +46,11 @@ class GoogleSignInProvider extends ChangeNotifier{
 
   // Future<String> getGender() async {
   //   final headers = await googleSignIn.currentUser!.authHeaders;
-  //   final r = await http.get(Uri.parse("https://people.googleapis.com/v1/people/me/connections''?requestMask.includeField=person.names"),
+  //   final r = await http.get(Uri.parse("https://people.googleapis.com/v1/people/me?personFields=genders&key="),
   //     headers: {
   //       "Authorization": headers["Authorization"]!
   //     }
   //   );
-  //   print("r.body");
-  //   print(r.body);
   //   final response = json.decode(r.body);
   //   print("dob");
   //   print(response["genders"][0]["formattedValue"]);

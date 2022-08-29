@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tvtalk/model/post_model.dart';
 import 'package:tvtalk/routers.dart';
 import 'package:tvtalk/view/alllquiz_tab_page.dart';
+import 'package:tvtalk/view/edit_profile_page.dart';
 import 'package:tvtalk/view/feeds_detail_page.dart';
 import 'package:tvtalk/view/fun_&_games.dart';
 import 'package:tvtalk/view/home_page.dart';
@@ -108,6 +109,11 @@ class CustomRouter{
       name: 'POLES',
         path: poles,
         builder: (context, state) => const Poles(),
+      ),
+       GoRoute(
+      name: 'EDITPROFILE',
+        path: editprofile,
+        builder: (context, state) => const Editprofilepage(),
       ),
     ]
     );

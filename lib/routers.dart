@@ -15,3 +15,4 @@ const String selectyourintrest = '/Selectyourintrest';
 const String articledetailpage = '/Articledetailpage';
 const String funandgamespage = '/Funandgamespage';
 const String poles = '/Poles';
+const String editprofile = '/Editprofile';

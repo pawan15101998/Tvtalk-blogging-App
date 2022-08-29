@@ -96,18 +96,15 @@ class _HomePageState extends State<HomePage> {
     const HomePage4(),
   ];
 
-
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-      getUSerDetails() async {
-    // final SharedPreferences sharedPreferences =
-    //     await SharedPreferences.getInstance();
-    signincontroller.getuserdata();
+    getUSerDetails() async {
+      // final SharedPreferences sharedPreferences =
+      //     await SharedPreferences.getInstance();
+      signincontroller.getuserdata();
+    }
 
-  }
     getUSerDetails();
     datacopy = homePage1Controller.allpostdata;
     print("nnnnnnnn");
@@ -140,12 +137,14 @@ class _HomePageState extends State<HomePage> {
           leading: Obx(() {
             return homePageController.searchIcon.value
                 ? IconButton(
-                    icon: signincontroller.isGuest.value == ""? Image(
-                      image: AssetImage(
-                        'assets/icons/icon_menu.png',
-                      ),
-                      height: 24,
-                    ): SizedBox(),
+                    icon: signincontroller.isGuest.value == ""
+                        ? Image(
+                            image: AssetImage(
+                              'assets/icons/icon_menu.png',
+                            ),
+                            height: 24,
+                          )
+                        : SizedBox(),
                     onPressed: () {
                       scaffoldKey.currentState!.openDrawer();
                     },
@@ -170,47 +169,51 @@ class _HomePageState extends State<HomePage> {
                       icon: const Image(
                         image: AssetImage("assets/icons/icon_bell.png"),
                         height: 24,
-                      )) :  Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Center(
+                      ))
+                  : Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Center(
                           // margin: const EdgeInsets.only(top: 20,),
                           child: SizedBox(
                             height: 50,
-                            width: MediaQuery.of(context).size.width *  80/ 100,
+                            width: MediaQuery.of(context).size.width * 80 / 100,
                             child: TextFormField(
                               controller: searchcontroller,
-                              onChanged: (value) {
-                                // homePage1Controller.allpostdata[0].title.rendered = value;
-                                print("print");
-                                copydata = homePage1Controller.allpostdata;
-                                homePage1Controller.allpostdata.value = copydata!
-                                    .where((i) => i.title.rendered
-                                        .toString()
-                                        .toLowerCase()
-                                        .contains(value.toLowerCase()))
-                                    .toList();
-                                print("objectssss");
-                                print(copydata);
-                                print(homePage1Controller.allpostdata);
-                                if(searchcontroller.text == ""){
-                               apiProvider.getPost(homePage1Controller.userTags.value);
-                                }
-                                // apiProvider.getPost(homePage1Controller.userTags.value);
-                                // searchcontroller.clear();`
-                                // print(homeP);
-                                // dataCopy![0].title.rendered = value;
-                                // homePage1Controller.allpostdata.value = dataCopy!;
-                              },
+                              onChanged: homePage1Controller.searchFunction,
+                              //  (value) {
+                              //   // homePage1Controller.allpostdata[0].title.rendered = value;
+                              //   print("print");
+                              //   copydata = homePage1Controller.allpostdata;
+                              //   homePage1Controller.allpostdata.value =
+                              //       copydata!
+                              //           .where((i) => i.title.rendered
+                              //               .toString()
+                              //               .toLowerCase()
+                              //               .contains(value.toLowerCase()))
+                              //           .toList();
+                              //   print("objectssss");
+                              //   print(copydata);
+                              //   print(homePage1Controller.allpostdata);
+                              //   if (searchcontroller.text == "") {
+                              //     apiProvider.getPost(
+                              //         homePage1Controller.userTags.value);
+                              //   }
+                              //   // apiProvider.getPost(homePage1Controller.userTags.value);
+                              //   // searchcontroller.clear();`
+                              //   // print(homeP);
+                              //   // dataCopy![0].title.rendered = value;
+                              //   // homePage1Controller.allpostdata.value = dataCopy!;
+                              // },
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
                                 filled: true,
                                 fillColor: Colors.white,
                                 // suffixIcon: InkWell(
@@ -225,75 +228,84 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                         ),
                         ),
-                      );
-      //             : Expanded(
-      //                 child: Center(
-      //                 // margin: const EdgeInsets.only(top: 20,),
-      //                 child: SizedBox(
-      //                   height: 50,
-      //                   width: MediaQuery.of(context).size.width * 80 / 100,
-      //                   child: TextFormField(
-      //                     controller: searchcontroller,
-      //                     onChanged: (value) {
-      //                       // homePage1Controller.allpostdata[0].title.rendered = value;
-      //                       print("print");
-      //                       copydata = homePage1Controller.allpostdata;
-      //                       homePage1Controller.allpostdata.value = copydata!
-      //                           .where((i) => i.title.rendered
-      //                               .toString()
-      //                               .toLowerCase()
-      //                               .contains(value.toLowerCase()))
-      //                           .toList();
-      //                       print("objectssss");
-      //                       print(copydata);
-      //                       print(homePage1Controller.allpostdata);
-      //                       // searchcontroller.clear();`
-      //                       // print(homeP);
-      //                       // dataCopy![0].title.rendered = value;
-      //                       // homePage1Controller.allpostdata.value = dataCopy!;
-      //                     },
-      //                     decoration: InputDecoration(
-      //                       focusedBorder: OutlineInputBorder(
-      //                         borderSide: BorderSide(color: Colors.white),
-      //                         borderRadius: BorderRadius.circular(10),
-      //                       ),
-      //                       enabledBorder: UnderlineInputBorder(
-      //   borderSide: BorderSide(color: Colors.white),
-      //   borderRadius: BorderRadius.circular(10),
-      // ),
-      //                       filled: true,
-      //                       fillColor: Colors.white,
-      //                       suffixIcon: InkWell(
-      //                           onTap: () {
-      //                             homePageController.searchIcon.toggle();
-      //                             searchcontroller.clear();
-      //                             apiProvider.getPost(homePage1Controller.userTags.value);
-      //                           },
-      //                           child: Icon(Icons.cancel)),
-      //                       border: OutlineInputBorder(),
-      //                       hintText: 'Search',
-      //                     ),
-      //                   ),
-      //                 ),
-      //               ));
+                      ),
+                    );
+              //             : Expanded(
+              //                 child: Center(
+              //                 // margin: const EdgeInsets.only(top: 20,),
+              //                 child: SizedBox(
+              //                   height: 50,
+              //                   width: MediaQuery.of(context).size.width * 80 / 100,
+              //                   child: TextFormField(
+              //                     controller: searchcontroller,
+              //                     onChanged: (value) {
+              //                       // homePage1Controller.allpostdata[0].title.rendered = value;
+              //                       print("print");
+              //                       copydata = homePage1Controller.allpostdata;
+              //                       homePage1Controller.allpostdata.value = copydata!
+              //                           .where((i) => i.title.rendered
+              //                               .toString()
+              //                               .toLowerCase()
+              //                               .contains(value.toLowerCase()))
+              //                           .toList();
+              //                       print("objectssss");
+              //                       print(copydata);
+              //                       print(homePage1Controller.allpostdata);
+              //                       // searchcontroller.clear();`
+              //                       // print(homeP);
+              //                       // dataCopy![0].title.rendered = value;
+              //                       // homePage1Controller.allpostdata.value = dataCopy!;
+              //                     },
+              //                     decoration: InputDecoration(
+              //                       focusedBorder: OutlineInputBorder(
+              //                         borderSide: BorderSide(color: Colors.white),
+              //                         borderRadius: BorderRadius.circular(10),
+              //                       ),
+              //                       enabledBorder: UnderlineInputBorder(
+              //   borderSide: BorderSide(color: Colors.white),
+              //   borderRadius: BorderRadius.circular(10),
+              // ),
+              //                       filled: true,
+              //                       fillColor: Colors.white,
+              //                       suffixIcon: InkWell(
+              //                           onTap: () {
+              //                             homePageController.searchIcon.toggle();
+              //                             searchcontroller.clear();
+              //                             apiProvider.getPost(homePage1Controller.userTags.value);
+              //                           },
+              //                           child: Icon(Icons.cancel)),
+              //                       border: OutlineInputBorder(),
+              //                       hintText: 'Search',
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ));
             }),
             Obx(() {
               return IconButton(
                   onPressed: () {
                     homePageController.searchIcon.toggle();
-                                      searchcontroller.clear();
-                                      // homePage1Controller.allpostdata = [];
-                                      apiProvider.getPost(homePage1Controller.userTags.value);
+                    homePage1Controller.searchArticle.clear();
+
+                    // homePage1Controller.allpostdata = [];
+                    apiProvider.getPost(homePage1Controller.userTags.value);
                   },
                   icon: homePageController.searchIcon.value
                       ? const Image(
                           image: AssetImage("assets/icons/icon_search.png"),
                           height: 24,
                         )
-                      : Icon(Icons.cancel, color: Colors.black,)
-                      );
+                      : InkWell(
+                          onTap: () {
+                            searchcontroller.clear();
+                            homePage1Controller.searchArticle.clear();
+                          },
+                          child: Icon(
+                            Icons.cancel,
+                            color: Colors.black,
+                          ),
+                        ));
             }),
             SizedBox(
               width: 10,
@@ -301,11 +313,11 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      drawer:  Drawer(
+      drawer: Drawer(
         child: ListView(
           children: [
             InkWell(
-              onTap: (){
+              onTap: () {
                 context.pushNamed("PROFILEPAGE");
               },
               child: DrawerHeader(
@@ -319,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: signincontroller.image == null
-                              ?const NetworkImage(
+                              ? NetworkImage(
                                   "https://szabul.edu.pk/dataUpload/863noimage.png")
                               : NetworkImage(signincontroller.image.toString()),
                           fit: BoxFit.cover),
@@ -500,7 +512,7 @@ class _HomePageState extends State<HomePage> {
                   icon: SizedBox(
                     height: 25,
                   ),
-                  label: "fun&Game",
+                  label: "Fun&Games",
                 ),
                 BottomNavigationBarItem(
                   icon: SizedBox(

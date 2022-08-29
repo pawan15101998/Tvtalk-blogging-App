@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 
 class Profilepage extends StatefulWidget {
@@ -20,14 +21,18 @@ class _ProfilepageState extends State<Profilepage> {
         child: Container(
           margin: EdgeInsets.only(top: 25),
           child: AppBar(
-            backgroundColor: Colors.yellow,
+            backgroundColor: Color(0xffFFDC5C),
             elevation: 0,
             centerTitle: true,
             title:const Text("Profile"),
             actions: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("save", style: TextStyle(color: Colors.black),),
+                child: InkWell(
+                  onTap: (){
+                    context.pushNamed('EDITPROFILE');
+                  },
+                  child: Text("Edit", style: TextStyle(color: Colors.black),)),
               )
             ],
           ),
@@ -35,7 +40,7 @@ class _ProfilepageState extends State<Profilepage> {
         ),
       ),
       body: Container(
-        color: Colors.yellow,
+        color: Color(0xfffFFDC5C),
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

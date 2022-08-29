@@ -34,7 +34,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   ];
 
 
-
   Stream streamController()=> Stream.fromFuture(
         apiprovider.getComment(widget.postData.id)
   );
@@ -50,19 +49,12 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   final textSize = AdaptiveTextSize();
   final getcomment = GetComment();
   PageController? pageController;
-  // var  homepage1controller.copydata[pageindex].content.rendered  = '<img[^>]* src=\"([^\"]*)\"[^>]*>';
-  final imagesize = RegExp(r'<img[^>]* src=\"([^\"]*)\"[^>]*">', caseSensitive: false);
-  imagesizefnc(){
-    print("helllll");
-    print(imagesize);
-    // print(homepage1controller.copydata[0].content.rendered.match(RegExp(r'<img[^>]* src=\"([^\"]*)\"[^>]*">')),'');
-  }
-             
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    imagesizefnc();
+    //  scrollController = ScrollController()..addListener(_reachend);
     print("inxxxxxxx");
     print(widget.feedindex['index']);
     apiprovider.getComment(widget.postData.id);
@@ -73,6 +65,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   }
   }
   final homepage1controller = Get.find<HomePage1Controller>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +99,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                     decoration: BoxDecoration(
                         color: detailpageController.isDark.value
                             ? Colors.black
-                            : const Color(0xffFFDC5C)),
+                            : Color(0xffFFDC5C)),
                     child: FlexibleSpaceBar(
                       collapseMode: CollapseMode.parallax,
                       background: Container(
@@ -130,7 +123,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                 width: 25,
                                 child: Obx(() {
                                   return Image(
-                                    image:const AssetImage(
+                                    image: AssetImage(
                                       "assets/icons/font_family.png",
                                     ),
                                     color: detailpageController.isDark.value
@@ -139,7 +132,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                   );
                                 })))),
                     Padding(
-                        padding:const EdgeInsets.symmetric(horizontal: 5),
+                        padding: EdgeInsets.symmetric(horizontal: 5),
                         child: InkWell(
                           onTap: () {
                             print(detailpageController
@@ -330,10 +323,10 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                                   Html(
                                       data: homepage1controller.copydata[pageindex].content.rendered,
                                       style: {
-                                        'figure': Style(
+                                        'figure':Style(
+                                          width: MediaQuery.of(context).size.width,
                                           padding: EdgeInsets.zero,
-                                          margin:EdgeInsets.zero,
-                                          width: MediaQuery.of(context).size.width
+                                          margin: EdgeInsets.zero
                                         ),
                                         'p': Style(
                                             fontSize: FontSize(detailpageController
