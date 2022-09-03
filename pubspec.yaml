@@ -46,11 +46,13 @@ dependencies:
   google_sign_in: ^5.4.0
   http: ^0.13.4
   image_picker: ^0.8.5+3
+  intl: ^0.17.0
   modal_progress_hud_nsn: ^0.3.0
   provider: ^6.0.3
   share_plus: ^4.0.10+1
   shared_preferences: ^2.0.15
   smooth_page_indicator: ^1.0.0+2
+  timeago: ^3.3.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -110,9 +112,21 @@ flutter:
         - asset: fonts/Quicksand-LightItalic.otf
         - asset: fonts/Quicksand-Regular.otf
 
-    # - family: Vidaloka
-    #   fonts:
-    #     - asset: fonts/Vidaloka-Regular.ttf
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Black.ttf
+        - asset: fonts/Roboto-BlackItalic.ttf
+        - asset: fonts/Roboto-Bold.ttf
+        - asset: fonts/Roboto-BoldItalic.ttf
+        - asset: fonts/Roboto-Italic.ttf
+        - asset: fonts/Roboto-Light.ttf
+        - asset: fonts/Roboto-LightItalic.ttf
+        - asset: fonts/Roboto-Medium.ttf
+        - asset: fonts/Roboto-MediumItalic.ttf
+        - asset: fonts/Roboto-Regular.ttf
+        - asset: fonts/Roboto-Thin.ttf
+        - asset: fonts/Roboto-ThinItalic.ttf
+
     - family: Montserrat
       fonts:
         - asset: fonts/MontserratAlternates-Black.otf

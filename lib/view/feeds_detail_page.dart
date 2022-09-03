@@ -3,11 +3,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/getxcontroller/detail_page_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
+import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/theme/theme.dart';
 import 'package:tvtalk/view/dialog/theme_dialog.dart';
@@ -49,7 +51,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   final textSize = AdaptiveTextSize();
   final getcomment = GetComment();
   PageController? pageController;
-
+final signincontroller = Get.find<SignInController>();
   @override
   void initState() {
     // TODO: implement initState
@@ -82,6 +84,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
         controller: pageController,
         itemBuilder: (BuildContext context, int pageindex) {
           return CustomScrollView(
+            controller: scrollController,
             slivers: <Widget>[
               Obx(() {
                 return SliverAppBar(
@@ -90,7 +93,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                         ? Colors.white
                         : Colors.black,
                   ),
-                  toolbarHeight: 100,
+                  toolbarHeight: 80,
                   pinned: true,
                   snap: false,
                   floating: false,
@@ -116,14 +119,14 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                         padding: EdgeInsets.symmetric(horizontal: 5),
                         child: InkWell(
                             onTap: () {
-                              themedialog.showThemeDialog(context, "knkn");
+                              // themedialog.showThemeDialog(context, "knkn");
                             },
                             child: SizedBox(
                                 height: 25,
                                 width: 25,
                                 child: Obx(() {
                                   return Image(
-                                    image: AssetImage(
+                                    image: const AssetImage(
                                       "assets/icons/font_family.png",
                                     ),
                                     color: detailpageController.isDark.value
@@ -177,6 +180,16 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                       width: 15,
                     )
                   ],
+                  bottom: PreferredSize(
+                          child: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: 
+                            // Obx(() {
+                            //   return 
+                              buildIndicatorTrending(ind: pageindex)
+                            // }),
+                          ),
+                          preferredSize: Size.fromHeight(0))
                 );
               }),
               SliverToBoxAdapter(
@@ -189,618 +202,647 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                   );
                 }),
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                    return Obx(() {
-                      return Container(
-                        color: detailpageController.isDark.value
-                            ? Colors.black
-                            : Colors.white, //dark Theme
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              Center(child: buildIndicator( pageindex)),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    homepage1controller.copydata[pageindex].title.rendered,
-                                    // widget.postData.title.rendered,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'Poppins',
-                                      color: detailpageController.isDark.value
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  // Container(
-                                  //   decoration: BoxDecoration(
-                                  //       color: Colors.yellow,
-                                  //       borderRadius: BorderRadius.circular(9)),
-                                  //   child: const Padding(
-                                  //     padding: EdgeInsets.all(8.0),
-                                  //     child: FittedBox(
-                                  //       fit: BoxFit.fitHeight,
-                                  //       child: Text(
-                                  //         "The Boys",
-                                  //         style: TextStyle(
-                                  //             fontWeight: FontWeight.w600),
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                   SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                        return Obx(() {
+                          return Container(
+                            color: detailpageController.isDark.value
+                                ? Colors.black
+                                : Colors.white, //dark Theme
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                  // Center(child: buildIndicator( pageindex)),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                    Text(
-                                          homepage1controller.copydata[pageindex].date.toString(),
-                                        style: TextStyle(color: Color(0xff949494),
-                                        fontSize: 12
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: (){
-                                              print(scrollController.hasClients);
-                                              // print(scrollController.position);
-                                              if(scrollController.hasClients){
-                                                scrollController.animateTo(500,
-                                             duration: const Duration(milliseconds: 500),
-                                             curve: Curves.easeInOut);
-                                              }
-                                             
-                                            },
-                                            child: Text(
-                                              "${detailpageController.commentData?.data?.comments?.rows?.length} Comments",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color:
-                                                    detailpageController.isDark.value
-                                                        ? Colors.white
-                                                        : Colors.black,
-                                              ),
+                                      Html(
+                                        data: "<p>${homepage1controller.copydata[pageindex].title.rendered}</p>",    
+                                        style: {
+                                            'p': Style(
+                                              margin: EdgeInsets.zero,
+                                              padding: EdgeInsets.zero,
+                                              width: MediaQuery.of(context).size.width,
+                                             fontSize: const FontSize(18),
+                                             color: detailpageController.isDark.value
+                                              ? Colors.white
+                                              : Colors.black,
                                             ),
-                                          ),
-                                          Icon(
-                                            Icons.comment,
-                                            color: detailpageController.isDark.value
-                                                ? Colors.white
-                                                : Colors.black,
-                                            size: 20,
-                                          )
-                                        ],
+                                        }
+                                        // widget.postData.title.rendered,
+                                        // style: TextStyle(
+                                        //   fontSize: 20,
+                                        //   fontWeight: FontWeight.w700,
+                                        //   fontFamily: 'Poppins',
+                                        //   color: detailpageController.isDark.value
+                                        //       ? Colors.white
+                                        //       : Colors.black,
+                                        // ),
                                       ),
-                                      Row(
-                                        children: [
-                                         const Text(
-                                            "Saved",
-                                            style:
-                                                TextStyle(color: Color(0xff949494)),
-                                          ),
-                                          Icon(
-                                            Icons.save,
-                                            color: detailpageController.isDark.value
-                                                ? Colors.white
-                                                : Colors.black,
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            Divider(
-                              color: detailpageController.isDark.value
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Html(
-                                      data: homepage1controller.copydata[pageindex].content.rendered,
-                                      style: {
-                                        'figure':Style(
-                                          width: MediaQuery.of(context).size.width,
-                                          padding: EdgeInsets.zero,
-                                          margin: EdgeInsets.zero
-                                        ),
-                                        'p': Style(
-                                            fontSize: FontSize(detailpageController
-                                                        .fontSize ==
-                                                    12
-                                                ? 12
-                                                : detailpageController.fontSize ==
-                                                        14
-                                                    ? 14
-                                                    : detailpageController.fontSize ==
-                                                            16
-                                                        ? 16
-                                                        : detailpageController.fontSize ==
-                                                                18
-                                                            ? 18
-                                                            : detailpageController
-                                                                        .fontSize ==
-                                                                    20
-                                                                ? 20
-                                                                : detailpageController.fontSize ==
-                                                                        22
-                                                                    ? 22
-                                                                    : detailpageController.fontSize ==
-                                                                            24
-                                                                        ? 24
-                                                                        : null),
-                                            fontFamily: detailpageController
-                                                        .fontFamily.value ==
-                                                    1
-                                                ? "QUICKSAND"
-                                                : detailpageController.fontFamily.value ==
-                                                        2
-                                                    ? "NOTO SERIF"
-                                                    : detailpageController
-                                                                .fontFamily.value ==
-                                                            3
-                                                        ? "Montserrat"
-                                                        : detailpageController
-                                                                    .fontFamily
-                                                                    .value ==
-                                                                4
-                                                            ? "VIDALOKA"
-                                                            : "POPPINS",
-                                            color: detailpageController.isDark.value
-                                                ? Colors.white
-                                                : Colors.black),
-                                        'h2': Style(
-                                            fontSize: FontSize(detailpageController
-                                                        .fontSize ==
-                                                    12
-                                                ? 12
-                                                : detailpageController.fontSize ==
-                                                        14
-                                                    ? 14
-                                                    : detailpageController.fontSize ==
-                                                            16
-                                                        ? 16
-                                                        : detailpageController.fontSize ==
-                                                                18
-                                                            ? 18
-                                                            : detailpageController
-                                                                        .fontSize ==
-                                                                    20
-                                                                ? 20
-                                                                : detailpageController.fontSize ==
-                                                                        22
-                                                                    ? 22
-                                                                    : detailpageController.fontSize ==
-                                                                            24
-                                                                        ? 24
-                                                                        : null),
-                                            fontFamily: detailpageController
-                                                        .fontFamily.value ==
-                                                    1
-                                                ? "QUICKSAND"
-                                                : detailpageController.fontFamily.value ==
-                                                        2
-                                                    ? "NOTO SERIF"
-                                                    : detailpageController
-                                                                .fontFamily.value ==
-                                                            3
-                                                        ? "Montserrat"
-                                                        : detailpageController
-                                                                    .fontFamily
-                                                                    .value ==
-                                                                4
-                                                            ? "VIDALOKA"
-                                                            : "POPPINS",
-                                            color: detailpageController.isDark.value
-                                                ? Colors.white
-                                                : Colors.black),
-                                        'figcaption': Style(
-                                            fontSize: const FontSize(12),
-                                            color: Colors.grey,
-                                            fontStyle: FontStyle.italic),
-                                        'img src': Style(
-                                          //  color: Colors.blue
-                                          width: 20,
-                                        ),
-                                        'li': Style(
-                                            fontSize: FontSize(detailpageController
-                                                        .fontSize ==
-                                                    12
-                                                ? 12
-                                                : detailpageController.fontSize ==
-                                                        14
-                                                    ? 14
-                                                    : detailpageController.fontSize ==
-                                                            16
-                                                        ? 16
-                                                        : detailpageController.fontSize ==
-                                                                18
-                                                            ? 18
-                                                            : detailpageController
-                                                                        .fontSize ==
-                                                                    20
-                                                                ? 20
-                                                                : detailpageController.fontSize ==
-                                                                        22
-                                                                    ? 22
-                                                                    : detailpageController.fontSize ==
-                                                                            24
-                                                                        ? 24
-                                                                        : null),
-                                            fontFamily: detailpageController
-                                                        .fontFamily.value ==
-                                                    1
-                                                ? "QUICKSAND"
-                                                : detailpageController.fontFamily.value ==
-                                                        2
-                                                    ? "NOTO SERIF"
-                                                    : detailpageController
-                                                                .fontFamily.value ==
-                                                            3
-                                                        ? "Montserrat"
-                                                        : detailpageController
-                                                                    .fontFamily
-                                                                    .value ==
-                                                                4
-                                                            ? "VIDALOKA"
-                                                            : "POPPINS",
-                                            color: detailpageController.isDark.value
-                                                ? Colors.white
-                                                : Colors.black)
-                                      },
-                                      onAnchorTap:
-                                          (url, context, attributes, element) {
-                                        print(attributes.values);
-                                      },
-                                      onLinkTap: (String? url,
-                                          RenderContext context,
-                                          Map<String, String> attributes,
-                                          dom.Element? element) {
-                                        print(url);
-                                        print(attributes.entries);
-                                        print(element);
-                                        //open URL in webview, or launch URL in browser, or any other logic here
-                                      }),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                            'https://picsum.photos/id/237/200/300'),
+                                      const SizedBox(
+                                        height: 10,
                                       ),
-                                      SizedBox(
-                                        width: 10,
+                                      // Container(
+                                      //   decoration: BoxDecoration(
+                                      //       color: Colors.yellow,
+                                      //       borderRadius: BorderRadius.circular(9)),
+                                      //   child: const Padding(
+                                      //     padding: EdgeInsets.all(8.0),
+                                      //     child: FittedBox(
+                                      //       fit: BoxFit.fitHeight,
+                                      //       child: Text(
+                                      //         "The Boys",
+                                      //         style: TextStyle(
+                                      //             fontWeight: FontWeight.w600),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      const SizedBox(
+                                        height: 10,
                                       ),
-                                      Text("Article by",
-                                          style:
-                                              detailpageController.fontfamily("")),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text("Akash Divya",
-                                          style:
-                                              detailpageController.fontfamily(""))
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                              child: Divider(
-                                color: detailpageController.isDark.value
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Text(
-                                "Similar Articles",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: detailpageController.isDark.value
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            CarouselSlider.builder(
-                              options: CarouselOptions(
-                                  height: 300.0,
-                                  // autoPlay: true,
-                                  onPageChanged: ((index, reason) {
-                                    // homePage1 = index;
-                                    detailpageController.DetailScroll.value = index;
-                                  })),
-                              itemCount: urlImages.length,
-                              itemBuilder: ((context, index, realIndex) {
-                                final urlImage = urlImages[index];
-                                return buildSimilarImage(urlImage, index, context);
-                              }),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Obx(() {
-                              return Center(child: buildIndicatorTrending());
-                            }),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Divider(
-                              color: detailpageController.isDark.value
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: StreamBuilder(
-                                stream: streamController(),
-                                builder: (context, snapshot){   
-         replayController = [
-        for (int i = 1; i <= detailpageController.commentData!.data!.comments!.rows!.length; i++)
-          TextEditingController()
-      ];
-                                  return Column(
-                                    children: [
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                              "Comments(${detailpageController.commentData!.data!.comments!.count})",
-                                              style:
-                                                  detailpageController.fontfamily("")),
+                                        Text(
+                                              homepage1controller.copydata[pageindex].date.toString().split(" ").first,
+                                            style: TextStyle(color: Color(0xff949494),
+                                            fontSize: 12
+                                            ),
+                                          ),
                                           Row(
                                             children: [
-                                              Obx(() {
-                                                return detailpageController
-                                                        .CommentShow.value
-                                                    ? Text("Hide Comments",
-                                                        style: detailpageController
-                                                            .fontfamily(""))
-                                                    : detailpageController
-                                                                .commentData!
-                                                                .data!
-                                                                .comments!
-                                                                .count !=
-                                                            0
-                                                        ? Text(
-                                                            "Show Comments",
-                                                            style: TextStyle(
-                                                              color:
-                                                                  detailpageController
-                                                                          .isDark.value
-                                                                      ? Colors.grey
-                                                                      : Colors.black,
-                                                            ),
-                                                          )
-                                                        : SizedBox();
-                                              }),
                                               InkWell(
-                                                  onTap: () {
-                                                    detailpageController.CommentShow
-                                                        .toggle();
-                                                  },
-                                                  child: detailpageController
-                                                              .commentData!
-                                                              .data!
-                                                              .comments!
-                                                              .count !=
-                                                          0
-                                                      ? SizedBox(
-                                                          height: 18,
-                                                          width: 18,
-                                                          child: Image(
-                                                            image: AssetImage(
-                                                                "assets/icons/expend_icon.webp"),
-                                                            color: detailpageController
-                                                                    .isDark.value
-                                                                ? Colors.grey
-                                                                : Colors.black,
-                                                          ))
-                                                      : SizedBox())
+                                                onTap: (){
+                                                  print(scrollController.hasClients);
+                                                  // print(scrollController.position);
+                                                  // if(scrollController.hasClients){
+                                                    scrollController.animateTo(scrollController.position.maxScrollExtent-300,
+                                                 duration: const Duration(milliseconds: 500),
+                                                 curve: Curves.easeInOut);
+                                                  // }
+                                                },
+                                                child: Text(
+                                                  "${detailpageController.commentData?.data?.comments?.rows?.length} Comments",
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color:
+                                                        detailpageController.isDark.value
+                                                            ? Colors.white
+                                                            : Colors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.comment,
+                                                color: detailpageController.isDark.value
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                                size: 20,
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                             const Text(
+                                                "Saved",
+                                                style:
+                                                    TextStyle(color: Color(0xff949494)),
+                                              ),
+                                              Icon(
+                                                Icons.save,
+                                                color: detailpageController.isDark.value
+                                                    ? Colors.white
+                                                    : Colors.black,
+                                              )
                                             ],
                                           )
                                         ],
-                                      ),
-                                      Container(
-                                        width: MediaQuery.of(context).size.width *
-                                            90 /
-                                            100,
-                                        height:
-                                            textSize.getadaptiveTextSize(context, 45),
-                                        padding:
-                                            const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),
-                                            color: TextFieldColor),
-                                        child: TextFormField(
-                                            controller: commentController,
-                                            // controller: widget.controller,
-                                            decoration: InputDecoration(
-                                              suffixIcon: InkWell(
-                                                  onTap: () {
-                                                    print("res");
-                                                    apiprovider.postApi(
-                                                        '/post/create-comment', {
-                                                      'postId':
-                                                          widget.postData.id.toString(),
-                                                      'content': commentController.text
-                                                    });
-                                                    if (apiprovider.statuscode == 200) {
-                                                      if(commentController.text != ""){
-                                                        final snackBar = SnackBar(
-                                                        backgroundColor: Colors.green,
-                                                        content: const Text(
-                                                            "Comment add sucessfully"),
-                                                        action: SnackBarAction(
-                                                          label: '',
-                                                          onPressed: () {
-                                                            // Some code to undo the change.
-                                                          },
-                                                        ),
-                                                      );
-                                                      ScaffoldMessenger.of(context)
-                                                          .showSnackBar(snackBar);
-                                                      }else{
-                                                        final snackBar = SnackBar(
-                                                        backgroundColor: Colors.red,
-                                                        content: const Text(
-                                                            "Write something to add comment"),
-                                                        action: SnackBarAction(
-                                                          label: '',
-                                                          onPressed: () {
-                                                            // Some code to undo the change.
-                                                          },
-                                                        ),
-                                                      );
-                                                      ScaffoldMessenger.of(context)
-                                                          .showSnackBar(snackBar);
-                                                      }
-                                                      
-                                                          setState(() {
-                                                            
-                                                          });
-                                                    }
-                                                    commentController.clear();
-                                                    apiprovider
-                                                        .getComment(widget.postData.id);
-                                                  },
-                                                  child: const SizedBox(
-                                                      height: 10,
-                                                      width: 10,
-                                                      child: Image(
-                                                          image: AssetImage(
-                                                              "assets/icons/icon_check.png")))),
-                                              fillColor: const Color(0xffFEDC5D),
-                                              border: InputBorder.none,
-                                              label: Text(
-                                                "Add your comment ",
-                                              ),
-                                            )),
-                                      ),
-                                     
-                                         detailpageController
-                                                  .commentData!.data!.comments!.count !=
-                                              0
-                                          ? Obx(() {
-                                              return detailpageController
-                                                      .CommentShow.value
-                                                  ? Column(
-                                                      children: [
-                                                        const SizedBox(
-                                                          height: 20,
-                                                        ),
-                              
-                                                        SizedBox(
-                                                          height: 20,
-                                                        ),
-                                                             ListView.builder(
-                                                              shrinkWrap: true,
-                                                              physics:
-                                                                  const ScrollPhysics(),
-                                                              itemCount:
-                                                                  detailpageController
-                                                                      .commentData!
-                                                                      .data!
-                                                                      .comments!
-                                                                      .rows!
-                                                                      .length,
-                                                              itemBuilder:
-                                                                  (context, index) {
-                                                                return ExpendedComment(
-                                                                    index,
-                                                                    detailpageController
-                                                                        .commentData!
-                                                                        .data!
-                                                                        .comments!
-                                                                        .rows![index]
-                                                                        .replies!
-                                                                        .length);
-                                                              },
-                                                            )
-                                                         
-                              
-                                                        // ExpendedComment(2),
-                                                        // ExpendedComment(1),
-                                                      ],
-                                                    )
-                                                  : SmallContainer();
-                                            })
-                                          : Text("no comment yet")
-                                      
+                                      )
                                     ],
-                                  );
-                                }
-                              ),
+                                  ),
+                                ),
+                                Divider(
+                                  color: detailpageController.isDark.value
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Html(
+                                          data: homepage1controller.copydata[pageindex].content.rendered,
+                                          style: {
+                                            'blockquote P': Style(
+                                              fontWeight: FontWeight.w900,
+                                              fontStyle: FontStyle.italic,
+                                            ),
+                                            'figure': Style(
+                                              width: MediaQuery.of(context).size.width,
+                                              margin: EdgeInsets.zero,
+                                              padding: EdgeInsets.zero
+                                            ),
+                                            'p': Style(
+                                                fontSize: FontSize(detailpageController
+                                                            .fontSize ==
+                                                        12
+                                                    ? 12
+                                                    : detailpageController.fontSize ==
+                                                            14
+                                                        ? 14
+                                                        : detailpageController.fontSize ==
+                                                                16
+                                                            ? 16
+                                                            : detailpageController.fontSize ==
+                                                                    18
+                                                                ? 18
+                                                                : detailpageController
+                                                                            .fontSize ==
+                                                                        20
+                                                                    ? 20
+                                                                    : detailpageController.fontSize ==
+                                                                            22
+                                                                        ? 22
+                                                                        : detailpageController.fontSize ==
+                                                                                24
+                                                                            ? 24
+                                                                            : null),
+                                                fontFamily: detailpageController
+                                                            .fontFamily.value ==
+                                                        1
+                                                    ? "QUICKSAND"
+                                                    : detailpageController.fontFamily.value ==
+                                                            2
+                                                        ? "NOTO SERIF"
+                                                        : detailpageController
+                                                                    .fontFamily.value ==
+                                                                3
+                                                            ? "Montserrat"
+                                                            : detailpageController
+                                                                        .fontFamily
+                                                                        .value ==
+                                                                    4
+                                                                ? "VIDALOKA"
+                                                                : "POPPINS",
+                                                color: detailpageController.isDark.value
+                                                    ? Colors.white
+                                                    : Colors.black),
+                                            'h2': Style(
+                                                fontSize: FontSize(detailpageController
+                                                            .fontSize ==
+                                                        12
+                                                    ? 12
+                                                    : detailpageController.fontSize ==
+                                                            14
+                                                        ? 14
+                                                        : detailpageController.fontSize ==
+                                                                16
+                                                            ? 16
+                                                            : detailpageController.fontSize ==
+                                                                    18
+                                                                ? 18
+                                                                : detailpageController
+                                                                            .fontSize ==
+                                                                        20
+                                                                    ? 20
+                                                                    : detailpageController.fontSize ==
+                                                                            22
+                                                                        ? 22
+                                                                        : detailpageController.fontSize ==
+                                                                                24
+                                                                            ? 24
+                                                                            : null),
+                                                fontFamily: detailpageController
+                                                            .fontFamily.value ==
+                                                        1
+                                                    ? "QUICKSAND"
+                                                    : detailpageController.fontFamily.value ==
+                                                            2
+                                                        ? "NOTO SERIF"
+                                                        : detailpageController
+                                                                    .fontFamily.value ==
+                                                                3
+                                                            ? "Montserrat"
+                                                            : detailpageController
+                                                                        .fontFamily
+                                                                        .value ==
+                                                                    4
+                                                                ? "VIDALOKA"
+                                                                : "POPPINS",
+                                                color: detailpageController.isDark.value
+                                                    ? Colors.white
+                                                    : Colors.black),
+                                            'figcaption': Style(
+                                                fontSize: const FontSize(12),
+                                                color: Colors.grey,
+                                                fontStyle: FontStyle.italic),
+                                            'img src': Style(
+                                              //  color: Colors.blue
+                                              width: 20,
+                                            ),
+                                            'li': Style(
+                                                fontSize: FontSize(detailpageController
+                                                            .fontSize ==
+                                                        12
+                                                    ? 12
+                                                    : detailpageController.fontSize ==
+                                                            14
+                                                        ? 14
+                                                        : detailpageController.fontSize ==
+                                                                16
+                                                            ? 16
+                                                            : detailpageController.fontSize ==
+                                                                    18
+                                                                ? 18
+                                                                : detailpageController
+                                                                            .fontSize ==
+                                                                        20
+                                                                    ? 20
+                                                                    : detailpageController.fontSize ==
+                                                                            22
+                                                                        ? 22
+                                                                        : detailpageController.fontSize ==
+                                                                                24
+                                                                            ? 24
+                                                                            : null),
+                                                fontFamily: detailpageController
+                                                            .fontFamily.value ==
+                                                        1
+                                                    ? "QUICKSAND"
+                                                    : detailpageController.fontFamily.value ==
+                                                            2
+                                                        ? "NOTO SERIF"
+                                                        : detailpageController
+                                                                    .fontFamily.value ==
+                                                                3
+                                                            ? "Montserrat"
+                                                            : detailpageController
+                                                                        .fontFamily
+                                                                        .value ==
+                                                                    4
+                                                                ? "VIDALOKA"
+                                                                : "POPPINS",
+                                                color: detailpageController.isDark.value
+                                                    ? Colors.white
+                                                    : Colors.black)
+                                          },
+                                          onAnchorTap:
+                                              (url, context, attributes, element) {
+                                            print(attributes.values);
+                                          },
+                                          onLinkTap: (String? url,
+                                              RenderContext context,
+                                              Map<String, String> attributes,
+                                              dom.Element? element) {
+                                            print(url);
+                                            print(attributes.entries);
+                                            print(element);
+                                            //open URL in webview, or launch URL in browser, or any other logic here
+                                          }),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                'https://picsum.photos/id/237/200/300'),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text("Article by",
+                                              style:
+                                                  detailpageController.fontfamily("")),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text("Akash Divya",
+                                              style:
+                                                  detailpageController.fontfamily(""))
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                  child: Divider(
+                                    color: detailpageController.isDark.value
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Text(
+                                    "Similar Articles",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: detailpageController.isDark.value
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                CarouselSlider.builder(
+                                  options: CarouselOptions(
+                                      height: 300.0,
+                                      // autoPlay: true,
+                                      onPageChanged: ((index, reason) {
+                                        // homePage1 = index;
+                                        detailpageController.DetailScroll.value = index;
+                                      })),
+                                  itemCount: urlImages.length,
+                                  itemBuilder: ((context, index, realIndex) {
+                                    final urlImage = urlImages[index];
+                                    return buildSimilarImage(urlImage, index, context);
+                                  }),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                // Obx(() {
+                                //   return
+                                   Center(child: buildIndicatorSimple()),
+                                // }),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Divider(
+                                  color: detailpageController.isDark.value
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                                signincontroller.isGuest.value == 'guest'
+                               ?  InkWell(
+                                onTap: (){
+                                  context.pushNamed("SIGNINPAGE");
+                                },
+                                child: Text("Login to add comment"))  : Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: StreamBuilder(
+                                    stream: streamController(),
+                                    builder: (context, snapshot){   
+                       replayController = [
+                      for (int i = 1; i <= detailpageController.commentData!.data!.comments!.rows!.length; i++)
+                        TextEditingController()
+                    ];
+                                      return Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  "Comments(${detailpageController.commentData!.data!.comments!.count})",
+                                                  style:
+                                                      detailpageController.fontfamily("")),
+                                              Row(
+                                                children: [
+                                                  Obx(() {
+                                                    return detailpageController
+                                                            .CommentShow.value
+                                                        ? InkWell(
+                                                          onTap: (){
+                                                             detailpageController.CommentShow
+                                                            .toggle();
+                                                          },
+                                                          child: Text("Hide Comments",
+                                                              style: detailpageController
+                                                                  .fontfamily("")),
+                                                        )
+                                                        : detailpageController
+                                                                    .commentData!
+                                                                    .data!
+                                                                    .comments!
+                                                                    .count !=
+                                                                0
+                                                            ? InkWell(
+                                                              onTap: () {
+                                                                 detailpageController.CommentShow
+                                                            .toggle();
+                                                              },
+                                                              child: Text(
+                                                                  "Show Comments",
+                                                                  style: TextStyle(
+                                                                    color:
+                                                                        detailpageController
+                                                                                .isDark.value
+                                                                            ? Colors.grey
+                                                                            : Colors.black,
+                                                                  ),
+                                                                ),
+                                                            )
+                                                            : SizedBox();
+                                                  }),
+                                                  InkWell(
+                                                      onTap: () {
+                                                        detailpageController.CommentShow
+                                                            .toggle();
+                                                      },
+                                                      child: detailpageController
+                                                                  .commentData!
+                                                                  .data!
+                                                                  .comments!
+                                                                  .count !=
+                                                              0
+                                                          ? SizedBox(
+                                                              height: 18,
+                                                              width: 18,
+                                                              child: Image(
+                                                                image: AssetImage(
+                                                                    "assets/icons/expend_icon.webp"),
+                                                                color: detailpageController
+                                                                        .isDark.value
+                                                                    ? Colors.grey
+                                                                    : Colors.black,
+                                                              ))
+                                                          : SizedBox())
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                          Container(
+                                            width: MediaQuery.of(context).size.width *
+                                                90 /
+                                                100,
+                                            height:
+                                                textSize.getadaptiveTextSize(context, 45),
+                                            padding:
+                                                const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(5),
+                                                color: TextFieldColor),
+                                            child: TextFormField(
+                                                controller: commentController,
+                                                // controller: widget.controller,
+                                                decoration: InputDecoration(
+                                                  suffixIcon: InkWell(
+                                                      onTap: () {
+                                                        print("res");
+                                                        apiprovider.postApi(
+                                                            '/post/create-comment', {
+                                                          'postId':
+                                                              widget.postData.id.toString(),
+                                                          'content': commentController.text
+                                                        });
+                                                        if (apiprovider.statuscode == 200) {
+                                                          if(commentController.text != ""){
+                                                            final snackBar = SnackBar(
+                                                            backgroundColor: Colors.green,
+                                                            content: const Text(
+                                                                "Comment add sucessfully"),
+                                                            action: SnackBarAction(
+                                                              label: '',
+                                                              onPressed: () {
+                                                                // Some code to undo the change.
+                                                              },
+                                                            ),
+                                                          );
+                                                          ScaffoldMessenger.of(context)
+                                                              .showSnackBar(snackBar);
+                                                          }else{
+                                                            final snackBar = SnackBar(
+                                                            backgroundColor: Colors.red,
+                                                            content: const Text(
+                                                                "Write something to add comment"),
+                                                            action: SnackBarAction(
+                                                              label: '',
+                                                              onPressed: () {
+                                                                // Some code to undo the change.
+                                                              },
+                                                            ),
+                                                          );
+                                                          ScaffoldMessenger.of(context)
+                                                              .showSnackBar(snackBar);
+                                                          }
+                                                          
+                                                              setState(() {
+                                                                
+                                                              });
+                                                        }
+                                                        commentController.clear();
+                                                        apiprovider
+                                                            .getComment(widget.postData.id);
+                                                      },
+                                                      child: const SizedBox(
+                                                          height: 10,
+                                                          width: 10,
+                                                          child: Image(
+                                                              image: AssetImage(
+                                                                  "assets/icons/icon_check.png")))),
+                                                  fillColor: const Color(0xffFEDC5D),
+                                                  border: InputBorder.none,
+                                                  label: Text(
+                                                    "Add your comment ",
+                                                  ),
+                                                )),
+                                          ),
+                                         
+                                             detailpageController
+                                                      .commentData!.data!.comments!.count !=
+                                                  0
+                                              ? Obx(() {
+                                                  return detailpageController
+                                                          .CommentShow.value
+                                                      ? Column(
+                                                          children: [
+                                                            const SizedBox(
+                                                              height: 20,
+                                                            ),
+                                  
+                                                            SizedBox(
+                                                              height: 20,
+                                                            ),
+                                                                 ListView.builder(
+                                                                  shrinkWrap: true,
+                                                                  physics:
+                                                                      const ScrollPhysics(),
+                                                                  itemCount:
+                                                                      detailpageController
+                                                                          .commentData!
+                                                                          .data!
+                                                                          .comments!
+                                                                          .rows!
+                                                                          .length,
+                                                                  itemBuilder:
+                                                                      (context, index) {
+                                                                    return ExpendedComment(
+                                                                        index,
+                                                                        detailpageController
+                                                                            .commentData!
+                                                                            .data!
+                                                                            .comments!
+                                                                            .rows![index]
+                                                                            .replies!
+                                                                            .length);
+                                                                  },
+                                                                )
+                                                             
+                                  
+                                                            // ExpendedComment(2),
+                                                            // ExpendedComment(1),
+                                                          ],
+                                                        )
+                                                      : SmallContainer();
+                                                })
+                                              : Text("no comment yet")
+                                          
+                                        ],
+                                      );
+                                    }
+                                  ),
+                                ),
+                                const Divider(),
+                                Advertisment(12),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Advertisment(12),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Advertisment(12),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Advertisment(12),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Advertisment(12),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                              ],
                             ),
-                            const Divider(),
-                            Advertisment(12),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Advertisment(12),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Advertisment(12),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Advertisment(12),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Advertisment(12),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      );
-                    });
-                  },
-                  childCount: 1,
-                ),
-              ),
+                          );
+                        });
+                      },
+                      childCount: 1,
+                    ),
+                  )
             ],
           );
         }
@@ -840,7 +882,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
             ),
             Text(
               detailpageController
-                  .commentData!.data!.comments!.rows![0].createdAt
+                  .commentData!.data!.comments!.rows![0].createdDate
                   .toString(),
               style: TextStyle(color: Color(0xff949494)),
             )
@@ -997,7 +1039,7 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                   ),
                   Text(
                     detailpageController.commentData!.data!.comments!
-                        .rows![index].replies![ind].createdAt
+                        .rows![index].replies![ind].createdDate
                         .toString(),
                     style: TextStyle(color: Color(0xff949494)),
                   )
@@ -1040,11 +1082,16 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                           ? Colors.white
                           : Colors.black),
                 )
-              ],
+              ],                  
+                                    
+                                   
+                                   
             ),
             Text(
-              detailpageController
-                  .commentData!.data!.comments!.rows![index].user!.createdAt
+              // detailpageController
+              //     .commentData!.data!.comments!.rows![0].createdDate
+                  detailpageController
+                  .commentData!.data!.comments!.rows![index].createdDate
                   .toString(),
               style: TextStyle(color: Color(0xff949494)),
             )
@@ -1215,10 +1262,10 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     );
   }
 
-  Widget buildIndicatorTrending() {
+  Widget buildIndicatorTrending({ind}) {
     return AnimatedSmoothIndicator(
-      activeIndex: detailpageController.DetailScroll.value,
-      count: urlImages.length,
+      activeIndex: ind,
+      count: homepage1controller.allpostdata.length,
       effect: const JumpingDotEffect(
           dotColor: Colors.grey,
           dotHeight: 6,
@@ -1227,15 +1274,28 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     );
   }
 
-  Widget buildIndicator(ind) {
+  Widget buildIndicatorSimple() {
     return AnimatedSmoothIndicator(
-      activeIndex: ind,
-      count: homepage1controller.copydata.length,
-      effect: JumpingDotEffect(
+      activeIndex: 6,
+      count: 10,
+      effect: const JumpingDotEffect(
           dotColor: Colors.grey,
           dotHeight: 6,
           dotWidth: 6,
           activeDotColor: Colors.black),
+    );
+  }
+
+  Widget buildIndicator(ind){
+    return AnimatedSmoothIndicator(
+      activeIndex: ind,
+      count: homepage1controller.copydata.length,
+      effect:const JumpingDotEffect(
+          dotColor: Colors.grey,
+          dotHeight: 6,
+          dotWidth: 6,
+          activeDotColor: Colors.black
+          ),
     );
   }
 
@@ -1266,10 +1326,17 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(
-                        Icons.heart_broken,
-                        color: Colors.white,
-                      ),
+                      icon: SizedBox(
+                        height: 25,
+                        child: Image(
+                                    image:const AssetImage(
+                                      "assets/icons/heart.png",
+                                    ) ,
+                                    color: detailpageController.isDark.value
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                      )
                     ),
                   ],
                 )),

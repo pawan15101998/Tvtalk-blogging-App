@@ -30,13 +30,25 @@ class DetailPageController extends GetxController{
                   22:
                   fontSize.value == 24?
                   24:null,
+
+                // fontFamily: fontFamily.value == 1 ?
+                //     "QUICKSAND" :
+                //    fontFamily.value == 2 ?
+                //     "NOTO SERIF" : 
+                //     fontFamily.value == 3 ?  
+                //     "Montserrat":
+                //     fontFamily.value == 4 ?
+                //     "VIDALOKA": "POPPINS",
+
                   fontFamily: fontFamily.value == 1 ?
-                    "QUICKSAND" :
+                    "ROBOTO" :
                    fontFamily.value == 2 ?
-                    "NOTO SERIF" : 
+                    "QUICKSAND" : 
                     fontFamily.value == 3 ?  
-                    "Montserrat":
+                    "NOTO SERIF":
                     fontFamily.value == 4 ?
+                    "Montserrat": 
+                    fontFamily.value == 5 ?
                     "VIDALOKA": "POPPINS",
                    color: color == Colors.green ? Colors.green : isDark.value
                                     ? Colors.white

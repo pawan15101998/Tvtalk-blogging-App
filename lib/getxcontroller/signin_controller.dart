@@ -7,6 +7,8 @@ RxBool cnfpasswordVisiblity = false.obs;
 String? userName;
 String? userEmail;  
 String? image;
+String? googleUserDob;
+String? googleUserGender;
 RxString isGuest = ''.obs;
 
 getuserdata()async{

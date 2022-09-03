@@ -1,12 +1,16 @@
-
-
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:another_flushbar/flushbar.dart';
+import 'package:intl/intl.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart' as modelProgresshub;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/getxcontroller/home_page_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/view/dialog/select_image.dart';
 
@@ -18,23 +22,35 @@ class Editprofilepage extends StatefulWidget {
   State<Editprofilepage> createState() => _EditprofilepageState();
 }
 
-
-
 class _EditprofilepageState extends State<Editprofilepage> {
   @override
-  File? image;
+File? image;
 final signincontroller = Get.find<SignInController>();
-TextEditingController namecontroller = TextEditingController();
-TextEditingController emailcontroller =  TextEditingController();
+TextEditingController namecontroller   =    TextEditingController();
+TextEditingController emailcontroller  =   TextEditingController();
 TextEditingController gendercontroller =  TextEditingController();
-TextEditingController dobcontroller =  TextEditingController();
-DateTime date = DateTime(2002, 02, 02);
-  void initState() {
+TextEditingController dobcontroller    =     TextEditingController();
+TextEditingController mobilecontroller =  TextEditingController();
+final homePageController = Get.find<HomePageController>();
+ late String value = homePageController.userDetails['data']['gender'] == 0? "male" :"female";
+final items = ['male', 'female'];
+DateTime date = DateTime(2000, 01, 01);
+// date = FormData(map)
+bool showSpinner = false;
+  void initState(){
     // TODO: implement initState
     super.initState();
-
-    namecontroller.text =  signincontroller.userName.toString();
-    emailcontroller.text = signincontroller.userEmail.toString();
+    print("userdetails");
+    print(date);
+    print(homePageController.userDetails['data']['name']);
+    print(homePageController.userDetails);
+    namecontroller.text =  homePageController.userDetails['data']['name'];
+    emailcontroller.text = homePageController.userDetails['data']['email'];
+    gendercontroller.text = homePageController.userDetails['data']['gender'] == null? "Add" :homePageController.userDetails['data']['gender'] == 0? "Male" : "Female";
+    if(homePageController.userDetails['data']['mobile'] != null){
+    mobilecontroller.text = homePageController.userDetails['data']['mobile'].toString();
+    }
+    dobcontroller.text = homePageController.userDetails['data']['dob'] == null ? "Select date" :homePageController.userDetails['data']['dob'] ;
   }
 
 Future pickimage()async{
@@ -50,142 +66,261 @@ Future pickimage()async{
   print("Fail to pick image $e");
 }
   }
+
+  Future<void> uploadImage ()async{
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+   String? resetToken = sharedPreferences.getString('reset_token');
+   var stream;
+   var length;
+    print("object");
+    print(resetToken);
+    print(image);
+    print(namecontroller.text);
+    print(DateFormat("MM/dd/yyyy").format(date));
+    print(mobilecontroller.text.toString());
+    print(value);
+    print(homePageController.userDetails);
+
+    setState(() {
+      showSpinner = true;
+    });
+    if(image != null){
+     stream =http.ByteStream(image!.openRead());
+    stream.cast();
+     length = await image!.length();
+    }
+    var uri = Uri.parse('https://tv-talk.hackerkernel.com/api/v1/user/edit-profile');
+    var request =  http.MultipartRequest('POST', uri);
+    request.fields['name'] = namecontroller.text;
+    if(DateFormat("MM-dd-yyyy").format(date) != ""){
+      request.fields['dob'] = DateFormat("MM-dd-yyyy").format(date);
+    }
+    request.fields['gender'] = value == 'male' ?'0' : value == 'female' ?'1': "";
+    if(mobilecontroller.text != ""){
+    request.fields['mobile'] = mobilecontroller.text;
+    }
+    request.headers.addAll({'Content-Type': 'application/x-www-form-urlencoded',
+    'authorization': 'Bearer ${resetToken!}',
+    });
+    print("hgsdjk,df");
+    // print()
+    if(image != null){
+          var multiport =  http.MultipartFile(
+      "file", 
+      stream, 
+      length);
+      request.files.add(multiport);
+      }
+      var response = await request.send();
+      print("kjdfhsdj");
+      if(response.statusCode == 200){
+            setState(() {
+      showSpinner = false;
+      Flushbar(
+          backgroundColor: Colors.green,
+          message: "Profile updated sucessfully",
+          duration: Duration(seconds: 1),
+        ).show(context);
+    });
+        print("image uploaded");
+        print(response);
+    }
+      else{
+        // print(response);
+        setState(() {
+      showSpinner = false;
+    });
+        print("failed to upload");
+    
+      }
+  }
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: Container(
-          margin: EdgeInsets.only(top: 25),
-          child: AppBar(
-            backgroundColor:Color(0xffFFDC5C),
-            elevation: 0,
-            centerTitle: true,
-            title:const Text("Profile"),
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Save", style: TextStyle(color: Colors.black),),
-              )
-            ],
-          ),
-          
-        ),
-      ),
-      body: Container(
-        color:const Color(0xffFFDC5C),
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-          // image != null?  Container(
-            
-          //   child: Image.file(image!, height: 100, width: 100,)) : 
-            InkWell(
-              onTap: (){
-                print("object");
-              showImageDialog();
-              print("ct");
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 100,
-                  width: 100,
-                  decoration:const BoxDecoration(
-                    color: Colors.red,
-                  shape: BoxShape.circle,
-                  // image: DecorationImage(
-                  //   image:  NetworkImage("https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg",),fit: BoxFit.cover,),
-                  ),
-                  child:Stack(
-                    children: [
-                      image != null ? ClipOval(child: Image.file(image!, height: 100, width: 100, fit: BoxFit.cover, )) : ClipOval(child: Image(image: NetworkImage("https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg"), fit: BoxFit.cover,)),
-                       Positioned(
-                        top: 50,
-                        // right: 0,
-                        left: 50,
-                     //give the values according to your requirement
-                     child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle
-                      ),
-                      child: Icon(Icons.edit, size: 25)),
-        ),
-                    ],
-                  ),
-                ),
-              ),
+    return  modelProgresshub.ModalProgressHUD(
+      inAsyncCall: showSpinner,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(100),
+          child: Container(
+            margin: EdgeInsets.only(top: 25),
+            child: AppBar(
+              backgroundColor:Color(0xffFFDC5C),
+              elevation: 0,
+              centerTitle: true,
+              title:const Text("Profile"),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      uploadImage();
+                    },
+                    child: Text("Save", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.white),)),
+                )
+              ],
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height-248,
-              decoration: BoxDecoration(
-              color: Colors.white,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50) )
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:  [
-                     Text("Username", style: TextStyle(
-                      color: Colors.grey
-                    ),),
-                    TextFormField(
-                      controller: namecontroller,
-                      decoration: InputDecoration(
-                        // hintText: "jk"
-                      ),
-                      // controller: ,
+            
+          ),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            color:const Color(0xffFFDC5C),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+              // image != null?  Container(
+                
+              //   child: Image.file(image!, height: 100, width: 100,)) : 
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration:const BoxDecoration(
+                      color: Colors.red,
+                    shape: BoxShape.circle,
+                    // image: DecorationImage(
+                    //   image:  NetworkImage("https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg",),fit: BoxFit.cover,),
                     ),
-                    SizedBox(height: 40,),
-                    Text("Email Adress", style: TextStyle(
-                      color: Colors.grey
-                    ),),
-                    TextFormField(
-                      controller: emailcontroller,
-                      decoration: InputDecoration(
-                        // hintText: ""
-                      ),
-                      // controller: ,
+                    child:Stack(
+                      children: [
+                        image != null ? ClipOval (child: Container(height: 100, width: 100, child: Image.file(image!,   fit: BoxFit.cover, ))) :const ClipOval( child: Image(height: 100, width: 100, image: NetworkImage("https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg"), fit: BoxFit.cover,)),
+                         Positioned(
+                          top: 70,
+                          left: 70,
+                      //  give the values according to your requirement
+                       child: InkWell(
+                        onTap: () {
+                          showImageDialog();
+                        },
+                         child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration:const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle
+                          ),
+                          child: const Icon(Icons.edit, size: 25)
+                          ),
+                       ),
+            ),
+                      ],
                     ),
-                    SizedBox(height: 40,),
-                    Text("Gender", style: TextStyle(
-                      color: Colors.grey
-                    ),),
-                    TextFormField(
-                      decoration:const InputDecoration(
-                        hintText: "Add"
-                      ),
-                      // controller: ,
-                    ),
-                    const SizedBox(height: 40,),
-                   const Text("Date of Birth", style: TextStyle(
-                      color: Colors.grey
-                    ),),
-                    ElevatedButton(
-                      onPressed: ()async{
-                       DateTime? newDate = await showDatePicker(
-                          context: context, 
-                          initialDate: date, 
-                          firstDate: DateTime(1900), 
-                          lastDate: DateTime(21000));
-                          if(newDate == null) return;
-                          setState(() {
-                            date = newDate;
-                          });
-                      }, 
-                      child: Text(date.toString()))
-                  ],
+                  ),
                 ),
-              ),
-            )
-          ],
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height-248,
+                  decoration:const BoxDecoration(
+                  color: Colors.white,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50) )
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:  [
+                           Text("Username", style: TextStyle(
+                            color: Colors.grey
+                          ),),
+                          TextFormField(
+                            controller: namecontroller,
+                            decoration:const InputDecoration(
+                              // hintText: "jk"
+                            ),
+                            // controller: ,
+                          ),
+                          SizedBox(height: 40,),
+                          Text("Email Adress", style: TextStyle(
+                            color: Colors.grey
+                          ),),
+                          TextFormField(
+                            controller: emailcontroller,
+                            decoration: InputDecoration(
+                              // hintText: ""
+                            ),
+                            // controller: ,
+                          ),
+                          SizedBox(height: 40,),
+                          Text("Gender", style: TextStyle(
+                            color: Colors.grey
+                          ),),
+                          // TextFormField(
+                          //   controller: gendercontroller,
+                          //   decoration:const InputDecoration(
+                          //     hintText: "Add"
+                          //   ),
+                          //   // controller: ,
+                          // ),
+                      DropdownButton<dynamic>(
+                      underline: Container(height: 0.5, width: MediaQuery.of(context).size.width, color: Colors.black,),
+                      items: items.map(buildMenuItem).toList(),
+                      iconSize: 36,
+                      
+                      icon: Icon(Icons.arrow_drop_down, color: Colors.black,),
+                      value: value,
+                      isExpanded: true,
+                      onChanged: (val){
+                        setState(() {
+                          this.value = val;
+                        });
+                      }),
+                          SizedBox(height: 40,),
+                          Text("Mobile", style: TextStyle(
+                            color: Colors.grey
+                          ),),
+                          TextFormField(
+                            controller: mobilecontroller,
+                            decoration: InputDecoration(
+                              hintText:mobilecontroller.text == ""? "------":""
+                            ),
+                            // controller: ,
+                          ),
+                          const SizedBox(height: 40,),
+                         const Text("Date of Birth", style: TextStyle(
+                            color: Colors.grey
+                          ),),
+                          ElevatedButton(
+                           style: ElevatedButton.styleFrom(
+                              primary: Color(0xffFFDC5C),
+                            ),
+                            onPressed: ()async{
+                             DateTime? newDate = await showDatePicker(
+                                context: context, 
+                                initialDate: date, 
+                                firstDate: DateTime(1900), 
+                                lastDate: DateTime(21000),
+                                builder: (context, child){
+                                  return Theme(
+                                    data: ThemeData().copyWith(
+                                      colorScheme: ColorScheme.dark(
+                                        primary:  Color(0xffFFDC5C),
+                                        onPrimary: Colors.black,
+                                        surface:  Color(0xffFFDC5C),
+                                      ),
+                                      dialogBackgroundColor: Colors.black
+                                    ), child: child!);
+                                }
+                                );  
+                                if(newDate == null) return;
+                                setState(() {
+                                  date = newDate;
+                                  print("shi date");
+                                  print(date);
+                                });
+                            }, 
+                            child: Text(DateFormat("MM-dd-yyyy").format(date)))
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -300,6 +435,13 @@ Future pickimage()async{
   //   );
   // }
 
+        DropdownMenuItem<String> buildMenuItem(String item) =>DropdownMenuItem(
+    value: item,
+    child: Text(
+      item,
+      style: TextStyle(fontSize: 18),
+    ));
+
     void showImageDialog() {
     showGeneralDialog(
       barrierLabel: "showGeneralDialog",
@@ -333,9 +475,11 @@ Future pickimage()async{
                          child: Text("Select from gallary")),
                           const SizedBox(height: 16),
                          ElevatedButton(onPressed: () {
+
                            setState(() {
                                                             
                                 });
+                                Navigator.pop(context);
                          }, 
                          child: Text("Select from gallary")),
                           const SizedBox(height: 16),

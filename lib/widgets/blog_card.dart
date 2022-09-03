@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
@@ -30,6 +31,7 @@ class _BlogCardState extends State<BlogCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
+        await apiprovider.getComment(widget.indexx);
         if (signincontroller.isGuest.value == 'guest') {
           context.pushNamed('ARTICLEDETAILPAGE',
               extra: widget.blogDetail,
@@ -60,7 +62,7 @@ class _BlogCardState extends State<BlogCard> {
           children: [
             InkWell(
               child: Container(
-                height: MediaQuery.of(context).size.height * 18 / 100,
+                height: MediaQuery.of(context).size.height * 20 / 100,
                 width: MediaQuery.of(context).size.width * 25 / 100,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -73,16 +75,15 @@ class _BlogCardState extends State<BlogCard> {
             SizedBox(
               // padding: const EdgeInsets.all(16.0),
               //  width: c_width,
-              height: MediaQuery.of(context).size.height * 18 / 100,
+              height: MediaQuery.of(context).size.height * 20 / 100,
               width: MediaQuery.of(context).size.width - 150,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                  // Row(
+                
+                    // children: const [
                       // Text(
                       //   "The Boys",
                       //   style: TextStyle(
@@ -92,8 +93,8 @@ class _BlogCardState extends State<BlogCard> {
                       //   ),
                       // ),
                       // SizedBox(width: 100,),
-                    ],
-                  ),
+                    // ],
+                  // ),
                   InkWell(
                     // onTap: () async {
                     //   if (signincontroller.isGuest.value == 'guest') {
@@ -110,12 +111,15 @@ class _BlogCardState extends State<BlogCard> {
                     //   isRead = await apiprovider.postApi(
                     //       'post/mark-read', {"postId": widget.blogDetail.id});
                     // },
-                    child: Text(
-                      widget.blogDetail.title.rendered.toString(),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 3,
-                      style: const TextStyle(
-                          height: 2, fontWeight: FontWeight.w600, fontSize: 16),
+                    child: Html(
+                    data:  "<h3>${widget.blogDetail.title.rendered}</h3>",
+                    // style: {
+                    //   ''
+                    // },
+                      // overflow: TextOverflow.ellipsis,
+                      // maxLines: 3,
+                      // style: const TextStyle(
+                      //     height: 2, fontWeight: FontWeight.w600, fontSize: 16),
                     ),
                   ),
                   Row(

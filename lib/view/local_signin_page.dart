@@ -1,8 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:go_router/go_router.dart';
 import 'package:tvtalk/Authencation/google_sign_in.dart';
 import 'package:tvtalk/view/home_page.dart';
 import 'package:tvtalk/view/signIn_screen.dart';
@@ -17,7 +14,7 @@ class LocalSignPage extends StatefulWidget {
 class _LocalSignPageState extends State<LocalSignPage> {
   var SocialSignin = GoogleSignInProvider();
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
@@ -35,7 +32,7 @@ class _LocalSignPageState extends State<LocalSignPage> {
             } else if (snapshot.hasData) {
               // print("faceaurhu");
               // print(SocialSignin.facebookdata);
-             return HomePage();
+              return HomePage();
             } else {
               return SignInPage();
             }

@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -29,276 +30,304 @@ class _HomePage2State extends State<HomePage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                CarouselSlider.builder(
-                  options: CarouselOptions(
-                      height: 300.0,
-                      viewportFraction: 1,
-                      // autoPlay: true,
-                      onPageChanged: ((index, reason) {
-                          homepage2Controller.sliderHome2index.value = index;
-                      })),
-                  itemCount: homePage1Controller.copydata.length,
-                  itemBuilder: ((context, index, realIndex) {
-                    // final urlImage = urlImages[index];
-                    return buildImage(context, index);
-                  }),
-                ),
-              ],
-            ),
-         const SizedBox(
-              height: 20,
-            ),
-            Obx(() {
-                return buildIndicator();
-              }
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 30 ),
-              child: GridView.builder(
-                itemCount: homePage1Controller.allpostdata.length > 9 ? 9 :homePage1Controller.allpostdata.length,
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () async{
-                      // yourIntrestController.choices[index].select.toggle();
-                      // choices[index].select = yourIntrestController.yourIntrest.value;
-                      // print(yourIntrestController.choices[index].select);
-                       var response = await apiprovider.getComment(homePage1Controller.copydata[index].id);
-                       print("sddddddddddsdddddd");
-                       print(apiprovider.statuscode);
-                  
-              if(signincontroller.isGuest.value == 'guest'){
-              Router.neglect(context, () {context.goNamed('SIGNINPAGE');});
-            }else{
-              context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.copydata[index],queryParams: {"index": "$index"});
-            }
-                    },
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 19 / 100,
-                      decoration: BoxDecoration(color: Color(0xffFFEAC5)),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children:  [
-                            Container(
-                              height: 32,
-                              width: 32,
-                              decoration: const BoxDecoration(
-                              color: Colors.grey,
-                                image: DecorationImage(image: AssetImage("assets/images/slider2.png"),fit: BoxFit.cover)
-                              ),
-                            ),
-                             Padding(
-                               padding: const EdgeInsets.all(8.0),
-                               child: Text(
-                                homePage1Controller.copydata[index].title.rendered,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 8
-                                ),
-                            ),
-                             )
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding( 
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20,),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            "Hot Shows/Topics",
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          Text(
-                            "View All",
-                            style: TextStyle(
-                                color: Color(0xfff0701BF), fontSize: 14),
-                          )
-                        ],
-                      ),
-                    ),
-                   Padding(
-                     padding: const EdgeInsets.only(left: 20),
-                     child: SizedBox(
-                      height: 150,
-                       child: ListView.separated(
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 12,);
-                        }, 
-                        itemCount: 10,
+      body: Obx(
+         () {
+          return                   homePage1Controller.searchArticle.isNotEmpty &&
+                        homePage1Controller.nosearch != ""
+                    ? ListView.builder(
                         shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
+                        physics: const ScrollPhysics(),
+                        // scrollDirection: Axis.vertical,
+                        itemCount: homePage1Controller.searchArticle.length,
                         itemBuilder: (context, index) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 120,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                image: DecorationImage(image: AssetImage("assets/images/myint1.png"),fit: BoxFit.cover)),
-                                child: const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Align(
-                                    alignment: Alignment.topRight,
-                                    child: Icon(Icons.add,color: Colors.black,)),
+                          print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+
+                          print(homePage1Controller.allpostdata.length);
+                          print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+                          return BlogCard(
+                            indexx: index,
+                            context: context,
+                            blogDetail:
+                                homePage1Controller.searchArticle[index],
+                          );
+                        },
+                      )
+                    : homePage1Controller.searchArticle.isEmpty &&
+                            homePage1Controller.nosearch != ""
+                        ? Center(child: Text(" No Data  Found"))
+                        : SingleChildScrollView(
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    CarouselSlider.builder(
+                      options: CarouselOptions(
+                          height: 300.0,
+                          viewportFraction: 1,
+                          // autoPlay: true,
+                          onPageChanged: ((index, reason) {
+                              homepage2Controller.sliderHome2index.value = index;
+                          })),
+                      itemCount: homePage1Controller.allpostdata.length,
+                      itemBuilder: ((context, index, realIndex) {
+                        // final urlImage = urlImages[index];
+                        return buildImage(context, index);
+                      }),
+                    ),
+                  ],
+                ),
+             const SizedBox(
+                  height: 20,
+                ),
+                Obx(() {
+                    return buildIndicator();
+                  }
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 30 ),
+                  child: GridView.builder(
+                    itemCount: homePage1Controller.allpostdata.length > 9 ? 9 :homePage1Controller.allpostdata.length,
+                    shrinkWrap: true,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () async{
+                          // yourIntrestController.choices[index].select.toggle();
+                          // choices[index].select = yourIntrestController.yourIntrest.value;
+                          // print(yourIntrestController.choices[index].select);
+                           var response = await apiprovider.getComment(homePage1Controller.copydata[index].id);
+                           print("sddddddddddsdddddd");
+                           print(apiprovider.statuscode);
+                      
+                  if(signincontroller.isGuest.value == 'guest'){
+                  Router.neglect(context, () {context.goNamed('SIGNINPAGE');});
+                }else{
+                  context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.copydata[index],queryParams: {"index": "$index"});
+                }
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 19 / 100,
+                          decoration: BoxDecoration(color: Color(0xffFFEAC5)),
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height: MediaQuery.of(context).size.height * 19 / 100,
+                                  width: MediaQuery.of(context).size.height * 19 / 100,
+                                  decoration: const BoxDecoration(
+                                  color: Colors.grey,
+                                    image: DecorationImage(image: AssetImage("assets/images/slider2.png"),fit: BoxFit.cover, opacity: 0.6)
+                                  ),
                                 ),
+                                Align(
+                                 alignment: Alignment.bottomCenter,
+                                  child: Html(data: '<p>${homePage1Controller.copydata[index].title.rendered}</p>',
+                        style: {
+                          'p':Style(
+                            color: Colors.white,
+                            fontSize: FontSize(8)
+                          )
+                        },
+                        ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                                    // homePage1Controller.copydata[index].title.rendered,
+                      );
+                    },
+                  ),
+                ),
+                Padding( 
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20,),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "Hot Shows/Topics",
+                                style: TextStyle(fontSize: 14),
                               ),
                               Text(
-                                "The Boys"
-                              ),
+                                "View All",
+                                style: TextStyle(
+                                    color: Color(0xfff0701BF), fontSize: 14),
+                              )
                             ],
-                          );
-                        }, 
+                          ),
                         ),
-                     ),
-                   ),
-                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            "Featured article",
-                            style: TextStyle(fontSize: 14),
+                       Padding(
+                         padding: const EdgeInsets.only(left: 20),
+                         child: SizedBox(
+                          height: 150,
+                           child: ListView.separated(
+                            separatorBuilder: (context, index) {
+                              return const SizedBox(width: 12,);
+                            }, 
+                            itemCount: 10,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    height: 120,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8),
+                                    image: DecorationImage(image: AssetImage("assets/images/myint1.png"),fit: BoxFit.cover)),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Align(
+                                        alignment: Alignment.topRight,
+                                        child: Icon(Icons.add,color: Colors.black,)),
+                                    ),
+                                  ),
+                                  Text(
+                                    "The Boys"
+                                  ),
+                                ],
+                              );
+                            }, 
+                            ),
+                         ),
+                       ),
+                       Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "Featured article",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Text(
+                                "View All",
+                                style: TextStyle(
+                                    color: Color(0xfff0701BF), fontSize: 14),
+                              )
+                            ],
                           ),
-                          Text(
-                            "View All",
-                            style: TextStyle(
-                                color: Color(0xfff0701BF), fontSize: 14),
-                          )
-                        ],
-                      ),
-                    ),
-                    // Obx(() {
-                    //   return 
-                    // }),
-                  Obx(() {
-                        return CarouselSlider.builder(
-                              options: CarouselOptions(
-                                  height: 400.0,
-                                  // viewportFraction: 1,
-                                  // autoPlay: true,
-                                  onPageChanged: ((index, reason) {
-                                    // homePage1 = index;
-                                    // if(homePage1Controller.carouselSliderIndex.value != null)
-                                    homePage1Controller.carouselSliderIndex.value = index;
-                                  })),
-                              itemCount: homePage1Controller.copydata.length,
-                              itemBuilder: ((context, index, realIndex) {
-                                print("Inexxx");
-                                print(index);
-                                // final urlImage = homePage1Controller.like[index].image;
-                                return buildImage(context, index);
-                              }),
-                            );
-                      }
-                    ),
-                      const SizedBox(
-                      height: 32,
-                    ),
-                   Obx((){
-                       return
-                        buildIndicatorTrending();
-                     }
-                   ), 
-                  // const SizedBox(height: 50,),
-            Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            "Latest Fun Quiz",
-                            style: TextStyle(fontSize: 14),
+                        ),
+                        // Obx(() {
+                        //   return 
+                        // }),
+                      Obx(() {
+                            return CarouselSlider.builder(
+                                  options: CarouselOptions(
+                                      height: 400.0,
+                                      // viewportFraction: 1,
+                                      // autoPlay: true,
+                                      onPageChanged: ((index, reason) {
+                                        // homePage1 = index;
+                                        // if(homePage1Controller.carouselSliderIndex.value != null)
+                                         homepage2Controller.SliderHome2Featured.value = index;
+                                        // homePage1Controller.carouselSliderIndex.value = index;
+                                      })),
+                                  itemCount: homePage1Controller.copydata.length,
+                                  itemBuilder: ((context, index, realIndex) {
+                                    print("Inexxx");
+                                    print(index);
+                                    // final urlImage = homePage1Controller.like[index].image;
+                                    return buildImage(context, index);
+                                  }),
+                                );
+                          }
+                        ),
+                          const SizedBox(
+                          height: 32,
+                        ),
+                       Obx((){
+                           return
+                            buildIndicatorTrending();
+                         }
+                       ), 
+                      // const SizedBox(height: 50,),
+                Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "Latest Fun Quiz",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Text(
+                                "View All",
+                                style: TextStyle(
+                                    color: Color(0xfff0701BF), fontSize: 14),
+                              )
+                            ],
                           ),
-                          Text(
-                            "View All",
-                            style: TextStyle(
-                                color: Color(0xfff0701BF), fontSize: 14),
-                          )
-                        ],
+                        ),
+                        CarouselSlider.builder(
+                            options: CarouselOptions(
+                                height: 220.0,
+                                viewportFraction: 0.9,
+                                // autoPlay: true,
+                                onPageChanged: ((index, reason){
+                                  // homePage1 = index;
+                                  homepage2Controller.sliderHome2Latest.value =
+                                      index;
+                              })),
+                            itemCount: urlImages.length,
+                            itemBuilder: ((context, index, realIndex) {
+                              final urlImage = urlImages[index];
+                              return buildLatestImage(urlImage, index);
+                            }),
                       ),
-                    ),
-                    CarouselSlider.builder(
-                        options: CarouselOptions(
-                            height: 220.0,
-                            viewportFraction: 0.9,
-                            // autoPlay: true,
-                            onPageChanged: ((index, reason){
-                              // homePage1 = index;
-                              homepage2Controller.sliderHome2Latest.value =
-                                  index;
-                          })),
-                        itemCount: urlImages.length,
-                        itemBuilder: ((context, index, realIndex) {
-                          final urlImage = urlImages[index];
-                          return buildLatestImage(urlImage, index);
-                        }),
-                  ),
-                   const SizedBox(
-                      height: 32,
-                    ),
-                   Obx((){
-                       return
-                        buildIndicatorLatest();
-                     }
-                   ), 
-                   SizedBox(height: 20,),
-                   Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
-                            "Trending articles",
-                            style: TextStyle(fontSize: 14),
+                       const SizedBox(
+                          height: 32,
+                        ),
+                       Obx((){
+                           return
+                            buildIndicatorLatest();
+                         }
+                       ), 
+                       SizedBox(height: 20,),
+                       Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                              Text(
+                                "Trending articles",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              Text(
+                                "View All",
+                                style: TextStyle(
+                                    color: Color(0xfff0701BF), fontSize: 14),
+                              )
+                            ],
                           ),
-                          Text(
-                            "View All",
-                            style: TextStyle(
-                                color: Color(0xfff0701BF), fontSize: 14),
-                          )
-                        ],
-                      ),
-                    ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ScrollPhysics(),
-                    itemCount: homePage1Controller.allpostdata.length,
-                    itemBuilder:(context, index) {
-                      return  BlogCard(
-                        indexx: index,
-                    context: context,
-                    blogDetail: homePage1Controller.allpostdata[index]
-                  );
-                    },),
-          ],
-        ),
+                        ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                        itemCount: homePage1Controller.allpostdata.length,
+                        itemBuilder:(context, index) {
+                          return  BlogCard(
+                            indexx: index,
+                        context: context,
+                        blogDetail: homePage1Controller.allpostdata[index]
+                      );
+                        },),
+              ],
+            ),
+          );
+        }
       ),
     );
   }
@@ -388,9 +417,27 @@ class _HomePage2State extends State<HomePage2> {
                   ),
                       Obx(() {
                           return 
-                          Text(
-                            homePage1Controller.copydata[index].title.rendered,
-                            style: TextStyle(color: Colors.white),
+                          InkWell(
+                            onTap: ()async {
+                              print("Moving");
+              print(homePage1Controller.copydata[index].id);
+              // print(homePage1Controller.allpostdata[index]);
+            var response = await apiprovider.getComment(homePage1Controller.copydata[index].id);
+            print("sddddddddddsdddddd");
+            print(apiprovider.statuscode);
+              if(signincontroller.isGuest.value == 'guest'){
+              Router.neglect(context, () {context.goNamed('SIGNINPAGE');});
+            }else{
+              context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.copydata[index],queryParams: {"index": "$index"});
+            }
+                            },
+                            child: Html(data:'<p>${homePage1Controller.copydata[index].title.rendered}</p>',
+                                              style: {
+                                                'p':Style(
+                                                  color: Colors.white
+                                                )
+                                              },
+                                              ),
                           );
                         }
                       ),  
@@ -472,7 +519,7 @@ Widget buildfeaturedImage(String image, int index, context) {
           decoration: BoxDecoration(
               color: Colors.red,
               image:
-                  DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
+                  DecorationImage(image: AssetImage(image), fit: BoxFit.fill)),
         ),
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
@@ -529,7 +576,7 @@ Widget buildfeaturedImage(String image, int index, context) {
   Widget buildIndicator() {
     return AnimatedSmoothIndicator(
       activeIndex: homepage2Controller.sliderHome2index.value,
-      count: 10,
+      count: homePage1Controller.allpostdata.length,
       effect: JumpingDotEffect(
           dotColor: Colors.grey,
           dotHeight: 6,
@@ -540,7 +587,7 @@ Widget buildfeaturedImage(String image, int index, context) {
     Widget buildIndicatorTrending() {
       return AnimatedSmoothIndicator(
         activeIndex: homepage2Controller.SliderHome2Featured.value,
-        count: 4,
+        count: homePage1Controller.allpostdata.length,
         effect: JumpingDotEffect(
             dotColor: Colors.grey,
             dotHeight: 6,

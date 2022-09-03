@@ -108,19 +108,19 @@ class HomePagePost {
         "modified": modified!.toIso8601String(),
         "modified_gmt": modifiedGmt!.toIso8601String(),
         "slug": slug,
-        "status": statusEnumValues.reverse[status],
-        "type": typeValues.reverse[type],
+        "status": statusEnumValues.reverse![status],
+        "type": typeValues.reverse![type],
         "link": link,
         "title": title!.toJson(),
         "content": content!.toJson(),
         "excerpt": excerpt!.toJson(),
         "author": author,
         "featured_media": featuredMedia,
-        "comment_status": statusValues.reverse[commentStatus],
-        "ping_status": statusValues.reverse[pingStatus],
+        "comment_status": statusValues.reverse![commentStatus],
+        "ping_status": statusValues.reverse![pingStatus],
         "sticky": sticky,
         "template": template,
-        "format": formatValues.reverse[format],
+        "format": formatValues.reverse![format],
         "meta": List<dynamic>.from(meta!.map((x) => x)),
         "categories": List<dynamic>.from(categories!.map((x) => x)),
         "tags": List<dynamic>.from(tags!.map((x) => x)),
@@ -189,23 +189,23 @@ class Links {
         this.replies,
         this.versionHistory,
         this.predecessorVersion,
-        this.wpFeaturedmedia,
         this.wpAttachment,
         this.wpTerm,
         this.curies,
+        this.wpFeaturedmedia,
     });
 
     List<About>? self;
-    List<About> ?collection;
+    List<About>? collection;
     List<About>? about;
     List<Author>? author;
     List<Author>? replies;
     List<VersionHistory>? versionHistory;
     List<PredecessorVersion>? predecessorVersion;
-    List<Author>? wpFeaturedmedia;
     List<About>? wpAttachment;
     List<WpTerm>? wpTerm;
     List<Cury>? curies;
+    List<Author>? wpFeaturedmedia;
 
     factory Links.fromJson(Map<String, dynamic> json) => Links(
         self: List<About>.from(json["self"].map((x) => About.fromJson(x))),
@@ -215,24 +215,24 @@ class Links {
         replies: List<Author>.from(json["replies"].map((x) => Author.fromJson(x))),
         versionHistory: List<VersionHistory>.from(json["version-history"].map((x) => VersionHistory.fromJson(x))),
         predecessorVersion: List<PredecessorVersion>.from(json["predecessor-version"].map((x) => PredecessorVersion.fromJson(x))),
-        wpFeaturedmedia: List<Author>.from(json["wp:featuredmedia"].map((x) => Author.fromJson(x))),
         wpAttachment: List<About>.from(json["wp:attachment"].map((x) => About.fromJson(x))),
         wpTerm: List<WpTerm>.from(json["wp:term"].map((x) => WpTerm.fromJson(x))),
         curies: List<Cury>.from(json["curies"].map((x) => Cury.fromJson(x))),
+        wpFeaturedmedia: json["wp:featuredmedia"] == null ? null : List<Author>.from(json["wp:featuredmedia"].map((x) => Author.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
-    "self": List<dynamic>.from(self!.map((x) => x.toJson())),
+        "self": List<dynamic>.from(self!.map((x) => x.toJson())),
         "collection": List<dynamic>.from(collection!.map((x) => x.toJson())),
         "about": List<dynamic>.from(about!.map((x) => x.toJson())),
         "author": List<dynamic>.from(author!.map((x) => x.toJson())),
         "replies": List<dynamic>.from(replies!.map((x) => x.toJson())),
         "version-history": List<dynamic>.from(versionHistory!.map((x) => x.toJson())),
         "predecessor-version": List<dynamic>.from(predecessorVersion!.map((x) => x.toJson())),
-        "wp:featuredmedia": List<dynamic>.from(wpFeaturedmedia!.map((x) => x.toJson())),
         "wp:attachment": List<dynamic>.from(wpAttachment!.map((x) => x.toJson())),
         "wp:term": List<dynamic>.from(wpTerm!.map((x) => x.toJson())),
         "curies": List<dynamic>.from(curies!.map((x) => x.toJson())),
+        "wp:featuredmedia": wpFeaturedmedia == null ? null : List<dynamic>.from(wpFeaturedmedia!.map((x) => x.toJson())),
     };
 }
 
@@ -290,8 +290,8 @@ class Cury {
     );
 
     Map<String, dynamic> toJson() => {
-        "name": nameValues.reverse[name],
-        "href": hrefValues.reverse[href],
+        "name": nameValues.reverse![name],
+        "href": hrefValues.reverse![href],
         "templated": templated,
     };
 }
@@ -366,7 +366,7 @@ class WpTerm {
     );
 
     Map<String, dynamic> toJson() => {
-        "taxonomy": taxonomyValues.reverse[taxonomy],
+        "taxonomy": taxonomyValues.reverse![taxonomy],
         "embeddable": embeddable,
         "href": href,
     };
@@ -393,11 +393,11 @@ final typeValues = EnumValues({
 
 class EnumValues<T> {
     Map<String, T> map;
-   late Map<T, String> reverseMap;
+    Map<T, String>? reverseMap;
 
-   EnumValues(this.map);
+    EnumValues(this.map);
 
-    Map<T, String> get reverse {
+    Map<T, String>? get reverse {
         if (reverseMap == null) {
             reverseMap = map.map((k, v) => new MapEntry(v, k));
         }

@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
   var homePageController = Get.find<HomePageController>();
   var homePage1Controller = Get.find<HomePage1Controller>();
   TextEditingController searchcontroller = TextEditingController();
-  // String? userName;
   // String? userEmail;
   // String? imageurl;
   List? copydata;
@@ -110,6 +109,7 @@ class _HomePageState extends State<HomePage> {
     print("nnnnnnnn");
     // print(userName);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -286,10 +286,9 @@ class _HomePageState extends State<HomePage> {
               return IconButton(
                   onPressed: () {
                     homePageController.searchIcon.toggle();
-                    homePage1Controller.searchArticle.clear();
-
+                    homePage1Controller.searchArticle.clear(); 
                     // homePage1Controller.allpostdata = [];
-                    apiProvider.getPost(homePage1Controller.userTags.value);
+                    // apiProvider.getPost(homePage1Controller.userTags.value);
                   },
                   icon: homePageController.searchIcon.value
                       ? const Image(
@@ -297,7 +296,12 @@ class _HomePageState extends State<HomePage> {
                           height: 24,
                         )
                       : InkWell(
-                          onTap: () {
+                          onTap:()async{
+                            // homePage1Controller.allpostdata.clear();
+                            // homePage1Controller.searchArticle = [].obs;
+                            // await  apiProvider.getPost("32");
+                            homePage1Controller.nosearch = "".obs;
+                            homePageController.searchIcon.toggle();
                             searchcontroller.clear();
                             homePage1Controller.searchArticle.clear();
                           },
@@ -317,7 +321,13 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children: [
             InkWell(
-              onTap: () {
+              onTap: () async{
+                await apiProvider.getprofile();
+                final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                // if(sharedPreferences.getString('birthday') != null){
+                // homePageController.birthday.value = sharedPreferences.getString('birthday')!;
+                // }
+                // print(homePageController.birthday);
                 context.pushNamed("PROFILEPAGE");
               },
               child: DrawerHeader(
@@ -385,10 +395,12 @@ class _HomePageState extends State<HomePage> {
                       "assets/icons/icon_puzzle.png", "Jigsaw Puzzle", () {}),
                   const SizedBox(
                     height: 10,
+                    
                   ),
                   DrawerItems("assets/icons/icon_profile.png", "My Profile",
-                      () {
-                    context.pushNamed('PROFILEPAGE');
+                      () async{
+                    await apiProvider.getprofile();
+                     context.pushNamed('PROFILEPAGE');
                   }),
                   const SizedBox(
                     height: 10,
@@ -436,10 +448,10 @@ class _HomePageState extends State<HomePage> {
                     final provider = Provider.of<GoogleSignInProvider>(context,
                         listen: false);
                     print("user details");
-                    provider.logout();
+                    context.goNamed("SIGNINPAGE");
+                    await provider.logout();
                     // provider.user
                     print("user details--------");
-                    context.goNamed("SIGNINPAGE");
                   }),
                   const SizedBox(
                     height: 10,
@@ -451,9 +463,19 @@ class _HomePageState extends State<HomePage> {
         ),
         // backgroundColor: Colors.red,
       ),
-      body: Obx(() {
-        return pages[homePageController.bootomNav.value];
-      }),
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          homePage1Controller.allpostdata = [].obs;
+          homePage1Controller.copydata = [].obs;
+          Get.delete<HomePage1Controller>();
+          await apiProvider.getPost("34");
+          print("dataLength");
+          print(homePage1Controller.allpostdata.length);
+          },
+        child: Obx(() {
+          return pages[homePageController.bootomNav.value];
+        }),
+      ),
       // bottomNavigationBar: Obx(() {
       //     return buildMynavbar();
       //   }
@@ -473,6 +495,8 @@ class _HomePageState extends State<HomePage> {
               currentIndex: homePageController.bootomNav.value,
               type: BottomNavigationBarType.fixed,
               elevation: 0,
+              selectedFontSize: 10,
+              unselectedFontSize: 10,
               selectedItemColor: Color(0xffF1B142),
               selectedIconTheme: IconThemeData(color: Color(0xffF1B142)),
               backgroundColor: Colors.transparent,
@@ -486,7 +510,7 @@ class _HomePageState extends State<HomePage> {
                   icon: SizedBox(
                       height: 25,
                       child: Image(
-                        image: AssetImage(
+                        image: const AssetImage(
                           "assets/icons/icon_myfeed.png",
                         ),
                         color: homePageController.bootomNav.value == 0
@@ -509,10 +533,16 @@ class _HomePageState extends State<HomePage> {
                   label: "Home",
                 ),
                 const BottomNavigationBarItem(
+                  
                   icon: SizedBox(
                     height: 25,
+                    // width: 50,
+                    
                   ),
-                  label: "Fun&Games",
+                  
+                  label: "Fun&Games" ,
+                  
+                  
                 ),
                 BottomNavigationBarItem(
                   icon: SizedBox(

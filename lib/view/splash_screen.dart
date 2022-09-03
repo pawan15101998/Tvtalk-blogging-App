@@ -40,20 +40,22 @@ List tagdata = [];
     // getcallapi();
     // TODO: implement initState
     getValidation().whenComplete(()async{
-  var tagsss=  await apiProvider.getTags();
      await signincontroller.getuserdata();
      await apiProvider.get();
+  var tagsss=  await apiProvider.getTags();
+     print("sd");
+     print(tagsss);
   // for(var i= 0; i<tagsss['data'].length; i++){
   //    tagdata.add(tagsss['data'][i]['tagId']);
   // }
 sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
 homepage1controller.userTags.value = sendingTags;
 print(sendingTags);
-    await  apiProvider.getPost(sendingTags);
-           await apiProvider.get();
-    Timer(Duration(microseconds: 0), ()=> finalEmail == null ? 
-    Router.neglect(context, () {context.goNamed('SIGNINPAGE');}):
-   Router.neglect(context, () {context.goNamed('HOMEPAGE');}));
+      await apiProvider.getPost(sendingTags);
+      await apiProvider.get();
+      Timer(const Duration(microseconds: 0), ()=> finalEmail == null ? 
+      Router.neglect(context, () {context.goNamed('SIGNINPAGE');}):
+      Router.neglect(context, () {context.goNamed('HOMEPAGE');}));
     });
     super.initState();
   }
@@ -69,7 +71,8 @@ print(sendingTags);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-);
+    return const Scaffold(
+
+    );
   }
 }

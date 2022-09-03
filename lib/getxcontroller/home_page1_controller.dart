@@ -6,6 +6,7 @@ class HomePage1Controller extends GetxController {
   RxInt carouselSliderIndex = 0.obs;
   RxInt carouselSliderLatestIndex = 0.obs;
   RxString userTags = ''.obs;
+  RxString nosearch = "".obs;
 
   RxList<Like> like = <Like>[
     Like(image: 'assets/images/slider1.png', isLike: false.obs),
@@ -15,20 +16,30 @@ class HomePage1Controller extends GetxController {
   ].obs;
   RxList allpostdata = [].obs;
   RxList copydata = [].obs;
+ RxMap userDetails = {}.obs;
 
   RxList searchArticle = [].obs;
 
-  searchFunction(String? val) {
+searchFunction(String? val) {
     searchArticle.clear();
-    if (val!.isEmpty) {
+
+    nosearch.value = val!;
+    if (val.isEmpty) {
       searchArticle.clear();
       return;
+    } else {
+      print('not empty');
+      allpostdata.forEach((element) {
+        if (element.title.rendered.toLowerCase().contains(val)){
+          searchArticle = [].obs;
+          searchArticle.add(element);
+          print(searchArticle);
+          print('value');
+          return;
+        } else {
+          return;
+        }
+      });
     }
-
-    allpostdata.forEach((element) {
-      if (element.title.rendered.toLowerCase().contains(val)) {
-        searchArticle.add(element);
-      }
-    });
   }
 }

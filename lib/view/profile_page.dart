@@ -1,8 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/getxcontroller/home_page_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 
 class Profilepage extends StatefulWidget {
@@ -12,7 +12,13 @@ class Profilepage extends StatefulWidget {
   State<Profilepage> createState() => _ProfilepageState();
 }
 final signincontroller = Get.find<SignInController>();
+final homePageController = Get.find<HomePageController>();
 class _ProfilepageState extends State<Profilepage> {
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -30,9 +36,10 @@ class _ProfilepageState extends State<Profilepage> {
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
                   onTap: (){
+                    Navigator.pop(context, true);
                     context.pushNamed('EDITPROFILE');
                   },
-                  child: Text("Edit", style: TextStyle(color: Colors.black),)),
+                  child: Text("Edit", style: TextStyle(color: Colors.white, fontSize: 18),)),
               )
             ],
           ),
@@ -52,7 +59,7 @@ class _ProfilepageState extends State<Profilepage> {
                 width: 100,
                 decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                image: DecorationImage(image: NetworkImage("https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg",),fit: BoxFit.cover,),
+                image: DecorationImage(image: NetworkImage("${homePageController.userDetails['data']['image']}".split("./public/assets/images/").last),fit: BoxFit.cover,),
                 ),
               ),
             ),
@@ -68,32 +75,39 @@ class _ProfilepageState extends State<Profilepage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text("Username", style: TextStyle(
                       color: Colors.grey
                     ),),
-                    Text("Anwar zeb", style: TextStyle(
+                    Text("${homePageController.userDetails['data']['name']}", style: TextStyle(
                     fontSize: 18
                     ),),
                     SizedBox(height: 40,),
                     Text("Email Adress", style: TextStyle(
                       color: Colors.grey
                     ),),
-                    Text("Anwarzeb25@mail.com", style: TextStyle(
+                    Text("${homePageController.userDetails['data']['email']}", style: TextStyle(
                     fontSize: 18
                     ),),
                     SizedBox(height: 40,),
                     Text("Gender", style: TextStyle(
                       color: Colors.grey
                     ),),
-                    Text("Male", style: TextStyle(
+                    Text("${homePageController.userDetails['data']['gender'] == null? "------" :homePageController.userDetails['data']['gender'] == 0? "Male" : "Female"}", style: TextStyle(
                     fontSize: 18
                     ),),
                      SizedBox(height: 40,),
+                     Text("Mobile", style: TextStyle(
+                      color: Colors.grey
+                    ),),
+                    Text("${homePageController.userDetails['data']['mobile'] == null ? "------": homePageController.userDetails['data']['mobile']}", style: TextStyle(
+                    fontSize: 18
+                    ),),
+                    SizedBox(height: 40,),
                     Text("Date of Birth", style: TextStyle(
                       color: Colors.grey
                     ),),
-                    Text("10/14/1997", style: TextStyle(
+                    Text("${(homePageController.userDetails['data']['dob']) == null ? "------" :homePageController.userDetails['data']['dob'].toString().split("T").first}", style: TextStyle(
                     fontSize: 18
                     ),),
                   ],
@@ -104,6 +118,7 @@ class _ProfilepageState extends State<Profilepage> {
         ),
       ),
     );
+
     // Scaffold(
     //   appBar: AppBar(
     //     iconTheme: const IconThemeData(color: Colors.black),
@@ -214,4 +229,6 @@ class _ProfilepageState extends State<Profilepage> {
   //     ),
   //   );
   // }
+
+
 }

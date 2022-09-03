@@ -194,14 +194,17 @@ class _SignInPageState extends State<SignInPage> {
                 onPress: ()async{
                   final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                 await  provider.googleLogin();
-                // await provider.getGender();
-                // await provider.getGender();
+                String birthday = await provider.getBirthday();
+                  // await provider.getGender();
+                  // await provider.getGender();
                   print("userinfo from googl");
                   print(provider.user);
                   print(provider.user.displayName);
                   print(provider.user.email);
                   print(provider.user.id);
                   print(provider.user.photoUrl);
+                  print(signincontroller.googleUserGender);
+                  print(signincontroller.googleUserDob);
                   if(provider.user != null){
                     // context.goNamed("SELECTYOURINTREST");
                     signincontroller.isGuest.value = '';
@@ -210,7 +213,9 @@ class _SignInPageState extends State<SignInPage> {
                      "name": provider.user.displayName,
                      "email":provider.user.email,
                      "social_login_id":provider.user.id,
-                     "image":provider.user.photoUrl
+                     "image":provider.user.photoUrl,
+                     "dob":signincontroller.googleUserDob!,
+                     "gender":signincontroller.googleUserGender == 'male'? '0' :'1'
                     });
                     print("ssssssddd");
                     if(apiProvider.RegisterResponse['message'] == 'Logged in successfully'){
@@ -218,7 +223,6 @@ class _SignInPageState extends State<SignInPage> {
                     }else if(apiProvider.RegisterResponse['message'] == 'User Added Successfully'){
                        context.goNamed("SELECTYOURINTREST");
                     }
-                    
                   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                   sharedPreferences.setString('email', provider.user.email);
                   sharedPreferences.setString('name', provider.user.displayName);
@@ -245,7 +249,6 @@ class _SignInPageState extends State<SignInPage> {
                  await provider.facebookLogin();
                   if(provider.user != null){
                     print("facebook email");
-                    context.goNamed("SELECTYOURINTREST");
                     signincontroller.isGuest.value = '';
                    await apiProvider.PostSocial("/user/social-login", 
                     {"social_login_type": "2",
@@ -256,12 +259,12 @@ class _SignInPageState extends State<SignInPage> {
                     });
                     print("ssssssssss");
                     print(apiProvider.RegisterResponse['message']);
-                    if(apiProvider.RegisterResponse['message'] == 'Logged in successfully'){
-                       context.goNamed("HOMEPAGE");
+                    print(apiProvider.RegisterResponse);
+                    if(apiProvider.RegisterResponse['message'] == 'Email already Exist'){
+                       context.pushNamed("HOMEPAGE");
                     }else if(apiProvider.RegisterResponse['message'] == 'User Added Successfully'){
                        context.goNamed("SELECTYOURINTREST");
                     }
-                    // if(socialres== )
                     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                     sharedPreferences.setString('email', provider.user['email']);
                     sharedPreferences.setString('name', provider.user['name']);
@@ -278,6 +281,7 @@ class _SignInPageState extends State<SignInPage> {
                 height: height * 2 / 100,
               ),
               // loginButton(
+              //   onPress: (){},
               //   width: width,
               //   text: "Continue with Apple",
               //   image: "assets/icons/apple.png",
@@ -307,7 +311,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                 ],
               ),
-              SizedBox(
+            const SizedBox(
                 height: 10,
               )
             ],

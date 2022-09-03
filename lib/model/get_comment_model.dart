@@ -75,6 +75,7 @@ class Rows {
   int? postId;
   String? content;
   String? createdAt;
+  String? createdDate;
   String? updatedAt;
   int? userIde;
   int? commentLikes;
@@ -87,6 +88,7 @@ class Rows {
       this.postId,
       this.content,
       this.createdAt,
+      this.createdDate,
       this.updatedAt,
       this.userIde,
       this.commentLikes,
@@ -99,6 +101,7 @@ class Rows {
     postId = json['postId'];
     content = json['content'];
     createdAt = json['createdAt'];
+    createdDate = json['createdDate'];
     updatedAt = json['updatedAt'];
     userId = json['UserId'];
     commentLikes = json['comment_likes'];
@@ -118,6 +121,7 @@ class Rows {
     data['postId'] = this.postId;
     data['content'] = this.content;
     data['createdAt'] = this.createdAt;
+    data['createdDate'] = this.createdDate;
     data['updatedAt'] = this.updatedAt;
     data['UserId'] = this.userId;
     data['comment_likes'] = this.commentLikes;
@@ -137,6 +141,7 @@ class User {
   String? email;
   dynamic image;
   String? createdAt;
+  String? createdDate;
   String? updatedAt;
 
   User(
@@ -145,6 +150,7 @@ class User {
       this.email,
       this.image,
       this.createdAt,
+      this.createdDate,
       this.updatedAt});
 
   User.fromJson(Map<String, dynamic> json) {
@@ -153,6 +159,7 @@ class User {
     email = json['email'];
     image = json['image'];
     createdAt = json['createdAt'];
+    createdDate = json['createdDate'];
     updatedAt = json['updatedAt'];
   }
 
@@ -163,6 +170,7 @@ class User {
     data['email'] = this.email;
     data['image'] = this.image;
     data['createdAt'] = this.createdAt;
+    data['createdDate'] = this.createdDate;
     data['updatedAt'] = this.updatedAt;
     return data;
   }
@@ -174,6 +182,7 @@ class Replies {
   int? commentId;
   String? content;
   String? createdAt;
+  String? createdDate;
   String? updatedAt;
   int? userIde;
   User? user;
@@ -184,6 +193,7 @@ class Replies {
       this.commentId,
       this.content,
       this.createdAt,
+      this.createdDate,
       this.updatedAt,
       this.userIde,
       this.user});
@@ -194,6 +204,7 @@ class Replies {
     commentId = json['commentId'];
     content = json['content'];
     createdAt = json['createdAt'];
+    createdDate = json['createdDate'];
     updatedAt = json['updatedAt'];
     userId = json['UserId'];
     user = json['User'] != null ? new User.fromJson(json['User']) : null;
@@ -206,6 +217,7 @@ class Replies {
     data['commentId'] = this.commentId;
     data['content'] = this.content;
     data['createdAt'] = this.createdAt;
+    data['createdDate'] = this.createdDate;
     data['updatedAt'] = this.updatedAt;
     data['UserId'] = this.userId;
     if (this.user != null) {

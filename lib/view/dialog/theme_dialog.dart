@@ -113,12 +113,13 @@ class ThemeDialog {
                 style: ElevatedButton.styleFrom(
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
-                    elevation: 0.0,
+                    elevation: 0.0,                                                     //"QUICKSAND"   NOTO SERIF  Montserrat  VIDALOKA                                                          //NOTO SERIF
                     side: BorderSide(
-                      color:((detailpageController.fontFamily.value == 1 && fontName == "QUICKSAND") ||
-                             (detailpageController.fontFamily.value == 2 && fontName == "NOTO SERIF") ||
-                             (detailpageController.fontFamily.value == 3 && fontName == "Montserrat")||
-                             (detailpageController.fontFamily.value == 4 && fontName == "VIDALOKA")
+                      color:((detailpageController.fontFamily.value == 1 && fontName == "ROBOTO") ||
+                             (detailpageController.fontFamily.value == 2 && fontName == "QUICKSAND") ||
+                             (detailpageController.fontFamily.value == 3 && fontName == "NOTO SERIF")||
+                             (detailpageController.fontFamily.value == 4 && fontName == "Montserrat") ||
+                             (detailpageController.fontFamily.value == 5 && fontName == "VIDALOKA")
                              ) ? 
                       Colors.green : Colors.grey 
                     ),
@@ -146,7 +147,7 @@ class ThemeDialog {
                                     ? Colors.white
                                     : Colors.black,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           Text(
@@ -184,17 +185,21 @@ class ThemeDialog {
                     ),
               Icon(
                 Icons.check_circle_rounded,
-                size: 16,
-                color: (detailpageController.isDark.value && ((detailpageController.fontFamily.value == 1 && fontName == "QUICKSAND") ||
-                             (detailpageController.fontFamily.value == 2 && fontName == "NOTO SERIF") ||
-                             (detailpageController.fontFamily.value == 3 && fontName == "Montserrat")||
-                             (detailpageController.fontFamily.value == 4 && fontName == "VIDALOKA")
-                             ))
+                size: 16,                        //QUICKSAND NOTO SERIF  Montserrat VIDALOKA
+                color: (detailpageController.isDark.value && (
+                       (detailpageController.fontFamily.value == 1 && fontName == "ROBOTO") ||
+                       (detailpageController.fontFamily.value == 2 && fontName == "QUICKSAND")||
+                       (detailpageController.fontFamily.value == 3 && fontName == "NOTO SERIF")||
+                       (detailpageController.fontFamily.value == 4 && fontName == "Montserrat")  ||
+                       (detailpageController.fontFamily.value == 5 && fontName == "VIDALOKA")
+                    ))
                     ? Colors.green
-                    : (detailpageController.isDark == false && ((detailpageController.fontFamily.value == 1 && fontName == "QUICKSAND") ||
-                             (detailpageController.fontFamily.value == 2 && fontName == "NOTO SERIF") ||
-                             (detailpageController.fontFamily.value == 3 && fontName == "Montserrat")||
-                             (detailpageController.fontFamily.value == 4 && fontName == "VIDALOKA")
+                    : (detailpageController.isDark == false && (
+                       (detailpageController.fontFamily.value == 1 && fontName == "ROBOTO") ||
+                       (detailpageController.fontFamily.value == 2 && fontName == "QUICKSAND")||
+                       (detailpageController.fontFamily.value == 3 && fontName == "NOTO SERIF")||
+                       (detailpageController.fontFamily.value == 4 && fontName == "Montserrat")  ||
+                       (detailpageController.fontFamily.value == 5 && fontName == "VIDALOKA")
                              )) ?
                              Colors.green
                           : detailpageController.isDark.value ?
@@ -379,29 +384,36 @@ class ThemeDialog {
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             FonttheamingButtons("assets/icons/icon_light.png",
-                              "Hello, friend!",  "QUICKSAND",(){
+                              "Hello, friend!",  "ROBOTO",(){
                                   detailpageController.fontFamily.value = 1;
+                              }),
+                               const SizedBox(
+                              width: 20,
+                            ),
+                            FonttheamingButtons("assets/icons/icon_light.png",
+                              "Hello, friend!",  "QUICKSAND",(){
+                                  detailpageController.fontFamily.value = 2;
                               }),
                             const SizedBox(
                               width: 20,
                             ),
                             FonttheamingButtons("assets/icons/icon_light.png",
                                 "Hello, friend!", "NOTO SERIF",(){
-                                  detailpageController.fontFamily.value = 2;
-                                }),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            FonttheamingButtons("assets/icons/icon_light.png",
-                                "Hello, friend!",  "Montserrat",(){
                                   detailpageController.fontFamily.value = 3;
                                 }),
                             const SizedBox(
                               width: 20,
                             ),
                             FonttheamingButtons("assets/icons/icon_light.png",
-                                "Hello, friend!",   "VIDALOKA",(){
+                                "Hello, friend!",  "Montserrat",(){
                                   detailpageController.fontFamily.value = 4;
+                                }),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            FonttheamingButtons("assets/icons/icon_light.png",
+                                "Hello, friend!",   "VIDALOKA",(){
+                                  detailpageController.fontFamily.value = 5;
                                 }),
                             const SizedBox(
                               width: 20,

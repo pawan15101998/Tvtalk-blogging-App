@@ -44,7 +44,6 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getcallapi();
   }
@@ -75,35 +74,36 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
             controller: searchtagscontroller,
             decoration: InputDecoration(
               suffixIcon: Obx(() {
-                  return InkWell(
-                      onTap: () {
-                          // yourIntrestController.activeTextfield.toggle();
-                        FocusScope.of(context).unfocus();
-                      },
-                      child: yourIntrestController.activeTextfield.value?  InkWell(
-                        onTap: ()async{
-                          yourIntrestController.activeTextfield.value = false;
-                          FocusScope.of(context).unfocus();
-                          searchtagscontroller.clear();
-                          yourIntrestController.allTagsModel.value = [];
-                          await getcallapi();
-                          
-                        },
-                        child: Icon(Icons.cancel)): Icon(Icons.search));
-                }
-              ),
+                return InkWell(
+                    onTap: () {
+                      // yourIntrestController.activeTextfield.toggle();
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: yourIntrestController.activeTextfield.value
+                        ? InkWell(
+                            onTap: () async {
+                              yourIntrestController.activeTextfield.value =
+                                  false;
+                              FocusScope.of(context).unfocus();
+                              searchtagscontroller.clear();
+                              yourIntrestController.allTagsModel.value = [];
+                              await getcallapi();
+                            },
+                            child: Icon(Icons.cancel))
+                        : Icon(Icons.search));
+              }),
               filled: true,
               fillColor: Color(0xfffF2F1F1),
               hintText: "Search interest",
               border: InputBorder.none,
             ),
             onTap: () {
-                      // yourIntrestController.activeTextfield.toggle();
-                      if(yourIntrestController.activeTextfield.value == false){
-                        yourIntrestController.activeTextfield.value = true;
-                      }
+              // yourIntrestController.activeTextfield.toggle();
+              if (yourIntrestController.activeTextfield.value == false) {
+                yourIntrestController.activeTextfield.value = true;
+              }
             },
-            onChanged: (value)async {
+            onChanged: (value) async {
               copydata = yourIntrestController.allTagsModel;
               yourIntrestController.allTagsModel.value = copydata!
                   .where((i) => i.name
@@ -111,10 +111,10 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                       .toLowerCase()
                       .contains(value.toLowerCase()))
                   .toList();
-                  if(searchtagscontroller.text == ""){
-                    yourIntrestController.allTagsModel.value = [];
-                   await getcallapi();
-                  }
+              if (searchtagscontroller.text == "") {
+                yourIntrestController.allTagsModel.value = [];
+                await getcallapi();
+              }
             },
           ),
           const SizedBox(
@@ -133,140 +133,140 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                   return true;
                 },
                 child: Obx(() {
-                    return SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: GridView.builder(
-                          itemCount: yourIntrestController.allTagsModel.length < 7? yourIntrestController.allTagsModel.length:7,
-                          // itemCount: yourIntrestController.allTagsModel.length,
-                          shrinkWrap: true,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 2,
-                            crossAxisSpacing: 5,
-                          ),
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            print("objecttttttttt");
-                            print(yourIntrestController.allTagsModel.length);
-                            return
-                                InkWell(
-                                  onTap: () {
-                                    print("object");
-                                    // choice2.add(choices[index]);
-                                    // print(choice2[index].title);
-                                    // print(choice2);
-                                    // choices[index].select = !choices[index].select;
-                                    yourIntrestController.choices[index].select
-                                        .toggle();
-                                    // choices[index].select = yourIntrestController.yourIntrest.value;
-                                    if (yourIntrestController.choices[index].select ==
-                                        true) {
-                                      // print(yourIntrestController.allTagsModel!.data![0].id);
-                                      // selectedtags.add(yourIntrestController.allTagsModel!.data![index].id);
-                                      // selectedtags.assign('tags', yourIntrestController.allTagsModel![index].id);
-                                      selectedtags.add(yourIntrestController
-                                          .allTagsModel[index].id);
-                                      selectedTagsName.add(yourIntrestController
-                                          .allTagsModel[index].name);
-                                      print("object");
-                                      sendSelectedName = selectedTagsName
-                                          .toString()
-                                          .replaceAll("[", "")
-                                          .replaceAll("]", "");
-                                      sendSelectedtags = selectedtags
-                                          .toString()
-                                          .replaceAll("[", "")
-                                          .replaceAll("]", "");
-                                      print(sendSelectedName);
-                                      print(sendSelectedtags);
-                                    } else {
-                                      selectedtags.remove(yourIntrestController
-                                          .allTagsModel[index].id);
-                                      selectedTagsName.remove(yourIntrestController
-                                          .allTagsModel[index].name);
-                                      sendSelectedName = selectedTagsName
-                                          .toString()
-                                          .replaceAll("[", "")
-                                          .replaceAll("]", "");
-                                      sendSelectedtags = selectedtags
-                                          .toString()
-                                          .replaceAll("[", "")
-                                          .replaceAll("]", "");
-                                      // selectedtags.remove(yourIntrestController.allTagsModel!.data![index].id);
-                                      print(sendSelectedName);
-                                      print(sendSelectedtags);
-                                    }
-                                    print(selectedtags);
-                                    print(yourIntrestController.choices[index].select);
-                                  },
-                                  child: Column(
+                  return SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: GridView.builder(
+                        itemCount: yourIntrestController.allTagsModel.length < 7
+                            ? yourIntrestController.allTagsModel.length
+                            : 7,
+                        // itemCount: yourIntrestController.allTagsModel.length,
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 2,
+                          crossAxisSpacing: 5,
+                        ),
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          print("objecttttttttt");
+                          print(yourIntrestController.allTagsModel.length);
+                          return InkWell(
+                            onTap: () {
+                              print("object");
+                              // choice2.add(choices[index]);
+                              // print(choice2[index].title);
+                              // print(choice2);
+                              // choices[index].select = !choices[index].select;
+                              yourIntrestController.choices[index].select
+                                  .toggle();
+                              // choices[index].select = yourIntrestController.yourIntrest.value;
+                              if (yourIntrestController.choices[index].select ==
+                                  true) {
+                                // print(yourIntrestController.allTagsModel!.data![0].id);
+                                // selectedtags.add(yourIntrestController.allTagsModel!.data![index].id);
+                                // selectedtags.assign('tags', yourIntrestController.allTagsModel![index].id);
+                                selectedtags.add(yourIntrestController
+                                    .allTagsModel[index].id);
+                                selectedTagsName.add(yourIntrestController
+                                    .allTagsModel[index].name);
+                                print("object");
+                                sendSelectedName = selectedTagsName
+                                    .toString()
+                                    .replaceAll("[", "")
+                                    .replaceAll("]", "");
+                                sendSelectedtags = selectedtags
+                                    .toString()
+                                    .replaceAll("[", "")
+                                    .replaceAll("]", "");
+                                print(sendSelectedName);
+                                print(sendSelectedtags);
+                              } else {
+                                selectedtags.remove(yourIntrestController
+                                    .allTagsModel[index].id);
+                                selectedTagsName.remove(yourIntrestController
+                                    .allTagsModel[index].name);
+                                sendSelectedName = selectedTagsName
+                                    .toString()
+                                    .replaceAll("[", "")
+                                    .replaceAll("]", "");
+                                sendSelectedtags = selectedtags
+                                    .toString()
+                                    .replaceAll("[", "")
+                                    .replaceAll("]", "");
+                                // selectedtags.remove(yourIntrestController.allTagsModel!.data![index].id);
+                                print(sendSelectedName);
+                                print(sendSelectedtags);
+                              }
+                              print(selectedtags);
+                              print(
+                                  yourIntrestController.choices[index].select);
+                            },
+                            child: Column(
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: Obx(() {
+                                      return Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                19 /
+                                                100,
+                                        // height: 160,
+                                        // width:MediaQuery.of(context).size.height * 16 / 100,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    yourIntrestController
+                                                        .choices[index].title
+                                                        .toString()),
+                                                opacity: 0.8,
+                                                fit: BoxFit.cover),
+                                            color: yourIntrestController
+                                                    .choices[index].select.value
+                                                ? Color(0xfff0FC59A)
+                                                : Colors.black),
+                                      );
+                                    })),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Padding(
-                                          padding:
-                                              const EdgeInsets.symmetric(horizontal: 8),
-                                          child: Obx(() {
-                                            return Container(
-                                              height:
-                                                  MediaQuery.of(context).size.height *
-                                                      19 /
-                                                      100,
-                                              // height: 160,
-                                              // width:MediaQuery.of(context).size.height * 16 / 100,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                  image: DecorationImage(
-                                                      image: AssetImage(
-                                                          yourIntrestController
-                                                              .choices[index].title
-                                                              .toString()),
-                                                      opacity: 0.8,
-                                                      fit: BoxFit.cover),
-                                                  color: yourIntrestController
-                                                          .choices[index].select.value
-                                                      ? Color(0xfff0FC59A)
-                                                      : Colors.black),
-                                            );
-                                          })),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 15,
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              yourIntrestController
-                                                  .allTagsModel[index].name
-                                                  .toString(),
-                                              // "sds",
-                                              style: const TextStyle(fontSize: 16),
-                                            ),
-                                            Obx(() {
-                                              return Icon(
-                                                Icons.check_circle_rounded,
-                                                color: yourIntrestController
-                                                        .choices[index].select.value
-                                                    ? Colors.green
-                                                    : Colors.grey,
-                                              );
-                                            })
-                                          ],
-                                        ),
-                                      )
+                                      Text(
+                                        yourIntrestController
+                                            .allTagsModel[index].name
+                                            .toString(),
+                                        // "sds",
+                                        style: const TextStyle(fontSize: 16),
+                                      ),
+                                      Obx(() {
+                                        return Icon(
+                                          Icons.check_circle_rounded,
+                                          color: yourIntrestController
+                                                  .choices[index].select.value
+                                              ? Colors.green
+                                              : Colors.grey,
+                                        );
+                                      })
                                     ],
                                   ),
-                                );
-                            
-                          },
-                        ),
+                                )
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  }
-                ),
+                    ),
+                  );
+                }),
               ),
             )
         ],
