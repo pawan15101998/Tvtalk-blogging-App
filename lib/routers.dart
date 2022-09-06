@@ -16,3 +16,5 @@ const String articledetailpage = '/Articledetailpage';
 const String funandgamespage = '/Funandgamespage';
 const String poles = '/Poles';
 const String editprofile = '/Editprofile';
+const String featurearticleviewall = '/Featurearticleviewall';
+const String trendingarticleviewall = '/Trendingarticleviewall';

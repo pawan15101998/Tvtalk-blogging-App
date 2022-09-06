@@ -4,6 +4,7 @@ import 'package:tvtalk/model/post_model.dart';
 import 'package:tvtalk/routers.dart';
 import 'package:tvtalk/view/alllquiz_tab_page.dart';
 import 'package:tvtalk/view/edit_profile_page.dart';
+import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
 import 'package:tvtalk/view/feeds_detail_page.dart';
 import 'package:tvtalk/view/fun_&_games.dart';
 import 'package:tvtalk/view/home_page.dart';
@@ -20,6 +21,7 @@ import 'package:tvtalk/view/signIn_screen.dart';
 import 'package:tvtalk/view/register_page.dart';
 import 'package:tvtalk/view/splash_screen.dart';
 import 'package:tvtalk/view/term_&_condition.dart';
+import 'package:tvtalk/view/trending_article_viewall_page.dart';
 
 class CustomRouter{
   GoRouter goRouter = GoRouter(
@@ -114,6 +116,16 @@ class CustomRouter{
       name: 'EDITPROFILE',
         path: editprofile,
         builder: (context, state) => const Editprofilepage(),
+      ),
+      GoRoute(
+      name: 'FEATUREARTICLEVIEWALL',
+        path: featurearticleviewall,
+        builder: (context, state) => const FeatureArticleViewAll(),
+      ),
+       GoRoute(
+        name: 'TRENDINGARTICLEVIEWALL',
+        path: trendingarticleviewall,
+        builder: (context, state) => const TrendingArticleViewAll(),
       ),
     ]
     );

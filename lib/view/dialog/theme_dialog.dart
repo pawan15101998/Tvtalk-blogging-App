@@ -331,41 +331,41 @@ class ThemeDialog {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 16),
-                      Text(
-                        "Select Reading Theme",
-                        style: TextStyle(
-                            color: detailpageController.isDark.value
-                                ? Colors.white
-                                : Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          theamingButtons(
-                              "assets/icons/icon_light.png",  "Light", "" ,(){
-                                detailpageController.isDarkButton.value = false;
-                                detailpageController.isDark.value = false;
-                                detailpageController.activeBorder.value = 1;
+                      // const SizedBox(height: 16),
+                      // Text(
+                      //   "Select Reading Theme",
+                      //   style: TextStyle(
+                      //       color: detailpageController.isDark.value
+                                // ? Colors.white
+                      //           : Colors.black,
+                      //       fontWeight: FontWeight.w600,
+                      //       fontSize: 16),
+                      // ),
+                      // const SizedBox(height: 16),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     theamingButtons(
+                      //         "assets/icons/icon_light.png",  "Light", "" ,(){
+                      //           detailpageController.isDarkButton.value = false;
+                      //           detailpageController.isDark.value = false;
+                      //           detailpageController.activeBorder.value = 1;
 
-                              }),
-                          theamingButtons(
-                              "assets/icons/icon_dark.png", "Dark", "",(){
-                                detailpageController.isDarkButton.value = true;
-                                detailpageController.isDark.value = true;
-                                detailpageController.activeBorder.value = 2;
-                              })
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Divider(
-                        color: detailpageController.isDark.value
-                            ? Colors.white
-                            : Colors.black,
-                      ),
+                      //         }),
+                      //     theamingButtons(
+                      //         "assets/icons/icon_dark.png", "Dark", "",(){
+                      //           detailpageController.isDarkButton.value = true;
+                      //           detailpageController.isDark.value = true;
+                      //           detailpageController.activeBorder.value = 2;
+                      //         })
+                      //   ],
+                      // ),
+                      // const SizedBox(height: 16),
+                      // Divider(
+                      //   color: detailpageController.isDark.value
+                      //       ? Colors.white
+                      //       : Colors.black,
+                      // ),
                       Text(
                         "Select Font",
                         style: TextStyle(

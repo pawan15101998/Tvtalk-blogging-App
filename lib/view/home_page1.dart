@@ -7,6 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/theme/text_style.dart';
+import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
 import 'package:tvtalk/view/profile_page.dart';
 import 'package:tvtalk/widgets/blog_card.dart';
 import '../getxcontroller/home_page1_controller.dart';
@@ -27,6 +28,7 @@ class _HomePage1State extends State<HomePage1> {
   var yourIntrestController = Get.find<YourIntrestController>();
   // var homePage1 = Get.find<HomePage1>();
   final signincontroller = Get.find<SignInController>();
+  List listModel = [];
 
   @override
   void initState() {
@@ -36,213 +38,272 @@ class _HomePage1State extends State<HomePage1> {
     // homePage1Controller.allpostdata.add({"status": 0});
     // }
     print("stsusss");
+    print(yourIntrestController.allTagsModel);
+    // for(int i=0; i<=yourIntrestController.allTagsModel.length; i++){
+    //   yourIntrestController.allTagsModel[i].add({"isSelected":false});
+    // }
+    // print("Ypur int");
+    // print(listModel);
   }
+    Stream streamController(id)=> Stream.fromFuture(
+        apiprovider.getPost(id)
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: homePage1Controller.allpostdata.length != 0? SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Column(
-            children: [
-              Obx(() {
-                print("lol");
-                print(homePage1Controller.searchArticle.isNotEmpty);
-                print(homePage1Controller.nosearch);
-                return
-                 homePage1Controller.searchArticle.isNotEmpty &&
-                        homePage1Controller.nosearch != ""
-                    ? ListView.builder(
-                        shrinkWrap: true,
-                        physics: const ScrollPhysics(),
-                        // scrollDirection: Axis.vertical,
-                        itemCount: homePage1Controller.searchArticle.length,
-                        itemBuilder: (context, index) {
-                          print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-
-                          print(homePage1Controller.allpostdata.length);
-                          print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                          return BlogCard(
-                            indexx: index,
-                            context: context,
-                            blogDetail:
-                                homePage1Controller.searchArticle[index],
-                          );
-                        },
-                      )
-                    : homePage1Controller.searchArticle.isEmpty &&
+      body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Column(
+                children: [
+                  Obx(() {
+                    print("lol");
+                    print(homePage1Controller.searchArticle.isNotEmpty);
+                    print(homePage1Controller.nosearch);
+                    return
+                     homePage1Controller.searchArticle.isNotEmpty &&
                             homePage1Controller.nosearch != ""
-                        ? Center(child: Text(" No Data  Found"))
-                        : Column(
-                            children: [
-                              SizedBox(
-                                height: 35,
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  children: [
-                                    upperList("All", const Color(0xffFBDC6D)),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    Obx(() {
-                                      return ListView.builder(
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: yourIntrestController
-                                            .allTagsModel.length,
-                                        itemBuilder: (context, index) {
-                                          return upperList(
-                                              yourIntrestController
-                                                  .allTagsModel[index].name
-                                                  .toString(),
-                                              "");
-                                        },
-                                      );
-                                    }),
-                                  ],
-                                ),
-                              ),
-                              const Divider(),
-                              Column(
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            physics: const ScrollPhysics(),
+                            // scrollDirection: Axis.vertical,
+                            itemCount: homePage1Controller.searchArticle.length,
+                            itemBuilder: (context, index) {
+                              print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+                              print(homePage1Controller.allpostdata.length);
+                              print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+                              return BlogCard(
+                                indexx: index,
+                                context: context,
+                                blogDetail:
+                                    homePage1Controller.searchArticle[index],
+                              );
+                            },
+                          )
+                        : homePage1Controller.searchArticle.isEmpty &&
+                                homePage1Controller.nosearch != ""
+                            ?const Center(child: Text(" No Data  Found"))
+                            :
+                            Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 20),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            apiprovider.getTags();
-                                          },
-                                          child: Text(
-                                            "Featured article",
-                                            style: TextStyle(fontSize: 14),
-                                          ),
-                                        ),
-                                        Text(
-                                          "View All",
-                                          style: TextStyle(
-                                              color: Color(0xfff0701BF),
-                                              fontSize: 14),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  // Obx(() {
-                                  //   return
-                                  // }),
-                                  // Obx(() {
-                                  //     return
-                                  StreamBuilder<Object>(
-                                      stream: null,
-                                      builder: (context, snapshot) {
-                                        return Obx(() {
-                                          return CarouselSlider.builder(
-                                            options: CarouselOptions(
-                                                height: 400.0,
-                                                // viewportFraction: 1,
-                                                // autoPlay: true,
-                                                onPageChanged:
-                                                    ((index, reason) {
-                                                  // homePage1 = index;
-                                                  // if(homePage1Controller.carouselSliderIndex.value != null)
-                                                  homePage1Controller
-                                                      .carouselSliderIndex
-                                                      .value = index;
-                                                })),
-                                            itemCount: homePage1Controller
-                                                .copydata.length,
-                                            itemBuilder:
-                                                ((context, index, realIndex) {
-                                              // Stream streamController() => Stream.fromFuture(
-                                              // apiprovider.getComment(homePage1Controller.copydata[index].id)
-                                              //   );
-                                              print("Inexxx");
-                                              print(index);
-                                              // final urlImage = homePage1Controller.like[index].image;
-                                              return buildImage(context, index);
-                                            }),
-                                          );
-                                        });
-                                      }),
-                                  //   }
-                                  // ),
-                                  const SizedBox(
-                                    height: 32,
-                                  ),
-                                  Obx(() {
-                                    return buildIndicator(homePage1Controller
-                                        .carouselSliderIndex.value);
-                                  }),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 20),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: const [
-                                        Text(
-                                          "Trending Articles",
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                        Text(
-                                          "View All",
-                                          style: TextStyle(
-                                              color: Color(0xfff0701BF),
-                                              fontSize: 14),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Obx(() {
-                                    return ListView.builder(
+                                  SizedBox(
+                                    height: 35,
+                                    child: ListView(
                                       shrinkWrap: true,
-                                      physics: const ScrollPhysics(),
-                                      // scrollDirection: Axis.vertical,
-                                      itemCount: homePage1Controller
-                                                  .allpostdata.length >
-                                              9
-                                          ? 9
-                                          : homePage1Controller
-                                              .allpostdata.length,
-                                      itemBuilder: (context, index) {
-                                              // allpostdata = [].obs;
-                                              // homePage1Controller.searchArticle = [].obs;
-                                              // homePage1Controller.allpostdata = [].obs;
-                                              // homePage1Controller.copydata = [].obs;
-                                        print(
-                                            'obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-
-                                        print(homePage1Controller
-                                            .allpostdata.length);
-                                        print(
-                                            'obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                                        return BlogCard(
-                                          indexx: index,
-                                          context: context,
-                                          blogDetail: homePage1Controller
-                                              .allpostdata[index],
+                                      scrollDirection: Axis.horizontal,
+                                      children: [
+                                      //  Obx(() {
+                                            // return 
+                                            InkWell(
+                                              onTap: ()async{
+                                                homePage1Controller.allpostdata = [].obs;   
+                                                      homePage1Controller.copydata = [].obs;
+                                                      apiprovider.allPost = [];
+                                                      print("postLength");
+                                                      print(homePage1Controller.allpostdata.length);
+                                                    await apiprovider.getPost(homePage1Controller.userTags.value);
+                                                    homePage1Controller.topTags.value = "All";
+                                                    setState((){  });
+                                              },
+                                              child: upperList(name: "All",isSelected:  true, bgcolor: const Color(0xffFBDC6D))),
+                                        //   }
+                                        // ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        Obx(() {
+                                          return ListView.builder(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: yourIntrestController
+                                                .allTagsModel.length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                    onTap: () async{
+                                                      homePage1Controller.allpostdata = [].obs;   
+                                                      homePage1Controller.copydata = [].obs;
+                                                      apiprovider.allPost = [];
+                                                      print("postLength");
+                                                      print(homePage1Controller.allpostdata.length);
+                                                    await apiprovider.getPost(yourIntrestController
+                                                    .allTagsModel[index].id);
+                                                    print("after hit api");
+                                                    homePage1Controller.topTags.value = yourIntrestController.allTagsModel[index].name.toString();
+                                                    print(homePage1Controller.allpostdata.length);
+                                                    setState(() {
+                                              
+                                                    });
+                                                    },
+                                                    child: upperList(name:
+                                                        yourIntrestController.allTagsModel[index].name.toString(), 
+                                                        isSelected: true,
+                                                      bgcolor: ""),
+                                                  );
+                                                } 
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                  ),
+                                  const Divider(),
+                                  homePage1Controller.allpostdata.length != 0 ?
+                                  Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                apiprovider.getTags();
+                                              },
+                                              child: Text(
+                                                "Featured article",
+                                                style: TextStyle(fontSize: 14),
+                                              ),
+                                            ),
+                                            InkWell(
+                                              onTap: (){
+                                                context.pushNamed('FEATUREARTICLEVIEWALL');
+                                              },
+                                              child:const Text(
+                                                "View All",
+                                                style: TextStyle(
+                                                    color: Color(0xfff0701BF),
+                                                    fontSize: 14),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      // Obx(() {
+                                      //   return
+                                      // }),
+                                      // Obx(() {
+                                      //     return
+                                     
+                                            Obx(() {
+                                              return CarouselSlider.builder(
+                                                options: CarouselOptions(
+                                                    height: 400.0,
+                                                    enableInfiniteScroll: false,
+                                                    // viewportFraction: 1,
+                                                    autoPlay: false,
+                                                    onPageChanged:
+                                                        ((index, reason) {
+                                                      // homePage1 = index;
+                                                      // if(homePage1Controller.carouselSliderIndex.value != null)
+                                                      homePage1Controller
+                                                          .carouselSliderIndex
+                                                          .value = index;
+                                                    })),
+                                                itemCount: homePage1Controller
+                                                    .copydata.length,
+                                                itemBuilder:
+                                                    ((context, index, realIndex) {
+                                                  // Stream streamController() => Stream.fromFuture(
+                                                  // apiprovider.getComment(homePage1Controller.copydata[index].id)
+                                                  //   );
+                                                  print("Inexxx");
+                                                  print(index);
+                                                  // final urlImage = homePage1Controller.like[index].image;
+                                                  return buildImage(context, index);
+                                                }),
+                                              );
+                                            }),
+                                          
+                                      //   }
+                                      // ),
+                                      const SizedBox(
+                                        height: 32,
+                                      ),
+                                      Obx(() {
+                                        return buildIndicator(homePage1Controller
+                                            .carouselSliderIndex.value);
+                                      }),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15, vertical: 20),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Trending Articles",
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            InkWell(
+                                              onTap: (){
+                                                context.pushNamed('TRENDINGARTICLEVIEWALL');
+                                              },
+                                              child:const Text(
+                                                "View All",
+                                                style: TextStyle(
+                                                    color: Color(0xfff0701BF),
+                                                    fontSize: 14),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Obx(() {
+                                        return ListView.builder(
+                                          shrinkWrap: true,
+                                          physics: const ScrollPhysics(),
+                                          // scrollDirection: Axis.vertical,
+                                          itemCount: homePage1Controller
+                                                      .allpostdata.length >
+                                                  9
+                                              ? 9
+                                              : homePage1Controller
+                                                  .allpostdata.length,
+                                          itemBuilder: (context, index) {
+                                                  // allpostdata = [].obs;
+                                                  // homePage1Controller.searchArticle = [].obs;
+                                                  // homePage1Controller.allpostdata = [].obs;
+                                                  // homePage1Controller.copydata = [].obs;
+                                            print(
+                                                'obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+      
+                                            print(homePage1Controller
+                                                .allpostdata.length);
+                                            print(
+                                                'obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+                                            return BlogCard(
+                                              indexx: index,
+                                              context: context,
+                                              blogDetail: homePage1Controller
+                                                  .allpostdata[index],
+                                            );
+                                          },
                                         );
-                                      },
-                                    );
-                                  }),
+                                      }),
+                                    ],
+                                  ): SizedBox(
+                                    height: MediaQuery.of(context).size.height -190,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Center (child: Text("No Data Found"),),
+                                      ],
+                                    ),
+                                  ),
                                 ],
-                              ),
-                            ],
-                          );
-              }),
-            ],
-          ),
-        ),
-      ): Center(child: Text("No Data Found"),),
-    );
+                              );
+                  }),
+                ],
+              ),
+            ),
+          )
+      );
   }
 
   Widget buildIndicator(int sliderVal) {
@@ -281,16 +342,17 @@ class _HomePage1State extends State<HomePage1> {
           print(homePage1Controller.copydata[index].id);
           print("sddddddddddsdddddd");
           print(apiprovider.statuscode);
-
         },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 12),
-          height: 400,
+          height: double.infinity,
           // width: 200,
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/slider1.png"),
-                  fit: BoxFit.cover)),
+                  image:homePage1Controller.copydata[index].featuredMediaSrcUrl != null?
+ NetworkImage(homePage1Controller.copydata[index].featuredMediaSrcUrl, scale: 0.5):
+  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                  fit: BoxFit.cover,), ),
         ),
       ),
       Positioned(
@@ -369,10 +431,9 @@ class _HomePage1State extends State<HomePage1> {
                     data: "<P>${homePage1Controller.copydata[index].title.rendered}</p>",
                     style: {
                       'p': Style(
-                        color: Colors.white
+                        color:homePage1Controller.copydata[index].featuredMediaSrcUrl != null? Colors.white: Colors.black
                       )
-                    },
-                    
+                    },  
                   ),
                 );
               }),
@@ -384,10 +445,10 @@ class _HomePage1State extends State<HomePage1> {
   }
 }
 
-Widget upperList(name, bgcolor) {
+Widget upperList({name, index, bool isSelected = false, bgcolor}){
   return Container(
     decoration: BoxDecoration(
-        color: bgcolor == "" ? Colors.transparent : bgcolor,
+        color:  homePage1Controller.topTags.value == name ? Color(0xffFBDC6D) : Colors.transparent,
         borderRadius: BorderRadius.circular(15)),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),

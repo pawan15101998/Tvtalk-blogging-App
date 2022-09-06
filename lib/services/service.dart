@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -214,23 +215,24 @@ get()async {
 getPost(sendingTags)async{
   print("taggggggggggggggg");
   print(sendingTags);
-  
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   resetToken = sharedPreferences.getString('reset_token');
   // homepage1controller.allpostdata.clear();
-  try{
+  try{  
     print("111111");
-    // isDataLoading(true);
-    http.Response response = await http.get(Uri.parse('$siteurl/wp-json/wp/v2/posts/?tags=${sendingTags},36,37'),
+    EasyLoading.show(status: 'loading');
+    http.Response response = await http.get(Uri.parse('$siteurl/wp-json/wp/v2/posts/?tags=${sendingTags},'),
         headers: {'Authorization': 'Bearer $resetToken',
         'Content-Type': 'application/json; charset=UTF-8',
         },
     );
+    EasyLoading.dismiss();
     if(response.statusCode == 200){
        homepage1controller.allpostdata = [].obs;
       ///data successfully
       var result = jsonDecode(response.body);
-      // print(result);
+      print("dataaaaaaaaaaa");
+      print(result);
       // allTags  = [];
       for (var item in result){     
         print("jkxcdsas");
@@ -255,6 +257,7 @@ getPost(sendingTags)async{
     print("Data length");
     print(homepage1controller.allpostdata.length);
   }catch(e){
+    EasyLoading.dismiss();
     // log('Error while getting data is $e');
     print('Error while getting data is $e');
   }finally{
@@ -334,6 +337,7 @@ getComment(postId)async {
   print(postId);
   print(resetToken);
   try{
+    EasyLoading.show(status: "Loading...");
     print("111111");
     // isDataLoading(true);
     http.Response response = await http.get(Uri.parse('$baseUrl/post/get-data?postId=$postId'),
@@ -359,10 +363,13 @@ getComment(postId)async {
       //error
       print("err");
     }
+    EasyLoading.dismiss();
   }catch(e){
+    EasyLoading.dismiss();
     // log('Error while getting data is $e');
     print('Error while getting data is $e');
   }finally{
+    EasyLoading.dismiss();
     // isDataLoading(false);
     print("object");
   }

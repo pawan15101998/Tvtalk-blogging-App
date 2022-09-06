@@ -41,7 +41,7 @@ List tagdata = [];
     // TODO: implement initState
     getValidation().whenComplete(()async{
      await signincontroller.getuserdata();
-     await apiProvider.get();
+    //  await apiProvider.get();
   var tagsss=  await apiProvider.getTags();
      print("sd");
      print(tagsss);
@@ -53,7 +53,7 @@ homepage1controller.userTags.value = sendingTags;
 print(sendingTags);
       await apiProvider.getPost(sendingTags);
       await apiProvider.get();
-      Timer(const Duration(microseconds: 0), ()=> finalEmail == null ? 
+      Timer(const Duration(microseconds: 0),()=> finalEmail == null ? 
       Router.neglect(context, () {context.goNamed('SIGNINPAGE');}):
       Router.neglect(context, () {context.goNamed('HOMEPAGE');}));
     });

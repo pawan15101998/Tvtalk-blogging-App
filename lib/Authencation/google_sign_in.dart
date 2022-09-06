@@ -11,11 +11,13 @@ import 'package:tvtalk/view/profile_page.dart';
 
 class GoogleSignInProvider extends ChangeNotifier{
   final googleSignIn = GoogleSignIn(
-    scopes:['email',
+    scopes:[
+    'email',
     "https://www.googleapis.com/auth/userinfo.profile", 
     "https://www.googleapis.com/auth/user.birthday.read", 
     'https://www.googleapis.com/auth/user.gender.read', 
-    'https://www.googleapis.com/auth/user.phonenumbers.read'
+    'https://www.googleapis.com/auth/user.phonenumbers.read',
+    // 'https://www.googleapis.com/auth/user.contact.readonly'
     ]);
   var _user;
    get user => _user;
@@ -49,7 +51,7 @@ class GoogleSignInProvider extends ChangeNotifier{
   notifyListeners();
 }
 
-  Future<String> getBirthday() async {
+Future<String> getBirthday() async {
     int day;
     int month;
     int year;

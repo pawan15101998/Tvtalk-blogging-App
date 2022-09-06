@@ -33,10 +33,39 @@ class HomePagePost {
         this.meta,
         this.categories,
         this.tags,
+        this.postFormat,
+        this.featuredMediaSrcUrl,
+        this.postSubtitleFlag,
+        this.postSubtitle,
+        this.lastEditorUsedJetpack,
         this.thumbnailId,
+        this.jnewsPriceLowest,
+        this.formatGalleryImages,
+        this.enableReview,
+        this.name,
+        this.summary,
+        this.brand,
+        this.good,
+        this.bad,
+        this.price,
+        this.jnewsOverrideCounter,
+        this.jnewsSinglePost,
+        this.jnewsPrimaryCategory,
+        this.jnewsCommentsNumber,
+        this.jnewsSocialCounterLastUpdate,
+        this.editLast,
+        this.bunyadReviews,
+        this.wpPageTemplate,
+        this.wpOldSlug,
         this.wxrImportHasAttachmentRefs,
         this.bunyadFeaturedDisable,
+        this.bunyadContentSlider,
         this.bunyadFeaturedVideo,
+        this.bunyadReviewItemAuthor,
+        this.bunyadReviewItemName,
+        this.bunyadReviewHeading,
+        this.bunyadReviewVerdict,
+        this.bunyadReviewVerdictText,
         this.links,
     });
 
@@ -47,26 +76,55 @@ class HomePagePost {
     DateTime? modified;
     DateTime? modifiedGmt;
     String? slug;
-    StatusEnum? status;
-    Type? type;
+    String? status;
+    String? type;
     String? link;
     Guid? title;
     Content? content;
     Content? excerpt;
     int? author;
     int? featuredMedia;
-    Status? commentStatus;
-    Status? pingStatus;
+    String? commentStatus;
+    String? pingStatus;
     bool? sticky;
     String? template;
-    Format? format;
+    String? format;
     List<dynamic>? meta;
     List<int>? categories;
     List<int>? tags;
+    List<dynamic>? postFormat;
+    String? featuredMediaSrcUrl;
+    String? postSubtitleFlag;
+    String? postSubtitle;
+    String? lastEditorUsedJetpack;
     String? thumbnailId;
-    String? wxrImportHasAttachmentRefs;
-    String? bunyadFeaturedDisable;
-    String? bunyadFeaturedVideo;
+    String? jnewsPriceLowest;
+    dynamic formatGalleryImages;
+    String? enableReview;
+    dynamic name;
+    dynamic summary;
+    dynamic brand;
+    dynamic good;
+    dynamic bad;
+    dynamic price;
+    dynamic jnewsOverrideCounter;
+    dynamic jnewsSinglePost;
+    dynamic jnewsPrimaryCategory;
+    dynamic jnewsCommentsNumber;
+    dynamic jnewsSocialCounterLastUpdate;
+    dynamic editLast;
+    dynamic bunyadReviews;
+    dynamic wpPageTemplate;
+    dynamic wpOldSlug;
+    dynamic wxrImportHasAttachmentRefs;
+    dynamic bunyadFeaturedDisable;
+    dynamic bunyadContentSlider;
+    dynamic bunyadFeaturedVideo;
+    dynamic bunyadReviewItemAuthor;
+    dynamic bunyadReviewItemName;
+    dynamic bunyadReviewHeading;
+    dynamic bunyadReviewVerdict;
+    dynamic bunyadReviewVerdictText;
     Links? links;
 
     factory HomePagePost.fromJson(Map<String, dynamic> json) => HomePagePost(
@@ -77,26 +135,55 @@ class HomePagePost {
         modified: DateTime.parse(json["modified"]),
         modifiedGmt: DateTime.parse(json["modified_gmt"]),
         slug: json["slug"],
-        status: statusEnumValues.map[json["status"]],
-        type: typeValues.map[json["type"]],
+        status: json["status"],
+        type: json["type"],
         link: json["link"],
         title: Guid.fromJson(json["title"]),
         content: Content.fromJson(json["content"]),
         excerpt: Content.fromJson(json["excerpt"]),
         author: json["author"],
         featuredMedia: json["featured_media"],
-        commentStatus: statusValues.map[json["comment_status"]],
-        pingStatus: statusValues.map[json["ping_status"]],
+        commentStatus: json["comment_status"],
+        pingStatus: json["ping_status"],
         sticky: json["sticky"],
         template: json["template"],
-        format: formatValues.map[json["format"]],
+        format: json["format"],
         meta: List<dynamic>.from(json["meta"].map((x) => x)),
         categories: List<int>.from(json["categories"].map((x) => x)),
         tags: List<int>.from(json["tags"].map((x) => x)),
+        postFormat: List<dynamic>.from(json["post_format"].map((x) => x)),
+        featuredMediaSrcUrl: json["featured_media_src_url"] == null ? null : json["featured_media_src_url"],
+        postSubtitleFlag: json["post_subtitle_flag"],
+        postSubtitle: json["post_subtitle"],
+        lastEditorUsedJetpack: json["_last_editor_used_jetpack"],
         thumbnailId: json["_thumbnail_id"],
+        jnewsPriceLowest: json["jnews_price_lowest"],
+        formatGalleryImages: json["_format_gallery_images"],
+        enableReview: json["enable_review"],
+        name: json["name"],
+        summary: json["summary"],
+        brand: json["brand"],
+        good: json["good"],
+        bad: json["bad"],
+        price: json["price"],
+        jnewsOverrideCounter: json["jnews_override_counter"],
+        jnewsSinglePost: json["jnews_single_post"],
+        jnewsPrimaryCategory: json["jnews_primary_category"],
+        jnewsCommentsNumber: json["jnews_comments_number"],
+        jnewsSocialCounterLastUpdate: json["jnews_social_counter_last_update"],
+        editLast: json["_edit_last"],
+        bunyadReviews: json["_bunyad_reviews"],
+        wpPageTemplate: json["_wp_page_template"],
+        wpOldSlug: json["_wp_old_slug"],
         wxrImportHasAttachmentRefs: json["_wxr_import_has_attachment_refs"],
         bunyadFeaturedDisable: json["_bunyad_featured_disable"],
+        bunyadContentSlider: json["_bunyad_content_slider"],
         bunyadFeaturedVideo: json["_bunyad_featured_video"],
+        bunyadReviewItemAuthor: json["_bunyad_review_item_author"],
+        bunyadReviewItemName: json["_bunyad_review_item_name"],
+        bunyadReviewHeading: json["_bunyad_review_heading"],
+        bunyadReviewVerdict: json["_bunyad_review_verdict"],
+        bunyadReviewVerdictText: json["_bunyad_review_verdict_text"],
         links: Links.fromJson(json["_links"]),
     );
 
@@ -108,35 +195,58 @@ class HomePagePost {
         "modified": modified!.toIso8601String(),
         "modified_gmt": modifiedGmt!.toIso8601String(),
         "slug": slug,
-        "status": statusEnumValues.reverse![status],
-        "type": typeValues.reverse![type],
+        "status": status,
+        "type": type,
         "link": link,
         "title": title!.toJson(),
         "content": content!.toJson(),
         "excerpt": excerpt!.toJson(),
         "author": author,
         "featured_media": featuredMedia,
-        "comment_status": statusValues.reverse![commentStatus],
-        "ping_status": statusValues.reverse![pingStatus],
+        "comment_status": commentStatus,
+        "ping_status": pingStatus,
         "sticky": sticky,
         "template": template,
-        "format": formatValues.reverse![format],
+        "format": format,
         "meta": List<dynamic>.from(meta!.map((x) => x)),
         "categories": List<dynamic>.from(categories!.map((x) => x)),
         "tags": List<dynamic>.from(tags!.map((x) => x)),
+        "post_format": List<dynamic>.from(postFormat!.map((x) => x)),
+        "featured_media_src_url": featuredMediaSrcUrl == null ? null : featuredMediaSrcUrl,
+        "post_subtitle_flag": postSubtitleFlag,
+        "post_subtitle": postSubtitle,
+        "_last_editor_used_jetpack": lastEditorUsedJetpack,
         "_thumbnail_id": thumbnailId,
+        "jnews_price_lowest": jnewsPriceLowest,
+        "_format_gallery_images": formatGalleryImages,
+        "enable_review": enableReview,
+        "name": name,
+        "summary": summary,
+        "brand": brand,
+        "good": good,
+        "bad": bad,
+        "price": price,
+        "jnews_override_counter": jnewsOverrideCounter,
+        "jnews_single_post": jnewsSinglePost,
+        "jnews_primary_category": jnewsPrimaryCategory,
+        "jnews_comments_number": jnewsCommentsNumber,
+        "jnews_social_counter_last_update": jnewsSocialCounterLastUpdate,
+        "_edit_last": editLast,
+        "_bunyad_reviews": bunyadReviews,
+        "_wp_page_template": wpPageTemplate,
+        "_wp_old_slug": wpOldSlug,
         "_wxr_import_has_attachment_refs": wxrImportHasAttachmentRefs,
         "_bunyad_featured_disable": bunyadFeaturedDisable,
+        "_bunyad_content_slider": bunyadContentSlider,
         "_bunyad_featured_video": bunyadFeaturedVideo,
+        "_bunyad_review_item_author": bunyadReviewItemAuthor,
+        "_bunyad_review_item_name": bunyadReviewItemName,
+        "_bunyad_review_heading": bunyadReviewHeading,
+        "_bunyad_review_verdict": bunyadReviewVerdict,
+        "_bunyad_review_verdict_text": bunyadReviewVerdictText,
         "_links": links!.toJson(),
     };
 }
-
-enum Status { OPEN }
-
-final statusValues = EnumValues({
-    "open": Status.OPEN
-});
 
 class Content {
     Content({
@@ -157,12 +267,6 @@ class Content {
         "protected": protected,
     };
 }
-
-enum Format { STANDARD }
-
-final formatValues = EnumValues({
-    "standard": Format.STANDARD
-});
 
 class Guid {
     Guid({
@@ -189,10 +293,10 @@ class Links {
         this.replies,
         this.versionHistory,
         this.predecessorVersion,
+        this.wpFeaturedmedia,
         this.wpAttachment,
         this.wpTerm,
         this.curies,
-        this.wpFeaturedmedia,
     });
 
     List<About>? self;
@@ -202,10 +306,10 @@ class Links {
     List<Author>? replies;
     List<VersionHistory>? versionHistory;
     List<PredecessorVersion>? predecessorVersion;
+    List<Author>? wpFeaturedmedia;
     List<About>? wpAttachment;
     List<WpTerm>? wpTerm;
     List<Cury>? curies;
-    List<Author>? wpFeaturedmedia;
 
     factory Links.fromJson(Map<String, dynamic> json) => Links(
         self: List<About>.from(json["self"].map((x) => About.fromJson(x))),
@@ -215,10 +319,10 @@ class Links {
         replies: List<Author>.from(json["replies"].map((x) => Author.fromJson(x))),
         versionHistory: List<VersionHistory>.from(json["version-history"].map((x) => VersionHistory.fromJson(x))),
         predecessorVersion: List<PredecessorVersion>.from(json["predecessor-version"].map((x) => PredecessorVersion.fromJson(x))),
+        wpFeaturedmedia: List<Author>.from(json["wp:featuredmedia"].map((x) => Author.fromJson(x))),
         wpAttachment: List<About>.from(json["wp:attachment"].map((x) => About.fromJson(x))),
         wpTerm: List<WpTerm>.from(json["wp:term"].map((x) => WpTerm.fromJson(x))),
         curies: List<Cury>.from(json["curies"].map((x) => Cury.fromJson(x))),
-        wpFeaturedmedia: json["wp:featuredmedia"] == null ? null : List<Author>.from(json["wp:featuredmedia"].map((x) => Author.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -229,10 +333,10 @@ class Links {
         "replies": List<dynamic>.from(replies!.map((x) => x.toJson())),
         "version-history": List<dynamic>.from(versionHistory!.map((x) => x.toJson())),
         "predecessor-version": List<dynamic>.from(predecessorVersion!.map((x) => x.toJson())),
+        "wp:featuredmedia": List<dynamic>.from(wpFeaturedmedia!.map((x) => x.toJson())),
         "wp:attachment": List<dynamic>.from(wpAttachment!.map((x) => x.toJson())),
         "wp:term": List<dynamic>.from(wpTerm!.map((x) => x.toJson())),
         "curies": List<dynamic>.from(curies!.map((x) => x.toJson())),
-        "wp:featuredmedia": wpFeaturedmedia == null ? null : List<dynamic>.from(wpFeaturedmedia!.map((x) => x.toJson())),
     };
 }
 
@@ -279,34 +383,22 @@ class Cury {
         this.templated,
     });
 
-    Name? name;
-    Href? href;
+    String? name;
+    String? href;
     bool? templated;
 
     factory Cury.fromJson(Map<String, dynamic> json) => Cury(
-        name: nameValues.map[json["name"]],
-        href: hrefValues.map[json["href"]],
+        name: json["name"],
+        href: json["href"],
         templated: json["templated"],
     );
 
     Map<String, dynamic> toJson() => {
-        "name": nameValues.reverse![name],
-        "href": hrefValues.reverse![href],
+        "name": name,
+        "href": href,
         "templated": templated,
     };
 }
-
-enum Href { HTTPS_API_W_ORG_REL }
-
-final hrefValues = EnumValues({
-    "https://api.w.org/{rel}": Href.HTTPS_API_W_ORG_REL
-});
-
-enum Name { WP }
-
-final nameValues = EnumValues({
-    "wp": Name.WP
-});
 
 class PredecessorVersion {
     PredecessorVersion({
@@ -355,52 +447,19 @@ class WpTerm {
         this.href,
     });
 
-    Taxonomy? taxonomy;
+    String? taxonomy;
     bool? embeddable;
     String? href;
 
     factory WpTerm.fromJson(Map<String, dynamic> json) => WpTerm(
-        taxonomy: taxonomyValues.map[json["taxonomy"]],
+        taxonomy: json["taxonomy"],
         embeddable: json["embeddable"],
         href: json["href"],
     );
 
     Map<String, dynamic> toJson() => {
-        "taxonomy": taxonomyValues.reverse![taxonomy],
+        "taxonomy": taxonomy,
         "embeddable": embeddable,
         "href": href,
     };
-}
-
-enum Taxonomy { CATEGORY, POST_TAG }
-
-final taxonomyValues = EnumValues({
-    "category": Taxonomy.CATEGORY,
-    "post_tag": Taxonomy.POST_TAG
-});
-
-enum StatusEnum { PUBLISH }
-
-final statusEnumValues = EnumValues({
-    "publish": StatusEnum.PUBLISH
-});
-
-enum Type { POST }
-
-final typeValues = EnumValues({
-    "post": Type.POST
-});
-
-class EnumValues<T> {
-    Map<String, T> map;
-    Map<T, String>? reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String>? get reverse {
-        if (reverseMap == null) {
-            reverseMap = map.map((k, v) => new MapEntry(v, k));
-        }
-        return reverseMap;
-    }
 }

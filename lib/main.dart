@@ -21,14 +21,14 @@ void configLoading(){
   print("first");
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
-    ..indicatorType = EasyLoadingIndicatorType.pulse
-    ..loadingStyle = EasyLoadingStyle.dark
-    ..indicatorSize = 20.0
-    ..radius = 10.0
-    ..progressColor = Colors.yellow
+    ..indicatorType = EasyLoadingIndicatorType.ring
+    ..loadingStyle = EasyLoadingStyle.values[0]
     ..backgroundColor = Colors.transparent
-    ..indicatorColor = Colors.yellow
-    ..textColor = Colors.yellow
+    ..indicatorSize = 30.0
+    ..radius = 0.0
+    ..progressColor = Colors.transparent
+    ..indicatorColor = Colors.transparent
+    ..textColor = Colors.transparent
     ..maskColor = Colors.blue.withOpacity(0.5)
     ..userInteractions = true
     ..dismissOnTap = false;

@@ -32,9 +32,11 @@ class _HomePage2State extends State<HomePage2> {
     return Scaffold(
       body: Obx(
          () {
-          return                   homePage1Controller.searchArticle.isNotEmpty &&
+          return homePage1Controller.searchArticle.isNotEmpty &&
                         homePage1Controller.nosearch != ""
-                    ? ListView.builder(
+                    ?
+                    homePage1Controller.allpostdata.length != 0?
+                     ListView.builder(
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
                         // scrollDirection: Axis.vertical,
@@ -64,6 +66,7 @@ class _HomePage2State extends State<HomePage2> {
                       options: CarouselOptions(
                           height: 300.0,
                           viewportFraction: 1,
+                          enableInfiniteScroll: false,
                           // autoPlay: true,
                           onPageChanged: ((index, reason) {
                               homepage2Controller.sliderHome2index.value = index;
@@ -119,9 +122,13 @@ class _HomePage2State extends State<HomePage2> {
                                 Container(
                                   height: MediaQuery.of(context).size.height * 19 / 100,
                                   width: MediaQuery.of(context).size.height * 19 / 100,
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                   color: Colors.grey,
-                                    image: DecorationImage(image: AssetImage("assets/images/slider2.png"),fit: BoxFit.cover, opacity: 0.6)
+                                    image: DecorationImage(
+                  image:homePage1Controller.copydata[index].featuredMediaSrcUrl != null?
+ NetworkImage(homePage1Controller.copydata[index].featuredMediaSrcUrl, scale: 0.5):
+  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                  fit: BoxFit.cover,),
                                   ),
                                 ),
                                 Align(
@@ -129,7 +136,7 @@ class _HomePage2State extends State<HomePage2> {
                                   child: Html(data: '<p>${homePage1Controller.copydata[index].title.rendered}</p>',
                         style: {
                           'p':Style(
-                            color: Colors.white,
+                            color:homePage1Controller.copydata[index].featuredMediaSrcUrl != null ? Colors.white: Colors.black,
                             fontSize: FontSize(8)
                           )
                         },
@@ -227,6 +234,7 @@ class _HomePage2State extends State<HomePage2> {
                                       height: 400.0,
                                       // viewportFraction: 1,
                                       // autoPlay: true,
+                                      enableInfiniteScroll: false,
                                       onPageChanged: ((index, reason) {
                                         // homePage1 = index;
                                         // if(homePage1Controller.carouselSliderIndex.value != null)
@@ -326,7 +334,16 @@ class _HomePage2State extends State<HomePage2> {
                         },),
               ],
             ),
-          );
+          ): SizedBox(
+                                    height: MediaQuery.of(context).size.height -190,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Center (child: Text("No Data Found"),),
+                                      ],
+                                    ),
+                                  );
         }
       ),
     );
@@ -353,9 +370,12 @@ class _HomePage2State extends State<HomePage2> {
               margin: const EdgeInsets.symmetric(horizontal: 12),
               height: 400,
               // width: 200,
-              decoration:const BoxDecoration(
-                  image:
-                      DecorationImage(image: AssetImage("assets/images/slider1.png"), fit: BoxFit.fill)),
+              decoration: BoxDecoration(
+                  image:DecorationImage(
+                  image:homePage1Controller.copydata[index].featuredMediaSrcUrl != null?
+     NetworkImage(homePage1Controller.copydata[index].featuredMediaSrcUrl, scale: 0.5):
+  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                  fit: BoxFit.cover,),),
             ),
           ),
           // Positioned(
@@ -434,7 +454,7 @@ class _HomePage2State extends State<HomePage2> {
                             child: Html(data:'<p>${homePage1Controller.copydata[index].title.rendered}</p>',
                                               style: {
                                                 'p':Style(
-                                                  color: Colors.white
+                                                  color:homePage1Controller.copydata[index].featuredMediaSrcUrl != null? Colors.white: Colors.black
                                                 )
                                               },
                                               ),

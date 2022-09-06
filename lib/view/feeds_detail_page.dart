@@ -15,6 +15,7 @@ import 'package:tvtalk/theme/theme.dart';
 import 'package:tvtalk/view/dialog/theme_dialog.dart';
 import 'package:html/parser.dart' as htmlparser;
 import 'package:html/dom.dart' as dom;
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../model/get_comment_model.dart';
 
@@ -106,11 +107,12 @@ final signincontroller = Get.find<SignInController>();
                     child: FlexibleSpaceBar(
                       collapseMode: CollapseMode.parallax,
                       background: Container(
-                        decoration: const BoxDecoration(
+                        decoration:  BoxDecoration(
                             image: DecorationImage(
-                          image: AssetImage("assets/images/myint1.png"),
-                          fit: BoxFit.fill,
-                        )),
+                  image: widget.postData.featuredMediaSrcUrl != null?
+ NetworkImage(widget.postData.featuredMediaSrcUrl, scale: 0.5):
+  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                  fit: BoxFit.cover,)),
                       ),
                     ),
                   ),
@@ -119,7 +121,7 @@ final signincontroller = Get.find<SignInController>();
                         padding: EdgeInsets.symmetric(horizontal: 5),
                         child: InkWell(
                             onTap: () {
-                              // themedialog.showThemeDialog(context, "knkn");
+                              themedialog.showThemeDialog(context, "knkn");
                             },
                             child: SizedBox(
                                 height: 25,
@@ -343,6 +345,7 @@ final signincontroller = Get.find<SignInController>();
                                       Html(
                                           data: homepage1controller.copydata[pageindex].content.rendered,
                                           style: {
+                                            
                                             'blockquote P': Style(
                                               fontWeight: FontWeight.w900,
                                               fontStyle: FontStyle.italic,
@@ -498,12 +501,16 @@ final signincontroller = Get.find<SignInController>();
                                           },
                                           onAnchorTap:
                                               (url, context, attributes, element) {
-                                            print(attributes.values);
-                                          },
+                                            print(url); 
+                                            print(context);
+                                            print(attributes);
+                                            print(element);
+                                            print("object");                                         },
                                           onLinkTap: (String? url,
                                               RenderContext context,
                                               Map<String, String> attributes,
                                               dom.Element? element) {
+                                                print("deje");
                                             print(url);
                                             print(attributes.entries);
                                             print(element);
@@ -519,11 +526,11 @@ final signincontroller = Get.find<SignInController>();
                                     children: [
                                       Row(
                                         children: [
-                                          CircleAvatar(
+                                        const CircleAvatar(
                                             backgroundImage: NetworkImage(
                                                 'https://picsum.photos/id/237/200/300'),
                                           ),
-                                          SizedBox(
+                                         const SizedBox(
                                             width: 10,
                                           ),
                                           Text("Article by",
@@ -532,7 +539,7 @@ final signincontroller = Get.find<SignInController>();
                                           SizedBox(
                                             width: 5,
                                           ),
-                                          Text("Akash Divya",
+                                          Text("Unknown",
                                               style:
                                                   detailpageController.fontfamily(""))
                                         ],
@@ -568,14 +575,15 @@ final signincontroller = Get.find<SignInController>();
                                   options: CarouselOptions(
                                       height: 300.0,
                                       // autoPlay: true,
+                                      enableInfiniteScroll: false,
                                       onPageChanged: ((index, reason) {
                                         // homePage1 = index;
                                         detailpageController.DetailScroll.value = index;
                                       })),
-                                  itemCount: urlImages.length,
+                                  itemCount: homepage1controller.allpostdata.length,
                                   itemBuilder: ((context, index, realIndex) {
                                     final urlImage = urlImages[index];
-                                    return buildSimilarImage(urlImage, index, context);
+                                    return buildSimilarImage(context, urlImage, index,);
                                   }),
                                 ),
                                 const SizedBox(
@@ -583,7 +591,10 @@ final signincontroller = Get.find<SignInController>();
                                 ),
                                 // Obx(() {
                                 //   return
-                                   Center(child: buildIndicatorSimple()),
+                                   Obx(() {
+                                       return Center(child: buildIndicatorSimple());
+                                     }
+                                   ),
                                 // }),
                                 const SizedBox(
                                   height: 20,
@@ -881,9 +892,11 @@ final signincontroller = Get.find<SignInController>();
               ],
             ),
             Text(
-              detailpageController
-                  .commentData!.data!.comments!.rows![0].createdDate
-                  .toString(),
+              timeago.format(DateTime.now()),
+              // DateTime.now().toString(),
+              // detailpageController
+              //     .commentData!.data!.comments!.rows![0].createdDate
+              //     .toString(),
               style: TextStyle(color: Color(0xff949494)),
             )
           ],
@@ -1276,8 +1289,8 @@ final signincontroller = Get.find<SignInController>();
 
   Widget buildIndicatorSimple() {
     return AnimatedSmoothIndicator(
-      activeIndex: 6,
-      count: 10,
+      activeIndex: detailpageController.DetailScroll.value,
+      count: homepage1controller.allpostdata.length,
       effect: const JumpingDotEffect(
           dotColor: Colors.grey,
           dotHeight: 6,
@@ -1299,73 +1312,90 @@ final signincontroller = Get.find<SignInController>();
     );
   }
 
-  Widget buildSimilarImage(String image, int index, context) {
-    return Stack(children: [
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12),
-        height: 300,
-        // width: 200,
-        decoration: BoxDecoration(
-            image:
-                DecorationImage(image: AssetImage(image), fit: BoxFit.cover)),
-      ),
-      Positioned(
-        left: MediaQuery.of(context).size.width * 55 / 100,
-        child: Column(
-          children: [
-            Align(
-                alignment: Alignment.topRight,
-                child: Row(
-                  children: [
-                    Text(
-                      "2.5k",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: SizedBox(
-                        height: 25,
-                        child: Image(
-                                    image:const AssetImage(
-                                      "assets/icons/heart.png",
-                                    ) ,
-                                    color: detailpageController.isDark.value
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                      )
-                    ),
-                  ],
-                )),
-          ],
+  Widget buildSimilarImage(BuildContext context, String image, int index,) {
+    return InkWell(
+      onTap: ()async {
+        await apiprovider.getComment(homepage1controller.allpostdata[index].id);
+          context.pushNamed('ARTICLEDETAILPAGE',
+              extra: homepage1controller.allpostdata[index],
+              queryParams: {"index": "${index}"});
+      },
+      child: Stack(
+        children: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12),
+          height: 300,
+          // width: 200,
+          decoration: BoxDecoration(
+              image:DecorationImage(
+                    image: widget.postData.featuredMediaSrcUrl != null?
+     NetworkImage(widget.postData.featuredMediaSrcUrl, scale: 0.5):
+      NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                    fit: BoxFit.cover,),),
         ),
-      ),
-      Positioned(
-        bottom: 10,
-        width: MediaQuery.of(context).size.width * 65 / 100,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        Positioned(
+          left: MediaQuery.of(context).size.width * 55 / 100,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                "Viking",
-                style: TextStyle(color: Color(0xff0FC59A)),
-                // maxLines: ,
-                overflow: TextOverflow.ellipsis,
-              ),
-              Text(
-                "The jay, pig, fox, zebra, and my wolves quack! Blowzy red vixens.",
-                style: TextStyle(color: Colors.white),
-              )
+            children: [
+              Align(
+                  alignment: Alignment.topRight,
+                  child: Row(
+                    children: [
+                      Text(
+                        "2.5k",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: SizedBox(
+                          height: 25,
+                          child: Image(
+                                      image:const AssetImage(
+                                        "assets/icons/heart.png",
+                                      ) ,
+                                      color: detailpageController.isDark.value
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                        )
+                      ),
+                    ],
+                  )),
             ],
           ),
         ),
-      )
-    ]);
+        Positioned(
+          bottom: 10,
+          width: MediaQuery.of(context).size.width * 65 / 100,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children:  [
+                // Text(
+                //   "Viking",
+                //   style: TextStyle(color: Color(0xff0FC59A)),
+                //   // maxLines: ,
+                //   overflow: TextOverflow.ellipsis,
+                // ),
+                 Html(
+                      data: "<P>${homepage1controller.copydata[index].title.rendered}</p>",
+                      style: {
+                        'p': Style(
+                          color:homepage1controller.copydata[index].featuredMediaSrcUrl != null ? Colors.white: Colors.black
+                        )
+                      },
+                      
+                    ),
+              ],
+            ),
+          ),
+        )
+      ]),
+    );
   }
 
   Widget Advertisment(int height) {

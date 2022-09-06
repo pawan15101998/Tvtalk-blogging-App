@@ -64,12 +64,12 @@ class _BlogCardState extends State<BlogCard> {
               child: Container(
                 height: MediaQuery.of(context).size.height * 20 / 100,
                 width: MediaQuery.of(context).size.width * 25 / 100,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     image: DecorationImage(
-                  image: AssetImage("assets/images/trendingCard1.png"),
-                  fit: BoxFit.cover,
-                  // colorFilter: ColorFilter.mode(Colors.grey, BlendMode.saturation)
-                )),
+                  image:widget.blogDetail.featuredMediaSrcUrl != null?
+ NetworkImage(widget.blogDetail.featuredMediaSrcUrl, scale: 0.5):
+  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                  fit: BoxFit.cover,),),
               ),
             ),
             SizedBox(
@@ -131,7 +131,7 @@ class _BlogCardState extends State<BlogCard> {
                           await Share.share(widget.blogDetail.link);
                         },
                         child: Row(
-                          children: [
+                          children:const [
                             Text("Share"),
                             SizedBox(
                                 height: 22,

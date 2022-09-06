@@ -136,32 +136,32 @@ class _HomePageState extends State<HomePage> {
               )),
           leading: Obx(() {
             return homePageController.searchIcon.value
-                ? IconButton(
-                    icon: signincontroller.isGuest.value == ""
-                        ? Image(
+                ?
+                signincontroller.isGuest.value == "" ?
+                 IconButton(
+                    icon:  Image(
                             image: AssetImage(
                               'assets/icons/icon_menu.png',
                             ),
                             height: 24,
-                          )
-                        : SizedBox(),
+                          ),
                     onPressed: () {
                       scaffoldKey.currentState!.openDrawer();
                     },
-                  )
+                  ) : SizedBox()
                 : const SizedBox();
           }),
           actions: [
-            Obx(() {
-              return homePageController.searchIcon.value
-                  ? IconButton(
-                      onPressed: () {},
-                      icon: const Image(
-                        image: AssetImage("assets/icons/icon_dark.png"),
-                        height: 24,
-                      ))
-                  : const SizedBox();
-            }),
+            // Obx(() {
+            //   return homePageController.searchIcon.value
+            //       ? IconButton(
+            //           onPressed: () {},
+            //           icon: const Image(
+            //             image: AssetImage("assets/icons/icon_dark.png"),
+            //             height: 24,
+            //           ))
+            //       : const SizedBox();
+            // }),
             Obx(() {
               return homePageController.searchIcon.value
                   ? IconButton(
@@ -467,12 +467,13 @@ class _HomePageState extends State<HomePage> {
         onRefresh: ()async{
           homePage1Controller.allpostdata = [].obs;
           homePage1Controller.copydata = [].obs;
-          Get.delete<HomePage1Controller>();
-          await apiProvider.getPost("34");
+          apiProvider.allPost = [];
+          await apiProvider.getPost(homePage1Controller.userTags);
           print("dataLength");
           print(homePage1Controller.allpostdata.length);
+            setState(() {});
           },
-        child: Obx(() {
+        child:homePage1Controller.allpostdata == [] ?Text("No Feed Found")  :Obx(() {
           return pages[homePageController.bootomNav.value];
         }),
       ),
