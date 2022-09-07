@@ -3,11 +3,9 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/services/service.dart';
-import 'package:tvtalk/view/profile_page.dart';
 
 class FeatureArticleViewAll extends StatefulWidget {
   const FeatureArticleViewAll(

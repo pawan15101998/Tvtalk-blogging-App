@@ -1,39 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/services/service.dart';
-import 'package:tvtalk/view/profile_page.dart';
 
-class TrendingArticleViewAll extends StatefulWidget {
-  const TrendingArticleViewAll(
-      {Key? key,})
-      : super(key: key);
+import '../getxcontroller/home_page1_controller.dart';
+
+class TagSearchPage extends StatefulWidget {
+  var tagName;
+
+   TagSearchPage({Key? key, required this.tagName}) : super(key: key);
   @override
-  State<TrendingArticleViewAll> createState() => _TrendingArticleViewAllState();
+  State<TagSearchPage> createState() => _TagSearchPageState();
 }
 var homePage1Controller = Get.find<HomePage1Controller>();
 final apiprovider = ApiProvider();
 final signincontroller = Get.find<SignInController>();
 var isRead;
 
-class _TrendingArticleViewAllState extends State<TrendingArticleViewAll> {
+class _TagSearchPageState extends State<TagSearchPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("Tagggggggeee");
+    print(widget.tagName['tagName']);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: AppBar(
-          title: const Text("Trending Article"),
+          title:  Text(widget.tagName['tagName']),
           backgroundColor:Color(0xffFBDC6D),
           elevation: 0.0,
         ),
       ),
-      body: ListView.builder(
+      body:
+      homePage1Controller.allpostdata.isNotEmpty ?
+       ListView.builder(
         itemCount: homePage1Controller.allpostdata.length,
         itemBuilder: (context, index) {
           return  Padding(
@@ -148,7 +158,8 @@ class _TrendingArticleViewAllState extends State<TrendingArticleViewAll> {
                                 image: AssetImage(
                                   "assets/icons/heart.png",
                                 ),
-                              ))
+                              )
+                              )
                         ],
                       )
                     ],
@@ -159,7 +170,8 @@ class _TrendingArticleViewAllState extends State<TrendingArticleViewAll> {
           ],
         ),
       );
-        },),
+        },
+        ): Center(child: Text("No Data Found Related to ${widget.tagName['tagName']} Tag")),
       
     );
   }

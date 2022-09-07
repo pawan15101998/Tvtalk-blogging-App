@@ -110,7 +110,6 @@ class _HomePageState extends State<HomePage> {
     // print(userName);
   }
 
-
   @override
   Widget build(BuildContext context) {
     print("Google print");
@@ -139,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                 ?
                 signincontroller.isGuest.value == "" ?
                  IconButton(
-                    icon:  Image(
+                    icon: const Image(
                             image: AssetImage(
                               'assets/icons/icon_menu.png',
                             ),
@@ -200,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                               //         homePage1Controller.userTags.value);
                               //   }
                               //   // apiProvider.getPost(homePage1Controller.userTags.value);
-                              //   // searchcontroller.clear();`
+                              //   //  searchcontroller.clear();`
                               //   // print(homeP);
                               //   // dataCopy![0].title.rendered = value;
                               //   // homePage1Controller.allpostdata.value = dataCopy!;
@@ -341,7 +340,7 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: signincontroller.image == null
-                              ? NetworkImage(
+                              ? const NetworkImage(
                                   "https://szabul.edu.pk/dataUpload/863noimage.png")
                               : NetworkImage(signincontroller.image.toString()),
                           fit: BoxFit.cover),
@@ -364,9 +363,9 @@ class _HomePageState extends State<HomePage> {
                             ? signincontroller.userEmail.toString()
                             : "johncena@mi.vom",
                         // userEmail != null? userEmail.toString(): "John Cena",
-                        style: TextStyle(
+                        style: const TextStyle(
                             // fontWeight: FontWeight.w200
-                            color: Color(0xfff707070),
+                            color: Color(0xff707070),
                             fontSize: 14),
                       )
                     ],
@@ -501,7 +500,6 @@ class _HomePageState extends State<HomePage> {
               selectedItemColor: Color(0xffF1B142),
               selectedIconTheme: IconThemeData(color: Color(0xffF1B142)),
               backgroundColor: Colors.transparent,
-
               // fixedColor: Colors.transparent,\
               onTap: (index) {
                 homePageController.bootomNav.value = index;
@@ -540,10 +538,7 @@ class _HomePageState extends State<HomePage> {
                     // width: 50,
                     
                   ),
-                  
-                  label: "Fun&Games" ,
-                  
-                  
+                  label: "Fun&Games",  
                 ),
                 BottomNavigationBarItem(
                   icon: SizedBox(
@@ -562,7 +557,7 @@ class _HomePageState extends State<HomePage> {
                   icon: SizedBox(
                       height: 25,
                       child: Image(
-                        image: AssetImage(
+                        image:const AssetImage(
                           "assets/icons/icon_trending.png",
                         ),
                         color: homePageController.bootomNav.value == 4
@@ -595,7 +590,6 @@ class _HomePageState extends State<HomePage> {
             //       ),
             //       InkWell(
             //         onTap: (){
-
             //         },
             //         child: SizedBox(
             //           height: 40,
@@ -666,6 +660,22 @@ class _HomePageState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
+  Widget upperList({name, index, bool isSelected = false, bgcolor}) {
+  return Container(
+    decoration: BoxDecoration(
+        color: homePage1Controller.topTags.value == name
+            ? Color(0xffFBDC6D)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(15)),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+      child: Text(
+        name,
+      ),
+    ),
+  );
+}
 
   Widget buildMynavbar() {
     return AnimatedBottomNavigationBar(

@@ -4,6 +4,7 @@ import 'package:blurry_modal_progress_hud/blurry_modal_progress_hud.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -186,6 +187,7 @@ get()async {
     if(response.statusCode == 200){
       ///data successfully
       var result = jsonDecode(response.body);
+      // yourIntrestController.alltagsDetails = result
       for (var item in result){
         print("jkxcdsas");
         allTags.add(AllTagsModel.fromJson(item));
@@ -194,6 +196,12 @@ get()async {
         yourIntrestController.allTagsModel.value = allTags;
         yourIntrestController.copyTags.value = allTags;
       }
+    print("All tagsname");
+    print(yourIntrestController.alltagsName);
+      for(int i = 0; i<allTags.length; i++){
+      yourIntrestController.alltagsName.add(allTags[i].name.toLowerCase());
+    }
+print(yourIntrestController.alltagsName);
       // yourIntrestController.allTagsModel = allTags;
       print("data sucessfuly");
       print(yourIntrestController.allTagsModel[0]);

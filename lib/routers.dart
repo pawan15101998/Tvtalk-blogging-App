@@ -18,3 +18,4 @@ const String poles = '/Poles';
 const String editprofile = '/Editprofile';
 const String featurearticleviewall = '/Featurearticleviewall';
 const String trendingarticleviewall = '/Trendingarticleviewall';
+const String tagsearchpage = '/Tagsearchpage';

@@ -53,9 +53,25 @@ bool showSpinner = false;
     dobcontroller.text = homePageController.userDetails['data']['dob'] == null ? "Select date" :homePageController.userDetails['data']['dob'] ;
   }
 
-Future pickimage()async{
+Future pickimagegallary()async{
+  Navigator.pop(context);
   try {
   final image =  await ImagePicker().pickImage(source: ImageSource.gallery);
+  if(image == null) return;
+  final imageTemporary = File(image.path);
+      setState(() {
+      this.image = imageTemporary;
+    });
+} on Exception catch (e) {
+  // TODO
+  print("Fail to pick image $e");
+}
+  }
+
+  Future pickimagecamera()async{
+     Navigator.pop(context);
+  try {
+  final image =  await ImagePicker().pickImage(source: ImageSource.camera);
   if(image == null) return;
   final imageTemporary = File(image.path);
       setState(() {
@@ -469,19 +485,31 @@ Future pickimage()async{
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          Text("Choose Image Source", style: 
+                          TextStyle(
+                            fontSize: 16
+                          )
+                          ,),
                           const SizedBox(height: 16),
                          ElevatedButton(
-                          onPressed: pickimage, 
-                         child: Text("Select from gallary")),
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: Color(0xffFFDC5C)
+                          )
+,                          onPressed: pickimagegallary, 
+                         child: const Text("Select from gallary", style: TextStyle(
+                          color: Colors.black
+                         ),)),
                           const SizedBox(height: 16),
-                         ElevatedButton(onPressed: () {
-
-                           setState(() {
-                                                            
-                                });
-                                Navigator.pop(context);
-                         }, 
-                         child: Text("Select from gallary")),
+                         ElevatedButton(
+                          onPressed: pickimagecamera,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            primary: Color(0xffFFDC5C)
+                          ),
+                         child: Text("Select from Camera", style: TextStyle(
+                          color: Colors.black
+                         ),)),
                           const SizedBox(height: 16),
                         ],
                       ),

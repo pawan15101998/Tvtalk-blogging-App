@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/routers.dart';
 import 'package:tvtalk/services/service.dart';
@@ -13,6 +14,9 @@ class SignInNetwork {
   var apiProvider = ApiProvider();
   var bottomDialog = BottomDialog();
   final signincontroller = Get.find<SignInController>();
+  List tagdata = [];
+  final homepage1controller = Get.find<HomePage1Controller>();
+  String sendingTags = "";
 
   forgotPassword(context, loginEmailController) async {
     if (loginEmailController != ""){
@@ -139,7 +143,7 @@ class SignInNetwork {
         backgroundColor: Colors.green,
         action: SnackBarAction(
           label: '',
-          onPressed: () {
+          onPressed:(){
             // Some code to undo the change.
           },
         ),
@@ -155,11 +159,21 @@ class SignInNetwork {
       signincontroller.userEmail = loginEmailController;
       print("tokennnn");
       print(resetToken);
+      var tagsss=  await apiProvider.getTags();
+     print("sd");
+     print(tagsss);
+    for(var i= 0; i<tagsss['data'].length; i++){
+     tagdata.add(tagsss['data'][i]['tagId']);
+    }
+sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
+homepage1controller.userTags.value = sendingTags;
+print(sendingTags);
+      await apiProvider.getPost(sendingTags);
       // context.pushNamed('HOMEPAGE');
      signincontroller.isGuest.value = '';
       Router.neglect(context, () {context.goNamed('HOMEPAGE');});
     } else if(LoginResponse['message'] ==
-        'Wrong password entered.') {
+        'Wrong password entered.'){
       Flushbar(
         backgroundColor: Colors.red,
         message: "Wrong password entered",
@@ -210,6 +224,4 @@ class SignInNetwork {
       ).show(context);
     }
   }
-
-
 }

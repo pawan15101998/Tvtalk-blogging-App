@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tvtalk/constant/front_size.dart';
+import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/model/all_tags_model.dart';
 import 'package:tvtalk/model/select_your_intrest_model.dart';
@@ -24,6 +25,9 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
   var apiProvider = ApiProvider();
   bool isFabVisible = false;
   TextEditingController searchtagscontroller = TextEditingController();
+    List tagdata = [];
+  final homepage1controller = Get.find<HomePage1Controller>();
+  String sendingTags = "";
 
   List choice2 = [];
   List selectedtags = [];
@@ -277,7 +281,19 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                 if (selectedtags.isNotEmpty) {
                   await apiProvider.postApi("/user/assignTags",
                       {"tagId": sendSelectedtags, 'tagname': sendSelectedName});
-                  print("object");
+                 
+                        var tagsss=  await apiProvider.getTags();
+     print("sd");
+     print(tagsss);
+    for(var i= 0; i<tagsss['data'].length; i++){
+     tagdata.add(tagsss['data'][i]['tagId']);
+    }
+     print("objectTagss");
+    print(sendingTags);
+sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
+homepage1controller.userTags.value = sendingTags;
+print(sendingTags);
+      await apiProvider.getPost(sendingTags);
                   context.pushNamed('HOMEPAGE');
                   yourIntrestController.choices[0].select.value = false;
                   yourIntrestController.choices[1].select.value = false;

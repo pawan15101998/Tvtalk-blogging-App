@@ -41,18 +41,23 @@ List tagdata = [];
     // TODO: implement initState
     getValidation().whenComplete(()async{
      await signincontroller.getuserdata();
-    //  await apiProvider.get();
+     await apiProvider.get();
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? resetToken = sharedPreferences.getString('reset_token');
+    print("Resettoken");
+    print(yourIntrestController.allTagsModel);
+
+    print(resetToken);
+    if(resetToken != null){
   var tagsss=  await apiProvider.getTags();
-     print("sd");
-     print(tagsss);
-  // for(var i= 0; i<tagsss['data'].length; i++){
-  //    tagdata.add(tagsss['data'][i]['tagId']);
-  // }
+        for(var i= 0; i<tagsss['data'].length; i++){
+     tagdata.add(tagsss['data'][i]['tagId']);
+  }
 sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
 homepage1controller.userTags.value = sendingTags;
 print(sendingTags);
       await apiProvider.getPost(sendingTags);
-      await apiProvider.get();
+    }
       Timer(const Duration(microseconds: 0),()=> finalEmail == null ? 
       Router.neglect(context, () {context.goNamed('SIGNINPAGE');}):
       Router.neglect(context, () {context.goNamed('HOMEPAGE');}));

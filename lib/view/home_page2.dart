@@ -35,7 +35,7 @@ class _HomePage2State extends State<HomePage2> {
           return homePage1Controller.searchArticle.isNotEmpty &&
                         homePage1Controller.nosearch != ""
                     ?
-                    homePage1Controller.allpostdata.length != 0?
+                    // homePage1Controller.allpostdata.length != 0?
                      ListView.builder(
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
@@ -57,7 +57,9 @@ class _HomePage2State extends State<HomePage2> {
                     : homePage1Controller.searchArticle.isEmpty &&
                             homePage1Controller.nosearch != ""
                         ? Center(child: Text(" No Data  Found"))
-                        : SingleChildScrollView(
+                        : 
+                        homePage1Controller.allpostdata.isNotEmpty ?
+          SingleChildScrollView(
             child: Column(
               children: [
                 Stack(
@@ -316,7 +318,7 @@ class _HomePage2State extends State<HomePage2> {
                               Text(
                                 "View All",
                                 style: TextStyle(
-                                    color: Color(0xfff0701BF), fontSize: 14),
+                                color: Color(0xff0701BF), fontSize: 14),
                               )
                             ],
                           ),
@@ -334,7 +336,8 @@ class _HomePage2State extends State<HomePage2> {
                         },),
               ],
             ),
-          ): SizedBox(
+          )
+          : SizedBox(
                                     height: MediaQuery.of(context).size.height -190,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,

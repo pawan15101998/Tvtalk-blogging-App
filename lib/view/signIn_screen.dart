@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tvtalk/Authencation/google_sign_in.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/controllers/signIn_network.dart';
+import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/theme/buttonTheme/button_theme.dart';
@@ -33,6 +34,9 @@ class _SignInPageState extends State<SignInPage> {
   Timer? _timer;
   late double _progress;
   var signInNetwork = SignInNetwork();
+    List tagdata = [];
+  final homepage1controller = Get.find<HomePage1Controller>();
+  String sendingTags = "";
 
   @override
   Widget build(BuildContext context) {
@@ -74,9 +78,11 @@ class _SignInPageState extends State<SignInPage> {
                           title: Align(
                             alignment: Alignment.centerRight,
                             child: InkWell(
-                              onTap: (){
+                              onTap: () {
                                 signincontroller.isGuest.value = 'guest';
-                                  Router.neglect(context, () {context.goNamed('HOMEPAGE');});
+                                Router.neglect(context, () {
+                                  context.goNamed('HOMEPAGE');
+                                });
                               },
                               child: Text(
                                 "Continue as Guest >>|",
@@ -186,55 +192,70 @@ class _SignInPageState extends State<SignInPage> {
                 height: height * 5 / 100,
               ),
               loginButton(
-                width: width,
-              text: "Continue with Google",
-                image: "assets/icons/google.png",
-                color: Colors.white,
-                textColor: Colors.black,
-                onPress: ()async{
-                  final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-                await  provider.googleLogin();
-                String birthday = await provider.getBirthday();
-                  // await provider.getGender();
-                  // await provider.getGender();
-                  print("userinfo from googl");
-                  print(provider.user);
-                  print(provider.user.displayName);
-                  print(provider.user.email);
-                  print(provider.user.id);
-                  print(provider.user.photoUrl);
-                  print(signincontroller.googleUserGender);
-                  print(signincontroller.googleUserDob);
-                  if(provider.user != null){
-                    // context.goNamed("SELECTYOURINTREST");
-                    signincontroller.isGuest.value = '';
-                    await  apiProvider.PostSocial("/user/social-login", 
-                    {"social_login_type": "1",
-                     "name": provider.user.displayName,
-                     "email":provider.user.email,
-                     "social_login_id":provider.user.id,
-                     "image":provider.user.photoUrl,
-                     "dob":signincontroller.googleUserDob!,
-                     "gender":signincontroller.googleUserGender == 'male'? '0' :'1'
-                    });
-                    print("ssssssddd");
-                    if(apiProvider.RegisterResponse['message'] == 'Logged in successfully'){
-                       context.goNamed("HOMEPAGE");
-                    }else if(apiProvider.RegisterResponse['message'] == 'User Added Successfully'){
-                       context.goNamed("SELECTYOURINTREST");
+                  width: width,
+                  text: "Continue with Google",
+                  image: "assets/icons/google.png",
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  onPress: () async {
+                    final provider = Provider.of<GoogleSignInProvider>(context,
+                        listen: false);
+                    await provider.googleLogin();
+                    String birthday = await provider.getBirthday();
+                    // await provider.getGender();
+                    // await provider.getGender();
+                    print("userinfo from googl");
+                    print(provider.user);
+                    print(provider.user.displayName);
+                    print(provider.user.email);
+                    print(provider.user.id);
+                    print(provider.user.photoUrl);
+                    print(signincontroller.googleUserGender);
+                    print(signincontroller.googleUserDob);
+                    if (provider.user != null) {
+                      // context.goNamed("SELECTYOURINTREST");
+                      signincontroller.isGuest.value = '';
+                      await apiProvider.PostSocial("/user/social-login", {
+                        "social_login_type": "1",
+                        "name": provider.user.displayName,
+                        "email": provider.user.email,
+                        "social_login_id": provider.user.id,
+                        "image": provider.user.photoUrl,
+                        "dob": signincontroller.googleUserDob!,
+                        "gender": signincontroller.googleUserGender == 'male'
+                            ? '0'
+                            : '1'
+                      });
+                      print("ssssssddd");
+
+                      final SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      sharedPreferences.setString('email', provider.user.email);
+                      sharedPreferences.setString('name', provider.user.displayName);
+                      sharedPreferences.setString('image', provider.user.photoUrl);
+                      signincontroller.userName = provider.user.displayName;
+                      signincontroller.userEmail = provider.user.email;
+                      signincontroller.image = provider.user.photoUrl;
+                      var tagsss = await apiProvider.getTags();
+                      print("sd");
+                      print(tagsss);
+                      for (var i = 0; i < tagsss['data'].length; i++){
+                        tagdata.add(tagsss['data'][i]['tagId']);
+                      }
+                      sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
+                      homepage1controller.userTags.value = sendingTags;
+                      print("tags from google");
+                      print(sendingTags);
+                      await apiProvider.getPost(sendingTags);
+                      if (apiProvider.RegisterResponse['message'] ==
+                          'Logged in successfully') {
+                        context.goNamed("HOMEPAGE");
+                      } else if (apiProvider.RegisterResponse['message'] ==
+                          'User Added Successfully') {
+                        context.goNamed("SELECTYOURINTREST");
+                      }
                     }
-                  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                  sharedPreferences.setString('email', provider.user.email);
-                  sharedPreferences.setString('name', provider.user.displayName);
-                  sharedPreferences.setString('image', provider.user.photoUrl);
-                  signincontroller.userName = provider.user.displayName;
-                  signincontroller.userEmail = provider.user.email;
-                  signincontroller.image = provider.user.photoUrl;
-                  // context.pop();
-                  // context.pushNamed("HOMEPAGE");  
-                  }
-                }
-              ),
+                  }),
               SizedBox(
                 height: height * 2 / 100,
               ),
@@ -244,34 +265,52 @@ class _SignInPageState extends State<SignInPage> {
                 image: "assets/icons/facebook.png",
                 color: facebookColor,
                 textColor: Colors.white,
-                onPress: ()async{
-                  final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-                 await provider.facebookLogin();
-                  if(provider.user != null){
+                onPress: () async {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  await provider.facebookLogin();
+                  if (provider.user != null) {
                     print("facebook email");
                     signincontroller.isGuest.value = '';
-                   await apiProvider.PostSocial("/user/social-login", 
-                    {"social_login_type": "2",
-                     "name": provider.user['name'],
-                     "email":provider.user['email'],
-                     "social_login_id":provider.user['id'],
-                     "image":provider.user['picture']['data']['url']
+                    await apiProvider.PostSocial("/user/social-login", {
+                      "social_login_type": "2",
+                      "name": provider.user['name'],
+                      "email": provider.user['email'],
+                      "social_login_id": provider.user['id'],
+                      "image": provider.user['picture']['data']['url']
                     });
                     print("ssssssssss");
                     print(apiProvider.RegisterResponse['message']);
                     print(apiProvider.RegisterResponse);
-                    if(apiProvider.RegisterResponse['message'] == 'Email already Exist'){
-                       context.pushNamed("HOMEPAGE");
-                    }else if(apiProvider.RegisterResponse['message'] == 'User Added Successfully'){
-                       context.goNamed("SELECTYOURINTREST");
-                    }
-                    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                    sharedPreferences.setString('email', provider.user['email']);
+                    
+                    final SharedPreferences sharedPreferences =
+                        await SharedPreferences.getInstance();
+                    sharedPreferences.setString(
+                        'email', provider.user['email']);
                     sharedPreferences.setString('name', provider.user['name']);
-                    sharedPreferences.setString('image', provider.user['picture']['data']['url']);
+                    sharedPreferences.setString(
+                        'image', provider.user['picture']['data']['url']);
                     signincontroller.userName = provider.user['name'];
                     signincontroller.userEmail = provider.user['email'];
-                    signincontroller.image =  provider.user['picture']['data']['url'];
+                    signincontroller.image =provider.user['picture']['data']['url'];
+                        var tagsss = await apiProvider.getTags();
+                      print("sd");
+                      print(tagsss);
+                      for (var i = 0; i < tagsss['data'].length; i++){
+                        tagdata.add(tagsss['data'][i]['tagId']);
+                      }
+                      sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
+                      homepage1controller.userTags.value = sendingTags;
+                      print("tags from google");
+                      print(sendingTags);
+                      await apiProvider.getPost(sendingTags);
+                      if (apiProvider.RegisterResponse['message'] ==
+                        'Email already Exist') {
+                      context.pushNamed("HOMEPAGE");
+                    } else if (apiProvider.RegisterResponse['message'] ==
+                        'User Added Successfully') {
+                      context.goNamed("SELECTYOURINTREST");
+                    }
                     print("facebookdata");
                     print(provider.user);
                   }
@@ -311,7 +350,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                 ],
               ),
-            const SizedBox(
+              const SizedBox(
                 height: 10,
               )
             ],

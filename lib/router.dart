@@ -20,6 +20,7 @@ import 'package:tvtalk/view/select_your_intrest.dart';
 import 'package:tvtalk/view/signIn_screen.dart';
 import 'package:tvtalk/view/register_page.dart';
 import 'package:tvtalk/view/splash_screen.dart';
+import 'package:tvtalk/view/tag_search_page.dart';
 import 'package:tvtalk/view/term_&_condition.dart';
 import 'package:tvtalk/view/trending_article_viewall_page.dart';
 
@@ -126,6 +127,11 @@ class CustomRouter{
         name: 'TRENDINGARTICLEVIEWALL',
         path: trendingarticleviewall,
         builder: (context, state) => const TrendingArticleViewAll(),
+      ),
+       GoRoute(
+        name: 'TAGSEARCHPAGE',
+        path: tagsearchpage,
+        builder: (context, state) =>  TagSearchPage(tagName: state.queryParams,),
       ),
     ]
     );

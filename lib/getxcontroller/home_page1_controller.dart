@@ -1,5 +1,7 @@
+import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/model/like_model.dart';
 import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
 
@@ -13,6 +15,7 @@ class HomePage1Controller extends GetxController {
   RxMap userDetails = {}.obs;
   RxList searchArticle = [].obs;
   RxString topTags = "All".obs;
+   var yourIntrestController = Get.put(YourIntrestController());
 
 searchFunction(String? val) {
     searchArticle.clear();
@@ -20,11 +23,23 @@ searchFunction(String? val) {
     if (val.isEmpty) {
       searchArticle.clear();
       return;
-    } else {
+    }else if(yourIntrestController.alltagsName.contains(val.toLowerCase().trim())){
+      yourIntrestController.alltagsName.forEach((element) {
+        yourIntrestController.searchTags.value = true;
+      print(searchArticle);
+      searchArticle = [].obs;
+      print("ForEach");
+      print(searchArticle);
+      searchArticle.add(val);
+         return;
+       });
+    }
+     else {
       print('not empty');
       print(homePage1Controller.userTags.value);
       allpostdata.forEach((element) {
-        if (element.title.rendered.toLowerCase().contains(val)){
+        if (element.title.rendered.toLowerCase().contains(val.toLowerCase().trim())){
+          yourIntrestController.searchTags.value = false;
           searchArticle = [].obs;
           searchArticle.add(element);
           print(searchArticle);
@@ -33,7 +48,9 @@ searchFunction(String? val) {
         } else {
           return;
         }
-      });
+      }
+      );
+
     }
   }
 }

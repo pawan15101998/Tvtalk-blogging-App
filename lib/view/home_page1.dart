@@ -30,125 +30,152 @@ class _HomePage1State extends State<HomePage1> {
   final signincontroller = Get.find<SignInController>();
   List listModel = [];
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // for(int i=0; i<=homePage1Controller.allpostdata.length; i++){
-    // homePage1Controller.allpostdata.add({"status": 0});
-    // }
-    print("stsusss");
-    print(yourIntrestController.allTagsModel);
-    // for(int i=0; i<=yourIntrestController.allTagsModel.length; i++){
-    //   yourIntrestController.allTagsModel[i].add({"isSelected":false});
-    // }
-    // print("Ypur int");
-    // print(listModel);
-  }
-    Stream streamController(id)=> Stream.fromFuture(
-        apiprovider.getPost(id)
-  );
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Column(
-                children: [
-                  Obx(() {
-                    print("lol");
-                    print(homePage1Controller.searchArticle.isNotEmpty);
-                    print(homePage1Controller.nosearch);
-                    return
-                     homePage1Controller.searchArticle.isNotEmpty &&
-                            homePage1Controller.nosearch != ""
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            physics: const ScrollPhysics(),
-                            // scrollDirection: Axis.vertical,
-                            itemCount: homePage1Controller.searchArticle.length,
-                            itemBuilder: (context, index) {
-                              print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                              print(homePage1Controller.allpostdata.length);
-                              print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                              return BlogCard(
-                                indexx: index,
-                                context: context,
-                                blogDetail:
-                                    homePage1Controller.searchArticle[index],
-                              );
-                            },
-                          )
-                        : homePage1Controller.searchArticle.isEmpty &&
-                                homePage1Controller.nosearch != ""
-                            ?const Center(child: Text(" No Data  Found"))
-                            :
-                            Column(
+        body: SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Column(
+          children: [
+            Obx(() {
+              return homePage1Controller.searchArticle.isNotEmpty &&
+                      homePage1Controller.nosearch != "" && yourIntrestController.searchTags.value == false
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                      // scrollDirection: Axis.vertical,
+                      itemCount: homePage1Controller.searchArticle.length,
+                      itemBuilder: (context, index){
+                        return BlogCard(
+                          indexx: index,
+                          context: context,
+                          blogDetail: homePage1Controller.searchArticle[index],
+                        );
+                      },
+                    )
+                  : (yourIntrestController.searchTags.value == true) && 
+                  (homePage1Controller.searchArticle.isNotEmpty)
+                  ?
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: homePage1Controller.searchArticle.length,
+                    itemBuilder: (context, ind) {
+                      return InkWell(
+                        onTap: ()async {
+                          int? tagid;
+                          yourIntrestController.allTagsModel.forEach((element) {
+                            if(element.name.toLowerCase().trim() == homePage1Controller.searchArticle.toString().replaceAll("[", "").replaceAll("]", "").trim()){
+                              tagid = element.id;
+                            }
+                           });
+                           homePage1Controller.allpostdata = [].obs;
+                           apiprovider.allPost = [];
+                           await apiprovider.getPost(tagid);
+                           context.pushNamed('TAGSEARCHPAGE', queryParams: {'tagName': homePage1Controller.searchArticle.toString().replaceAll("[", "").replaceAll("]", "")});                          print(yourIntrestController.allTagsModel);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            color: Color(0xffFFDC5C),
+                            height: 50,
+                            width: MediaQuery.of(context).size.width,
+                            child: Center(child: Text(homePage1Controller.searchArticle[ind], style: 
+                            const TextStyle(
+                              fontSize: 20
+                            )
+                            ,))),
+                        ),
+                      );
+                    }
+                  ):
+                  homePage1Controller.searchArticle.isEmpty &&
+                          homePage1Controller.nosearch != ""
+                      ? const Center(child: Text(" No Data Found"))
+                      : Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 35,
+                              child: ListView(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
                                 children: [
-                                  SizedBox(
-                                    height: 35,
-                                    child: ListView(
-                                      shrinkWrap: true,
-                                      scrollDirection: Axis.horizontal,
-                                      children: [
-                                      //  Obx(() {
-                                            // return 
-                                            InkWell(
-                                              onTap: ()async{
-                                                homePage1Controller.allpostdata = [].obs;   
-                                                      homePage1Controller.copydata = [].obs;
-                                                      apiprovider.allPost = [];
-                                                      print("postLength");
-                                                      print(homePage1Controller.allpostdata.length);
-                                                    await apiprovider.getPost(homePage1Controller.userTags.value);
-                                                    homePage1Controller.topTags.value = "All";
-                                                    setState((){  });
-                                              },
-                                              child: upperList(name: "All",isSelected:  true, bgcolor: const Color(0xffFBDC6D))),
-                                        //   }
-                                        // ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        Obx(() {
-                                          return ListView.builder(
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemCount: yourIntrestController
-                                                .allTagsModel.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                    onTap: () async{
-                                                      homePage1Controller.allpostdata = [].obs;   
-                                                      homePage1Controller.copydata = [].obs;
-                                                      apiprovider.allPost = [];
-                                                      print("postLength");
-                                                      print(homePage1Controller.allpostdata.length);
-                                                    await apiprovider.getPost(yourIntrestController
-                                                    .allTagsModel[index].id);
-                                                    print("after hit api");
-                                                    homePage1Controller.topTags.value = yourIntrestController.allTagsModel[index].name.toString();
-                                                    print(homePage1Controller.allpostdata.length);
-                                                    setState(() {
-                                              
-                                                    });
-                                                    },
-                                                    child: upperList(name:
-                                                        yourIntrestController.allTagsModel[index].name.toString(), 
-                                                        isSelected: true,
-                                                      bgcolor: ""),
-                                                  );
-                                                } 
-                                          );
-                                        }),
-                                      ],
-                                    ),
+                                  //  Obx(() {
+                                  // return
+                                  InkWell(
+                                      onTap: () async {
+                                        homePage1Controller.allpostdata =
+                                            [].obs;
+                                        homePage1Controller.copydata = [].obs;
+                                        apiprovider.allPost = [];
+                                        print("postLengthhh");
+                                        print(homePage1Controller.userTags.value);
+                                        print(homePage1Controller
+                                            .allpostdata.length);
+                                            homePage1Controller.topTags.value =
+                                            "All";
+                                        await apiprovider.getPost(
+                                            homePage1Controller.userTags.value);
+                                        
+                                        setState(() {});
+                                      },
+                                      child: upperList(
+                                          name: "All",
+                                          isSelected: true,
+                                          bgcolor: const Color(0xffFBDC6D))),
+                                  //   }
+                                  // ),
+                                  const SizedBox(
+                                    width: 20,
                                   ),
-                                  const Divider(),
-                                  homePage1Controller.allpostdata.length != 0 ?
-                                  Column(
+                                  Obx(() {
+                                    return ListView.builder(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: yourIntrestController
+                                            .allTagsModel.length,
+                                        itemBuilder: (context, index){
+                                          return InkWell(
+                                            onTap: () async {
+                                              homePage1Controller.allpostdata =[].obs;
+                                              homePage1Controller.copydata =[].obs;
+                                              apiprovider.allPost = [];
+                                              print("postLength");
+                                              print(homePage1Controller.allpostdata.length);
+                                                  homePage1Controller
+                                                      .topTags.value =
+                                                  yourIntrestController
+                                                      .allTagsModel[index].name
+                                                      .toString();
+                                              await apiprovider.getPost(
+                                                  yourIntrestController
+                                                      .allTagsModel[index].id);
+                                              print("after hit api");
+                                              
+                                              print(homePage1Controller
+                                                  .allpostdata.length);
+                                              setState(() {});
+                                            },
+                                            child: upperList(
+                                                name: yourIntrestController
+                                                    .allTagsModel[index].name
+                                                    .toString(),
+                                                isSelected: true,
+                                                bgcolor: ""),
+                                          );
+                                        });
+                                  }),
+                                ],
+                              ),
+                            ),
+                            const Divider(),
+                            homePage1Controller.allpostdata.length != 0
+                                ? Column(
                                     children: [
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -167,10 +194,11 @@ class _HomePage1State extends State<HomePage1> {
                                               ),
                                             ),
                                             InkWell(
-                                              onTap: (){
-                                                context.pushNamed('FEATUREARTICLEVIEWALL');
+                                              onTap: () {
+                                                context.pushNamed(
+                                                    'FEATUREARTICLEVIEWALL');
                                               },
-                                              child:const Text(
+                                              child: const Text(
                                                 "View All",
                                                 style: TextStyle(
                                                     color: Color(0xfff0701BF),
@@ -185,45 +213,45 @@ class _HomePage1State extends State<HomePage1> {
                                       // }),
                                       // Obx(() {
                                       //     return
-                                     
-                                            Obx(() {
-                                              return CarouselSlider.builder(
-                                                options: CarouselOptions(
-                                                    height: 400.0,
-                                                    enableInfiniteScroll: false,
-                                                    // viewportFraction: 1,
-                                                    autoPlay: false,
-                                                    onPageChanged:
-                                                        ((index, reason) {
-                                                      // homePage1 = index;
-                                                      // if(homePage1Controller.carouselSliderIndex.value != null)
-                                                      homePage1Controller
-                                                          .carouselSliderIndex
-                                                          .value = index;
-                                                    })),
-                                                itemCount: homePage1Controller
-                                                    .copydata.length,
-                                                itemBuilder:
-                                                    ((context, index, realIndex) {
-                                                  // Stream streamController() => Stream.fromFuture(
-                                                  // apiprovider.getComment(homePage1Controller.copydata[index].id)
-                                                  //   );
-                                                  print("Inexxx");
-                                                  print(index);
-                                                  // final urlImage = homePage1Controller.like[index].image;
-                                                  return buildImage(context, index);
-                                                }),
-                                              );
-                                            }),
-                                          
+
+                                      Obx(() {
+                                        return CarouselSlider.builder(
+                                          options: CarouselOptions(
+                                              height: 400.0,
+                                              enableInfiniteScroll: false,
+                                              // viewportFraction: 1,
+                                              autoPlay: false,
+                                              onPageChanged: ((index, reason) {
+                                                // homePage1 = index;
+                                                // if(homePage1Controller.carouselSliderIndex.value != null)
+                                                homePage1Controller
+                                                    .carouselSliderIndex
+                                                    .value = index;
+                                              })),
+                                          itemCount: homePage1Controller
+                                              .copydata.length,
+                                          itemBuilder:
+                                              ((context, index, realIndex) {
+                                            // Stream streamController() => Stream.fromFuture(
+                                            // apiprovider.getComment(homePage1Controller.copydata[index].id)
+                                            //   );
+                                            print("Inexxx");
+                                            print(index);
+                                            // final urlImage = homePage1Controller.like[index].image;
+                                            return buildImage(context, index);
+                                          }),
+                                        );
+                                      }),
+
                                       //   }
                                       // ),
                                       const SizedBox(
                                         height: 32,
                                       ),
                                       Obx(() {
-                                        return buildIndicator(homePage1Controller
-                                            .carouselSliderIndex.value);
+                                        return buildIndicator(
+                                            homePage1Controller
+                                                .carouselSliderIndex.value);
                                       }),
                                       const SizedBox(
                                         height: 20,
@@ -240,10 +268,11 @@ class _HomePage1State extends State<HomePage1> {
                                               style: TextStyle(fontSize: 14),
                                             ),
                                             InkWell(
-                                              onTap: (){
-                                                context.pushNamed('TRENDINGARTICLEVIEWALL');
+                                              onTap: () {
+                                                context.pushNamed(
+                                                    'TRENDINGARTICLEVIEWALL');
                                               },
-                                              child:const Text(
+                                              child: const Text(
                                                 "View All",
                                                 style: TextStyle(
                                                     color: Color(0xfff0701BF),
@@ -265,13 +294,13 @@ class _HomePage1State extends State<HomePage1> {
                                               : homePage1Controller
                                                   .allpostdata.length,
                                           itemBuilder: (context, index) {
-                                                  // allpostdata = [].obs;
-                                                  // homePage1Controller.searchArticle = [].obs;
-                                                  // homePage1Controller.allpostdata = [].obs;
-                                                  // homePage1Controller.copydata = [].obs;
+                                            // allpostdata = [].obs;
+                                            // homePage1Controller.searchArticle = [].obs;
+                                            // homePage1Controller.allpostdata = [].obs;
+                                            // homePage1Controller.copydata = [].obs;
                                             print(
                                                 'obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-      
+
                                             print(homePage1Controller
                                                 .allpostdata.length);
                                             print(
@@ -286,24 +315,29 @@ class _HomePage1State extends State<HomePage1> {
                                         );
                                       }),
                                     ],
-                                  ): SizedBox(
-                                    height: MediaQuery.of(context).size.height -190,
+                                  )
+                                : SizedBox(
+                                    height: MediaQuery.of(context).size.height -
+                                        190,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
-                                        Center (child: Text("No Data Found"),),
+                                        Center(
+                                          child: Text("No Data Found"),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ],
-                              );
-                  }),
-                ],
-              ),
-            ),
-          )
-      );
+                          ],
+                        );
+            }),
+          ],
+        ),
+      ),
+    ));
   }
 
   Widget buildIndicator(int sliderVal) {
@@ -323,7 +357,7 @@ class _HomePage1State extends State<HomePage1> {
   Widget buildImage(BuildContext context, int index) {
     return Stack(children: [
       InkWell(
-        onTap: ()async{
+        onTap: () async {
           // if (signincontroller.isGuest.value == 'guest') {
           await apiprovider.getComment(homePage1Controller.copydata[index].id);
           context.pushNamed('ARTICLEDETAILPAGE',
@@ -332,12 +366,12 @@ class _HomePage1State extends State<HomePage1> {
           // Router.neglect(context, () {
           //   context.goNamed('SIGNINPAGE');
           // });
-        // }
-        // else{
-            // context.pushNamed('ARTICLEDETAILPAGE',
-            //   extra: homePage1Controller.copydata[index],
-            //   queryParams: {"index": "$index"});
-        // }
+          // }
+          // else{
+          // context.pushNamed('ARTICLEDETAILPAGE',
+          //   extra: homePage1Controller.copydata[index],
+          //   queryParams: {"index": "$index"});
+          // }
           print("Moving");
           print(homePage1Controller.copydata[index].id);
           print("sddddddddddsdddddd");
@@ -347,12 +381,18 @@ class _HomePage1State extends State<HomePage1> {
           margin: const EdgeInsets.symmetric(horizontal: 12),
           height: double.infinity,
           // width: 200,
-          decoration:  BoxDecoration(
-              image: DecorationImage(
-                  image:homePage1Controller.copydata[index].featuredMediaSrcUrl != null?
- NetworkImage(homePage1Controller.copydata[index].featuredMediaSrcUrl, scale: 0.5):
-  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
-                  fit: BoxFit.cover,), ),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: homePage1Controller.copydata[index].featuredMediaSrcUrl !=
+                      null
+                  ? NetworkImage(
+                      homePage1Controller.copydata[index].featuredMediaSrcUrl,
+                      scale: 0.5)
+                  : NetworkImage(
+                      'https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
       ),
       Positioned(
@@ -421,19 +461,24 @@ class _HomePage1State extends State<HomePage1> {
               // ),
               Obx(() {
                 return InkWell(
-                  onTap: () async{
-                     await apiprovider.getComment(homePage1Controller.copydata[index].id);
-          context.pushNamed('ARTICLEDETAILPAGE',
-              extra: homePage1Controller.copydata[index],
-              queryParams: {"index": "${index}"});
+                  onTap: () async {
+                    await apiprovider
+                        .getComment(homePage1Controller.copydata[index].id);
+                    context.pushNamed('ARTICLEDETAILPAGE',
+                        extra: homePage1Controller.copydata[index],
+                        queryParams: {"index": "${index}"});
                   },
                   child: Html(
-                    data: "<P>${homePage1Controller.copydata[index].title.rendered}</p>",
+                    data:
+                        "<P>${homePage1Controller.copydata[index].title.rendered}</p>",
                     style: {
                       'p': Style(
-                        color:homePage1Controller.copydata[index].featuredMediaSrcUrl != null? Colors.white: Colors.black
-                      )
-                    },  
+                          color: homePage1Controller
+                                      .copydata[index].featuredMediaSrcUrl !=
+                                  null
+                              ? Colors.white
+                              : Colors.black)
+                    },
                   ),
                 );
               }),
@@ -445,10 +490,12 @@ class _HomePage1State extends State<HomePage1> {
   }
 }
 
-Widget upperList({name, index, bool isSelected = false, bgcolor}){
+Widget upperList({name, index, bool isSelected = false, bgcolor}) {
   return Container(
     decoration: BoxDecoration(
-        color:  homePage1Controller.topTags.value == name ? Color(0xffFBDC6D) : Colors.transparent,
+        color: homePage1Controller.topTags.value == name
+            ? Color(0xffFBDC6D)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(15)),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),

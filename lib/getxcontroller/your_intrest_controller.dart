@@ -10,6 +10,9 @@ class YourIntrestController extends GetxController{
   RxBool yourIntrest = false.obs;
   RxBool activeTextfield = false.obs;
  RxList allTagsModel = [].obs;
+ RxList alltagsName = [].obs;
+ RxList alltagsDetails = [].obs;
+ RxBool searchTags =false.obs;
  RxList copyTags = [].obs;
 //  final apiProvider = ApiProvider();
 // @override
