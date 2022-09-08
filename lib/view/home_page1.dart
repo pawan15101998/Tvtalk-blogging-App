@@ -35,6 +35,8 @@ class _HomePage1State extends State<HomePage1> {
 
   @override
   Widget build(BuildContext context) {
+    print("imageUrl");
+    // print(homePage1Controller.allpostdata[0].featuredImageSrc);
     return Scaffold(
         body: SingleChildScrollView(
       child: Padding(
@@ -383,12 +385,15 @@ class _HomePage1State extends State<HomePage1> {
           // width: 200,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: homePage1Controller.copydata[index].featuredMediaSrcUrl !=
+              image: 
+              homePage1Controller.copydata[index].featuredImageSrc!=
                       null
-                  ? NetworkImage(
-                      homePage1Controller.copydata[index].featuredMediaSrcUrl,
+                  ? 
+                  NetworkImage(
+                      homePage1Controller.copydata[index].featuredImageSrc,
                       scale: 0.5)
-                  : NetworkImage(
+                  : 
+                  NetworkImage(
                       'https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
               fit: BoxFit.cover,
             ),
@@ -473,11 +478,13 @@ class _HomePage1State extends State<HomePage1> {
                         "<P>${homePage1Controller.copydata[index].title.rendered}</p>",
                     style: {
                       'p': Style(
-                          color: homePage1Controller
-                                      .copydata[index].featuredMediaSrcUrl !=
+                          color: 
+                          homePage1Controller
+                                      .copydata[index].featuredImageSrc !=
                                   null
                               ? Colors.white
-                              : Colors.black)
+                              : 
+                              Colors.black)
                     },
                   ),
                 );

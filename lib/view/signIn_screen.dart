@@ -78,8 +78,9 @@ class _SignInPageState extends State<SignInPage> {
                           title: Align(
                             alignment: Alignment.centerRight,
                             child: InkWell(
-                              onTap: () {
+                              onTap: () async{
                                 signincontroller.isGuest.value = 'guest';
+                                await apiProvider.getPost('78,82,76,75,73,72,81,79,80,83');
                                 Router.neglect(context, () {
                                   context.goNamed('HOMEPAGE');
                                 });

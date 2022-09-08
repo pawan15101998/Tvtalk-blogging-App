@@ -14,6 +14,8 @@ class YourIntrestController extends GetxController{
  RxList alltagsDetails = [].obs;
  RxBool searchTags =false.obs;
  RxList copyTags = [].obs;
+ RxList tagselectfromsearch = [].obs;
+var isSelected = false.obs;
 //  final apiProvider = ApiProvider();
 // @override
 // void onInit(){

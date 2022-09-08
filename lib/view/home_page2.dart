@@ -127,8 +127,8 @@ class _HomePage2State extends State<HomePage2> {
                                   decoration: BoxDecoration(
                                   color: Colors.grey,
                                     image: DecorationImage(
-                  image:homePage1Controller.copydata[index].featuredMediaSrcUrl != null?
- NetworkImage(homePage1Controller.copydata[index].featuredMediaSrcUrl, scale: 0.5):
+                  image:homePage1Controller.copydata[index].featuredImageSrc != null?
+ NetworkImage(homePage1Controller.copydata[index].featuredImageSrc, scale: 0.5):
   NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
                   fit: BoxFit.cover,),
                                   ),
@@ -138,7 +138,7 @@ class _HomePage2State extends State<HomePage2> {
                                   child: Html(data: '<p>${homePage1Controller.copydata[index].title.rendered}</p>',
                         style: {
                           'p':Style(
-                            color:homePage1Controller.copydata[index].featuredMediaSrcUrl != null ? Colors.white: Colors.black,
+                            color:homePage1Controller.copydata[index].featuredImageSrc != null ? Colors.white: Colors.black,
                             fontSize: FontSize(8)
                           )
                         },
@@ -338,7 +338,7 @@ class _HomePage2State extends State<HomePage2> {
             ),
           )
           : SizedBox(
-                                    height: MediaQuery.of(context).size.height -190,
+            height: MediaQuery.of(context).size.height -190,
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -375,9 +375,9 @@ class _HomePage2State extends State<HomePage2> {
               // width: 200,
               decoration: BoxDecoration(
                   image:DecorationImage(
-                  image:homePage1Controller.copydata[index].featuredMediaSrcUrl != null?
-     NetworkImage(homePage1Controller.copydata[index].featuredMediaSrcUrl, scale: 0.5):
-  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                  image:homePage1Controller.copydata[index].featuredImageSrc != null?
+     NetworkImage(homePage1Controller.copydata[index].featuredImageSrc, scale: 0.5):
+  const NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
                   fit: BoxFit.cover,),),
             ),
           ),
@@ -457,7 +457,7 @@ class _HomePage2State extends State<HomePage2> {
                             child: Html(data:'<p>${homePage1Controller.copydata[index].title.rendered}</p>',
                                               style: {
                                                 'p':Style(
-                                                  color:homePage1Controller.copydata[index].featuredMediaSrcUrl != null? Colors.white: Colors.black
+                                                  color:homePage1Controller.copydata[index].featuredImageSrc != null? Colors.white: Colors.black
                                                 )
                                               },
                                               ),
@@ -489,7 +489,7 @@ Widget buildfeaturedImage(String image, int index, context) {
               Align(
                   alignment: Alignment.topRight,
                   child: Row(
-                    children: [
+                    children: const [
                       Text(
                         "2.5k",
                         style: TextStyle(
@@ -532,12 +532,11 @@ Widget buildfeaturedImage(String image, int index, context) {
       ]);
     }
 
-
-        Widget buildLatestImage(String image, int index) {
+    Widget buildLatestImage(String image, int index) {
       return Stack(
         children: [
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 12),
+          margin:const EdgeInsets.symmetric(horizontal: 12),
           height: 300,
           decoration: BoxDecoration(
               color: Colors.red,
@@ -555,12 +554,12 @@ Widget buildfeaturedImage(String image, int index, context) {
         ),
 
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+          padding:const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
           child: Align(
               alignment: Alignment.centerRight,
               child: SizedBox(
                 width: MediaQuery.of(context).size.width*50/100,
-                child: Text(
+                child:const Text(
                   "How quickly daft jumping zebras vex jocks help fax my big quiz.",
                   textAlign: TextAlign.right,
                   style: TextStyle(color: Colors.white),
@@ -571,7 +570,7 @@ Widget buildfeaturedImage(String image, int index, context) {
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+            padding:const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             child: SizedBox(
               child: ElevatedButton(
                 style: ButtonStyle(
@@ -592,15 +591,14 @@ Widget buildfeaturedImage(String image, int index, context) {
             ),
             ),
         )
-        
       ]);
     }
 
-  Widget buildIndicator() {
+Widget buildIndicator() {
     return AnimatedSmoothIndicator(
       activeIndex: homepage2Controller.sliderHome2index.value,
       count: homePage1Controller.allpostdata.length,
-      effect: JumpingDotEffect(
+      effect:const JumpingDotEffect(
           dotColor: Colors.grey,
           dotHeight: 6,
           dotWidth: 6,
@@ -611,7 +609,7 @@ Widget buildfeaturedImage(String image, int index, context) {
       return AnimatedSmoothIndicator(
         activeIndex: homepage2Controller.SliderHome2Featured.value,
         count: homePage1Controller.allpostdata.length,
-        effect: JumpingDotEffect(
+        effect: const JumpingDotEffect(
             dotColor: Colors.grey,
             dotHeight: 6,
             dotWidth: 6,

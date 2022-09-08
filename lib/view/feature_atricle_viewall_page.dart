@@ -101,7 +101,7 @@ class _FeatureArticleViewAllState extends State<FeatureArticleViewAll> {
                       //     'post/mark-read', {"postId": widget.blogDetail.id});
                     },
                     child: Html(
-                    data:  "<h3>${homePage1Controller.allpostdata[index].title.rendered}</h3>",
+                    data:  "<h4>${homePage1Controller.allpostdata[index].title.rendered}</h4>",
                   
                     ),
                   ),

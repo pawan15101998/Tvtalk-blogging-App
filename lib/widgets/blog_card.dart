@@ -62,12 +62,13 @@ class _BlogCardState extends State<BlogCard> {
           children: [
             InkWell(
               child: Container(
-                height: MediaQuery.of(context).size.height * 20 / 100,
+                height: MediaQuery.of(context).size.height * 22 / 100,
                 width: MediaQuery.of(context).size.width * 25 / 100,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                  image:widget.blogDetail.featuredMediaSrcUrl != null?
- NetworkImage(widget.blogDetail.featuredMediaSrcUrl, scale: 0.5):
+                  image:
+                  widget.blogDetail.featuredImageSrc != null?
+ NetworkImage(widget.blogDetail.featuredImageSrc, scale: 0.5):
   NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
                   fit: BoxFit.cover,),),
               ),
@@ -75,7 +76,7 @@ class _BlogCardState extends State<BlogCard> {
             SizedBox(
               // padding: const EdgeInsets.all(16.0),
               //  width: c_width,
-              height: MediaQuery.of(context).size.height * 20 / 100,
+              height: MediaQuery.of(context).size.height * 22 / 100,
               width: MediaQuery.of(context).size.width - 150,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,7 +115,7 @@ class _BlogCardState extends State<BlogCard> {
                     child: Html(
                     data:  "<h3>${widget.blogDetail.title.rendered}</h3>",
                     // style: {
-                    //   ''
+                    //   ''           
                     // },
                       // overflow: TextOverflow.ellipsis,
                       // maxLines: 3,

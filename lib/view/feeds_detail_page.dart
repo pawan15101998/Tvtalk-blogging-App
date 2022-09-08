@@ -107,10 +107,11 @@ final signincontroller = Get.find<SignInController>();
                     child: FlexibleSpaceBar(
                       collapseMode: CollapseMode.parallax,
                       background: Container(
-                        decoration:  BoxDecoration(
+                        decoration:   BoxDecoration(
                             image: DecorationImage(
-                  image: widget.postData.featuredMediaSrcUrl != null?
- NetworkImage(widget.postData.featuredMediaSrcUrl, scale: 0.5):
+                  image: 
+                  homepage1controller.allpostdata[pageindex].featuredImageSrc != null?
+ NetworkImage(homepage1controller.allpostdata[pageindex].featuredImageSrc, scale: 0.5):
   NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
                   fit: BoxFit.cover,)),
                       ),
@@ -582,7 +583,7 @@ final signincontroller = Get.find<SignInController>();
                                       })),
                                   itemCount: homepage1controller.allpostdata.length,
                                   itemBuilder: ((context, index, realIndex) {
-                                    final urlImage = urlImages[index];
+                                    final urlImage =homepage1controller.allpostdata[index].featuredImageSrc;
                                     return buildSimilarImage(context, urlImage, index,);
                                   }),
                                 ),
@@ -1328,8 +1329,9 @@ final signincontroller = Get.find<SignInController>();
           // width: 200,
           decoration: BoxDecoration(
               image:DecorationImage(
-                    image: widget.postData.featuredMediaSrcUrl != null?
-     NetworkImage(widget.postData.featuredMediaSrcUrl, scale: 0.5):
+                    image:
+                     image != null?
+     NetworkImage(image):
       NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
                     fit: BoxFit.cover,),),
         ),
@@ -1385,7 +1387,7 @@ final signincontroller = Get.find<SignInController>();
                       data: "<P>${homepage1controller.copydata[index].title.rendered}</p>",
                       style: {
                         'p': Style(
-                          color:homepage1controller.copydata[index].featuredMediaSrcUrl != null ? Colors.white: Colors.black
+                          color:homepage1controller.copydata[index].featuredImageSrc != null ? Colors.white: Colors.black
                         )
                       },
                       

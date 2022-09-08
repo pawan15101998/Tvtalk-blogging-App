@@ -23,23 +23,12 @@ searchFunction(String? val) {
     if (val.isEmpty) {
       searchArticle.clear();
       return;
-    }else if(yourIntrestController.alltagsName.contains(val.toLowerCase().trim())){
-      yourIntrestController.alltagsName.forEach((element) {
-        yourIntrestController.searchTags.value = true;
-      print(searchArticle);
-      searchArticle = [].obs;
-      print("ForEach");
-      print(searchArticle);
-      searchArticle.add(val);
-         return;
-       });
-    }
-     else {
+    }else {
       print('not empty');
-      print(homePage1Controller.userTags.value);
+      // print(homePage1Controller.userTags.value);
       allpostdata.forEach((element) {
-        if (element.title.rendered.toLowerCase().contains(val.toLowerCase().trim())){
-          yourIntrestController.searchTags.value = false;
+        if (element.title.rendered.toLowerCase().contains(val)){
+          // yourIntrestController.searchTags.value = false;
           searchArticle = [].obs;
           searchArticle.add(element);
           print(searchArticle);

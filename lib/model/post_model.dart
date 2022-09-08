@@ -33,39 +33,7 @@ class HomePagePost {
         this.meta,
         this.categories,
         this.tags,
-        this.postFormat,
-        this.featuredMediaSrcUrl,
-        this.postSubtitleFlag,
-        this.postSubtitle,
-        this.lastEditorUsedJetpack,
-        this.thumbnailId,
-        this.jnewsPriceLowest,
-        this.formatGalleryImages,
-        this.enableReview,
-        this.name,
-        this.summary,
-        this.brand,
-        this.good,
-        this.bad,
-        this.price,
-        this.jnewsOverrideCounter,
-        this.jnewsSinglePost,
-        this.jnewsPrimaryCategory,
-        this.jnewsCommentsNumber,
-        this.jnewsSocialCounterLastUpdate,
-        this.editLast,
-        this.bunyadReviews,
-        this.wpPageTemplate,
-        this.wpOldSlug,
-        this.wxrImportHasAttachmentRefs,
-        this.bunyadFeaturedDisable,
-        this.bunyadContentSlider,
-        this.bunyadFeaturedVideo,
-        this.bunyadReviewItemAuthor,
-        this.bunyadReviewItemName,
-        this.bunyadReviewHeading,
-        this.bunyadReviewVerdict,
-        this.bunyadReviewVerdictText,
+        this.featuredImageSrc,
         this.links,
     });
 
@@ -92,39 +60,7 @@ class HomePagePost {
     List<dynamic>? meta;
     List<int>? categories;
     List<int>? tags;
-    List<dynamic>? postFormat;
-    String? featuredMediaSrcUrl;
-    String? postSubtitleFlag;
-    String? postSubtitle;
-    String? lastEditorUsedJetpack;
-    String? thumbnailId;
-    String? jnewsPriceLowest;
-    dynamic formatGalleryImages;
-    String? enableReview;
-    dynamic name;
-    dynamic summary;
-    dynamic brand;
-    dynamic good;
-    dynamic bad;
-    dynamic price;
-    dynamic jnewsOverrideCounter;
-    dynamic jnewsSinglePost;
-    dynamic jnewsPrimaryCategory;
-    dynamic jnewsCommentsNumber;
-    dynamic jnewsSocialCounterLastUpdate;
-    dynamic editLast;
-    dynamic bunyadReviews;
-    dynamic wpPageTemplate;
-    dynamic wpOldSlug;
-    dynamic wxrImportHasAttachmentRefs;
-    dynamic bunyadFeaturedDisable;
-    dynamic bunyadContentSlider;
-    dynamic bunyadFeaturedVideo;
-    dynamic bunyadReviewItemAuthor;
-    dynamic bunyadReviewItemName;
-    dynamic bunyadReviewHeading;
-    dynamic bunyadReviewVerdict;
-    dynamic bunyadReviewVerdictText;
+    String? featuredImageSrc;
     Links? links;
 
     factory HomePagePost.fromJson(Map<String, dynamic> json) => HomePagePost(
@@ -151,39 +87,7 @@ class HomePagePost {
         meta: List<dynamic>.from(json["meta"].map((x) => x)),
         categories: List<int>.from(json["categories"].map((x) => x)),
         tags: List<int>.from(json["tags"].map((x) => x)),
-        postFormat: List<dynamic>.from(json["post_format"].map((x) => x)),
-        featuredMediaSrcUrl: json["featured_media_src_url"] == null ? null : json["featured_media_src_url"],
-        postSubtitleFlag: json["post_subtitle_flag"],
-        postSubtitle: json["post_subtitle"],
-        lastEditorUsedJetpack: json["_last_editor_used_jetpack"],
-        thumbnailId: json["_thumbnail_id"],
-        jnewsPriceLowest: json["jnews_price_lowest"],
-        formatGalleryImages: json["_format_gallery_images"],
-        enableReview: json["enable_review"],
-        name: json["name"],
-        summary: json["summary"],
-        brand: json["brand"],
-        good: json["good"],
-        bad: json["bad"],
-        price: json["price"],
-        jnewsOverrideCounter: json["jnews_override_counter"],
-        jnewsSinglePost: json["jnews_single_post"],
-        jnewsPrimaryCategory: json["jnews_primary_category"],
-        jnewsCommentsNumber: json["jnews_comments_number"],
-        jnewsSocialCounterLastUpdate: json["jnews_social_counter_last_update"],
-        editLast: json["_edit_last"],
-        bunyadReviews: json["_bunyad_reviews"],
-        wpPageTemplate: json["_wp_page_template"],
-        wpOldSlug: json["_wp_old_slug"],
-        wxrImportHasAttachmentRefs: json["_wxr_import_has_attachment_refs"],
-        bunyadFeaturedDisable: json["_bunyad_featured_disable"],
-        bunyadContentSlider: json["_bunyad_content_slider"],
-        bunyadFeaturedVideo: json["_bunyad_featured_video"],
-        bunyadReviewItemAuthor: json["_bunyad_review_item_author"],
-        bunyadReviewItemName: json["_bunyad_review_item_name"],
-        bunyadReviewHeading: json["_bunyad_review_heading"],
-        bunyadReviewVerdict: json["_bunyad_review_verdict"],
-        bunyadReviewVerdictText: json["_bunyad_review_verdict_text"],
+        featuredImageSrc: json["featured_image_src"],
         links: Links.fromJson(json["_links"]),
     );
 
@@ -211,39 +115,7 @@ class HomePagePost {
         "meta": List<dynamic>.from(meta!.map((x) => x)),
         "categories": List<dynamic>.from(categories!.map((x) => x)),
         "tags": List<dynamic>.from(tags!.map((x) => x)),
-        "post_format": List<dynamic>.from(postFormat!.map((x) => x)),
-        "featured_media_src_url": featuredMediaSrcUrl == null ? null : featuredMediaSrcUrl,
-        "post_subtitle_flag": postSubtitleFlag,
-        "post_subtitle": postSubtitle,
-        "_last_editor_used_jetpack": lastEditorUsedJetpack,
-        "_thumbnail_id": thumbnailId,
-        "jnews_price_lowest": jnewsPriceLowest,
-        "_format_gallery_images": formatGalleryImages,
-        "enable_review": enableReview,
-        "name": name,
-        "summary": summary,
-        "brand": brand,
-        "good": good,
-        "bad": bad,
-        "price": price,
-        "jnews_override_counter": jnewsOverrideCounter,
-        "jnews_single_post": jnewsSinglePost,
-        "jnews_primary_category": jnewsPrimaryCategory,
-        "jnews_comments_number": jnewsCommentsNumber,
-        "jnews_social_counter_last_update": jnewsSocialCounterLastUpdate,
-        "_edit_last": editLast,
-        "_bunyad_reviews": bunyadReviews,
-        "_wp_page_template": wpPageTemplate,
-        "_wp_old_slug": wpOldSlug,
-        "_wxr_import_has_attachment_refs": wxrImportHasAttachmentRefs,
-        "_bunyad_featured_disable": bunyadFeaturedDisable,
-        "_bunyad_content_slider": bunyadContentSlider,
-        "_bunyad_featured_video": bunyadFeaturedVideo,
-        "_bunyad_review_item_author": bunyadReviewItemAuthor,
-        "_bunyad_review_item_name": bunyadReviewItemName,
-        "_bunyad_review_heading": bunyadReviewHeading,
-        "_bunyad_review_verdict": bunyadReviewVerdict,
-        "_bunyad_review_verdict_text": bunyadReviewVerdictText,
+        "featured_image_src": featuredImageSrc,
         "_links": links!.toJson(),
     };
 }
@@ -447,19 +319,40 @@ class WpTerm {
         this.href,
     });
 
-    String? taxonomy;
+    Taxonomy? taxonomy;
     bool? embeddable;
     String? href;
 
     factory WpTerm.fromJson(Map<String, dynamic> json) => WpTerm(
-        taxonomy: json["taxonomy"],
+        taxonomy: taxonomyValues.map[json["taxonomy"]],
         embeddable: json["embeddable"],
         href: json["href"],
     );
 
     Map<String, dynamic> toJson() => {
-        "taxonomy": taxonomy,
+        "taxonomy": taxonomyValues.reverse[taxonomy],
         "embeddable": embeddable,
         "href": href,
     };
+}
+
+enum Taxonomy { CATEGORY, POST_TAG }
+
+final taxonomyValues = EnumValues({
+    "category": Taxonomy.CATEGORY,
+    "post_tag": Taxonomy.POST_TAG
+});
+
+class EnumValues<T> {
+    Map<String, T> map;
+   late Map<T, String> reverseMap;
+
+    EnumValues(this.map);
+
+    Map<T, String> get reverse {
+        if (reverseMap == null) {
+            reverseMap = map.map((k, v) => new MapEntry(v, k));
+        }
+        return reverseMap;
+    }
 }

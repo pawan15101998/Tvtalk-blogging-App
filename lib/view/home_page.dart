@@ -281,14 +281,17 @@ class _HomePageState extends State<HomePage> {
               //                 ),
               //               ));
             }),
-            Obx(() {
+            Obx((){
               return IconButton(
-                  onPressed: () {
-                    homePageController.searchIcon.toggle();
-                    homePage1Controller.searchArticle.clear(); 
+                  onPressed:(){
+                    context.pushNamed("SEARCHPAGE");
+                    // homePageController.searchIcon.toggle();
+                    // homePage1Controller.searchArticle.clear(); 
                     // homePage1Controller.allpostdata = [];
-                    // apiProvider.getPost(homePage1Controller.userTags.value);
-                  },
+                    // apiProvider.getPost(homePage1Controller.userTags.value); 
+                    },
+            
+
                   icon: homePageController.searchIcon.value
                       ? const Image(
                           image: AssetImage("assets/icons/icon_search.png"),
@@ -304,13 +307,13 @@ class _HomePageState extends State<HomePage> {
                             searchcontroller.clear();
                             homePage1Controller.searchArticle.clear();
                           },
-                          child: Icon(
+                          child:const Icon(
                             Icons.cancel,
                             color: Colors.black,
                           ),
                         ));
             }),
-            SizedBox(
+          const SizedBox(
               width: 10,
             ),
           ],
@@ -536,7 +539,6 @@ class _HomePageState extends State<HomePage> {
                   icon: SizedBox(
                     height: 25,
                     // width: 50,
-                    
                   ),
                   label: "Fun&Games",  
                 ),

@@ -16,6 +16,7 @@ import 'package:tvtalk/view/privacy_policy.dart';
 import 'package:tvtalk/view/profile_page.dart';
 import 'package:tvtalk/view/quiz_already_taken_page.dart';
 import 'package:tvtalk/view/quizes_page.dart';
+import 'package:tvtalk/view/search_page.dart';
 import 'package:tvtalk/view/select_your_intrest.dart';
 import 'package:tvtalk/view/signIn_screen.dart';
 import 'package:tvtalk/view/register_page.dart';
@@ -132,6 +133,11 @@ class CustomRouter{
         name: 'TAGSEARCHPAGE',
         path: tagsearchpage,
         builder: (context, state) =>  TagSearchPage(tagName: state.queryParams,),
+      ),
+       GoRoute(
+        name: 'SEARCHPAGE',
+        path: searchpage,
+        builder: (context, state) =>const SearchPage()
       ),
     ]
     );

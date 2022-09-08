@@ -159,31 +159,13 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                           return InkWell(
                             onTap: () {
                               print("object");
-                              // choice2.add(choices[index]);
-                              // print(choice2[index].title);
-                              // print(choice2);
-                              // choices[index].select = !choices[index].select;
-                              yourIntrestController.choices[index].select
-                                  .toggle();
-                              // choices[index].select = yourIntrestController.yourIntrest.value;
-                              if (yourIntrestController.choices[index].select ==
-                                  true) {
-                                // print(yourIntrestController.allTagsModel!.data![0].id);
-                                // selectedtags.add(yourIntrestController.allTagsModel!.data![index].id);
-                                // selectedtags.assign('tags', yourIntrestController.allTagsModel![index].id);
-                                selectedtags.add(yourIntrestController
-                                    .allTagsModel[index].id);
-                                selectedTagsName.add(yourIntrestController
-                                    .allTagsModel[index].name);
+                              yourIntrestController.choices[index].select.toggle();
+                              if (yourIntrestController.choices[index].select ==true) {
+                                selectedtags.add(yourIntrestController.allTagsModel[index].id);
+                                selectedTagsName.add(yourIntrestController.allTagsModel[index].name);
                                 print("object");
-                                sendSelectedName = selectedTagsName
-                                    .toString()
-                                    .replaceAll("[", "")
-                                    .replaceAll("]", "");
-                                sendSelectedtags = selectedtags
-                                    .toString()
-                                    .replaceAll("[", "")
-                                    .replaceAll("]", "");
+                                sendSelectedName = selectedTagsName.toString().replaceAll("[", "").replaceAll("]", "");
+                                sendSelectedtags = selectedtags.toString().replaceAll("[", "").replaceAll("]", "");
                                 print(sendSelectedName);
                                 print(sendSelectedtags);
                               } else {
