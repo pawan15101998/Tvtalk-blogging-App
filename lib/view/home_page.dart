@@ -144,10 +144,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                             height: 24,
                           ),
-                    onPressed: () {
-                      scaffoldKey.currentState!.openDrawer();
+                    onPressed: () async{
+                      setState(() {});
+                      scaffoldKey.currentState!.openDrawer();  
                     },
-                  ) : SizedBox()
+                  ) : InkWell(
+                    onTap: () {
+                       context.goNamed("SIGNINPAGE");
+                    },
+                    child: Icon(Icons.login, color: Colors.black,))
                 : const SizedBox();
           }),
           actions: [
@@ -331,6 +336,10 @@ class _HomePageState extends State<HomePage> {
                 // }
                 // print(homePageController.birthday);
                 context.pushNamed("PROFILEPAGE");
+                print("this is deyails");
+                print(signincontroller.image);
+                print(homePageController.userDetails['data']['image']);
+
               },
               child: DrawerHeader(
                   child: Row(
@@ -342,10 +351,10 @@ class _HomePageState extends State<HomePage> {
                     width: fontSize.getadaptiveTextSize(context, 60),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: signincontroller.image == null
+                          image: (homePageController.userDetails['data'] == null || homePageController.userDetails['data']['image'] == null)
                               ? const NetworkImage(
-                                  "https://szabul.edu.pk/dataUpload/863noimage.png")
-                              : NetworkImage(signincontroller.image.toString()),
+                                  "https://szabul.edu.pk/dataUpload/863noimage.png"):
+                             NetworkImage("https://tv-talk.hackerkernel.com${homePageController.userDetails['data']['image']}"),
                           fit: BoxFit.cover),
                       shape: BoxShape.circle,
                     ),
@@ -465,25 +474,14 @@ class _HomePageState extends State<HomePage> {
         ),
         // backgroundColor: Colors.red,
       ),
-      body: RefreshIndicator(
-        onRefresh: ()async{
-          homePage1Controller.allpostdata = [].obs;
-          homePage1Controller.copydata = [].obs;
-          apiProvider.allPost = [];
-          await apiProvider.getPost(homePage1Controller.userTags);
-          print("dataLength");
-          print(homePage1Controller.allpostdata.length);
-            setState(() {});
-          },
-        child:homePage1Controller.allpostdata == [] ?Text("No Feed Found")  :Obx(() {
-          return pages[homePageController.bootomNav.value];
-        }),
-      ),
+      body: homePage1Controller.allpostdata == [] ?Text("No Feed Found")  :Obx(() {
+        return pages[homePageController.bootomNav.value];
+      }),
       // bottomNavigationBar: Obx(() {
       //     return buildMynavbar();
       //   }
       // ),
-      bottomNavigationBar: Obx(() {
+      bottomNavigationBar: Obx((){
         return BottomAppBar(
             // clipBehavior: Clip.antiAliasWithSaveLayer,
             // notchMargin: 10,

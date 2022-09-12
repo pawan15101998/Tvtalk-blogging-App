@@ -11,6 +11,7 @@ class YourIntrestController extends GetxController{
   RxBool activeTextfield = false.obs;
  RxList allTagsModel = [].obs;
  RxList alltagsName = [].obs;
+ RxList alltagsId = [].obs;
  RxList alltagsDetails = [].obs;
  RxBool searchTags =false.obs;
  RxList copyTags = [].obs;

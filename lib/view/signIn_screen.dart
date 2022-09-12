@@ -9,6 +9,7 @@ import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/controllers/signIn_network.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
+import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/theme/buttonTheme/button_theme.dart';
 import 'package:tvtalk/theme/text_style.dart';
@@ -30,6 +31,7 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginpasswordController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldkey = new GlobalKey<ScaffoldState>();
+  final yourIntrestController = Get.find<YourIntrestController>();
   late final String? title;
   Timer? _timer;
   late double _progress;
@@ -80,7 +82,7 @@ class _SignInPageState extends State<SignInPage> {
                             child: InkWell(
                               onTap: () async{
                                 signincontroller.isGuest.value = 'guest';
-                                await apiProvider.getPost('78,82,76,75,73,72,81,79,80,83');
+                                await apiProvider.getPost(yourIntrestController.alltagsId.toString().replaceAll('[', '').replaceAll(']', ''));
                                 Router.neglect(context, () {
                                   context.goNamed('HOMEPAGE');
                                 });
@@ -216,7 +218,7 @@ class _SignInPageState extends State<SignInPage> {
                     if (provider.user != null) {
                       // context.goNamed("SELECTYOURINTREST");
                       signincontroller.isGuest.value = '';
-                      await apiProvider.PostSocial("/user/social-login", {
+                      await apiProvider.PostSocial("/user/social-login",{
                         "social_login_type": "1",
                         "name": provider.user.displayName,
                         "email": provider.user.email,
@@ -228,7 +230,6 @@ class _SignInPageState extends State<SignInPage> {
                             : '1'
                       });
                       print("ssssssddd");
-
                       final SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
                       sharedPreferences.setString('email', provider.user.email);
@@ -248,8 +249,8 @@ class _SignInPageState extends State<SignInPage> {
                       print("tags from google");
                       print(sendingTags);
                       await apiProvider.getPost(sendingTags);
-                      if (apiProvider.RegisterResponse['message'] ==
-                          'Logged in successfully') {
+                      if (apiProvider.RegisterResponse['message'] =='Logged in successfully'){
+                        await apiProvider.getprofile();
                         context.goNamed("HOMEPAGE");
                       } else if (apiProvider.RegisterResponse['message'] ==
                           'User Added Successfully') {
@@ -293,7 +294,7 @@ class _SignInPageState extends State<SignInPage> {
                         'image', provider.user['picture']['data']['url']);
                     signincontroller.userName = provider.user['name'];
                     signincontroller.userEmail = provider.user['email'];
-                    signincontroller.image =provider.user['picture']['data']['url'];
+                    signincontroller.image = provider.user['picture']['data']['url'];
                         var tagsss = await apiProvider.getTags();
                       print("sd");
                       print(tagsss);

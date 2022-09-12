@@ -8,3 +8,4 @@ class AdaptiveTextSize {
     return (value / 720) * MediaQuery.of(context).size.height;
   }
 }
+

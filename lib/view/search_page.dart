@@ -180,7 +180,7 @@ String? sendingTags;
                               const TextStyle(
                                 fontSize: 20
                               )
-                              ,))),
+                            ,))),
                           ),
                         );
                       }
@@ -193,11 +193,11 @@ String? sendingTags;
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding:const EdgeInsets.all(8.0),
                 child: _titleContainer("Choose Tags"),
               ),
             ),
-            Padding(padding: EdgeInsets.only(left: 8),
+            Padding(padding:const EdgeInsets.only(left: 8),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Wrap(

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
+import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
 
 class Profilepage extends StatefulWidget {
   const Profilepage({Key? key}) : super(key: key);
@@ -21,13 +22,15 @@ class _ProfilepageState extends State<Profilepage> {
   }
   @override
   Widget build(BuildContext context) {
+    print("this is profile image");
+    print(homePageController.userDetails['data']['image']);
     return  Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(
           margin: EdgeInsets.only(top: 25),
           child: AppBar(
-            backgroundColor: Color(0xffFFDC5C),
+            backgroundColor:const Color(0xffFFDC5C),
             elevation: 0,
             centerTitle: true,
             title:const Text("Profile"),
@@ -47,7 +50,7 @@ class _ProfilepageState extends State<Profilepage> {
         ),
       ),
       body: Container(
-        color: Color(0xfffFFDC5C),
+        color:const Color(0xfffFFDC5C),
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -59,14 +62,18 @@ class _ProfilepageState extends State<Profilepage> {
                 width: 100,
                 decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                image: DecorationImage(image: NetworkImage("${homePageController.userDetails['data']['image']}".split("./public/assets/images/").last),fit: BoxFit.cover,),
+                image: DecorationImage(image:
+                homePageController.userDetails['data']['image'] != null?
+                 NetworkImage("https://tv-talk.hackerkernel.com${homePageController.userDetails['data']['image']}"):
+                 NetworkImage('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png')
+                 ,fit: BoxFit.cover,),
                 ),
               ),
             ),
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height-248,
-              decoration: BoxDecoration(
+              decoration:const BoxDecoration(
               color: Colors.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50) )
               ),
@@ -76,7 +83,7 @@ class _ProfilepageState extends State<Profilepage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Username", style: TextStyle(
+                   const Text("Username", style: TextStyle(
                       color: Colors.grey
                     ),),
                     Text("${homePageController.userDetails['data']['name']}", style: TextStyle(

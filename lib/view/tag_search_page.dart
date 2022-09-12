@@ -35,7 +35,13 @@ class _TagSearchPageState extends State<TagSearchPage> {
     return WillPopScope(
       onWillPop: ()async{
         print("object");
+        print(homePage1Controller.userTags);
+        apiprovider.allPost = [];
+        homePage1Controller.allpostdata.clear();
+        homePage1Controller.copydata.clear();
+        apiprovider.getPost(homePage1Controller.userTags);
         context.pushNamed('HOMEPAGE');
+        setState(() {});
         return false;
       },
       child: Scaffold(

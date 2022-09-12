@@ -49,6 +49,7 @@ List tagdata = [];
 
     print(resetToken);
     if(resetToken != null){
+       await apiProvider.getprofile();
   var tagsss=  await apiProvider.getTags();
         for(var i= 0; i<tagsss['data'].length; i++){
      tagdata.add(tagsss['data'][i]['tagId']);

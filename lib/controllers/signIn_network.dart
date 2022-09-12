@@ -165,10 +165,11 @@ class SignInNetwork {
     for(var i= 0; i<tagsss['data'].length; i++){
      tagdata.add(tagsss['data'][i]['tagId']);
     }
-sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
-homepage1controller.userTags.value = sendingTags;
-print(sendingTags);
+     sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
+     homepage1controller.userTags.value = sendingTags;
+     print(sendingTags);
       await apiProvider.getPost(sendingTags);
+      await apiProvider.getprofile();
       // context.pushNamed('HOMEPAGE');
      signincontroller.isGuest.value = '';
       Router.neglect(context, () {context.goNamed('HOMEPAGE');});

@@ -175,7 +175,7 @@ get()async {
   print("token");
   print(resetToken);
   try{
-    print("111111");
+    print("111112");
     // isDataLoading(true);
     http.Response response = await http.get(
         Uri.parse('$siteurl/wp-json/wp/v2/tags'),
@@ -201,7 +201,9 @@ get()async {
       for(int i = 0; i<allTags.length; i++){
       yourIntrestController.alltagsName.add(allTags[i].name.toLowerCase());
     }
-print(yourIntrestController.alltagsName);
+    for(int i = 0; i<allTags.length; i++){
+      yourIntrestController.alltagsId.add(allTags[i].id);
+    }
       // yourIntrestController.allTagsModel = allTags;
       print("data sucessfuly");
       print(yourIntrestController.allTagsModel[0]);
@@ -227,7 +229,7 @@ getPost(sendingTags)async{
   resetToken = sharedPreferences.getString('reset_token');
   // homepage1controller.allpostdata.clear();
   try{  
-    print("111111");
+    print("111114");
     EasyLoading.show(status: 'loading');
     http.Response response = await http.get(Uri.parse('$siteurl/wp-json/wp/v2/posts/?tags=${sendingTags},'),
         headers: {'Authorization': 'Bearer $resetToken',
@@ -280,7 +282,7 @@ getTags()async {
   print("rokern");
   print(resetToken);
   try{
-    print("111111");
+    print("111113");
     http.Response response = await http.get(Uri.parse('$baseUrl/user/get-user-tags'),
         headers: {'Authorization': 'Bearer $resetToken',
         'Content-Type': 'application/json; charset=UTF-8',
@@ -307,7 +309,7 @@ getprofile()async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   resetToken = sharedPreferences.getString('reset_token');
   try{
-    print("111111");
+    print("111115");
     // isDataLoading(true);
     http.Response response = await http.get(Uri.parse('$baseUrl/user/get-user-details'),
         headers: {'Authorization': 'Bearer $resetToken',
@@ -316,6 +318,7 @@ getprofile()async {
     );
     if(response.statusCode == 200){
       var result = jsonDecode(response.body);
+      print("where is image");
        print(result);
       // yourIntrestController.allTagsModel = allTags;
       // print(result);
@@ -324,6 +327,8 @@ getprofile()async {
       // print(allTags.data![2].tagname);
       // print(result);
       homePageController.userDetails.value = result;
+      print("where is controller image");
+      print(homePageController.userDetails);
       return result;
     }else{
       //error
@@ -346,7 +351,7 @@ getComment(postId)async {
   print(resetToken);
   try{
     EasyLoading.show(status: "Loading...");
-    print("111111");
+    print("111116");
     // isDataLoading(true);
     http.Response response = await http.get(Uri.parse('$baseUrl/post/get-data?postId=$postId'),
         // headers: {'Authorization': 'Bearer $resetToken',

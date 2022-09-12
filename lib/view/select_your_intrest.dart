@@ -276,6 +276,7 @@ sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
 homepage1controller.userTags.value = sendingTags;
 print(sendingTags);
       await apiProvider.getPost(sendingTags);
+      await apiProvider.getprofile();
                   context.pushNamed('HOMEPAGE');
                   yourIntrestController.choices[0].select.value = false;
                   yourIntrestController.choices[1].select.value = false;

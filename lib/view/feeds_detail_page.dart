@@ -36,7 +36,6 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
     'assets/images/slider4.png',
   ];
 
-
   Stream streamController()=> Stream.fromFuture(
         apiprovider.getComment(widget.postData.id)
   );
@@ -68,8 +67,7 @@ final signincontroller = Get.find<SignInController>();
   }
   }
   final homepage1controller = Get.find<HomePage1Controller>();
-
-
+  
   @override
   Widget build(BuildContext context) {
     print('homessss');
@@ -81,6 +79,12 @@ final signincontroller = Get.find<SignInController>();
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: PageView.builder(
+        // onPageChanged: (value)async {
+        //   print("iscomment");
+        //   print(value);
+        // await apiprovider.getComment(widget.feedindex);
+        // setState((){});
+        // },
         itemCount: homepage1controller.copydata.length,
         controller: pageController,
         itemBuilder: (BuildContext context, int pageindex) {
@@ -112,7 +116,7 @@ final signincontroller = Get.find<SignInController>();
                   image: 
                   homepage1controller.allpostdata[pageindex].featuredImageSrc != null?
  NetworkImage(homepage1controller.allpostdata[pageindex].featuredImageSrc, scale: 0.5):
-  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+ const NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
                   fit: BoxFit.cover,)),
                       ),
                     ),
@@ -138,7 +142,7 @@ final signincontroller = Get.find<SignInController>();
                                   );
                                 })))),
                     Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5),
+                        padding:const EdgeInsets.symmetric(horizontal: 5),
                         child: InkWell(
                           onTap: () {
                             print(detailpageController
@@ -274,7 +278,7 @@ final signincontroller = Get.find<SignInController>();
                                         children: [
                                         Text(
                                               homepage1controller.copydata[pageindex].date.toString().split(" ").first,
-                                            style: TextStyle(color: Color(0xff949494),
+                                            style: const TextStyle(color: Color(0xff949494),
                                             fontSize: 12
                                             ),
                                           ),
@@ -313,7 +317,7 @@ final signincontroller = Get.find<SignInController>();
                                           Row(
                                             children: [
                                              const Text(
-                                                "Saved",
+                                                "Save",
                                                 style:
                                                     TextStyle(color: Color(0xff949494)),
                                               ),
@@ -873,9 +877,12 @@ final signincontroller = Get.find<SignInController>();
           children: [
             Row(
               children: [
-                const CircleAvatar(
-                  backgroundImage:
-                      NetworkImage('https://picsum.photos/id/237/200/300'),
+                 CircleAvatar(
+                  backgroundImage: detailpageController
+                      .commentData!.data!.comments!.rows![0].user!.image != null ?
+                       NetworkImage("https://tv-talk.hackerkernel.com${detailpageController.commentData!.data!.comments!.rows![0].user!.image}"):
+                      NetworkImage('https://picsum.photos/id/237/200/300', ),
+                  
                 ),
                 const SizedBox(
                   width: 10,
@@ -893,7 +900,7 @@ final signincontroller = Get.find<SignInController>();
               ],
             ),
             Text(
-              timeago.format(DateTime.now()),
+              timeago.format(DateTime.parse(detailpageController.commentData!.data!.comments!.rows![0].createdDate!)),
               // DateTime.now().toString(),
               // detailpageController
               //     .commentData!.data!.comments!.rows![0].createdDate
@@ -999,8 +1006,9 @@ final signincontroller = Get.find<SignInController>();
         Row(
           children: [
             CircleAvatar(
-              backgroundImage:
-                  NetworkImage('https://picsum.photos/id/237/200/300'),
+              backgroundImage: detailpageController.commentData!.data!.comments!.rows![index].replies![ind].user!.image != null?
+                  NetworkImage('https://tv-talk.hackerkernel.com/${detailpageController.commentData!.data!.comments!.rows![index].replies![ind].user!.image}'):
+                  NetworkImage("https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg")
             ),
             SizedBox(
               width: 10,
@@ -1052,9 +1060,8 @@ final signincontroller = Get.find<SignInController>();
                     ],
                   ),
                   Text(
-                    detailpageController.commentData!.data!.comments!
-                        .rows![index].replies![ind].createdDate
-                        .toString(),
+                    // timeago.format(DateTime.parse('2022-09-09 09:26:12')),
+                    timeago.format(DateTime.parse(detailpageController.commentData!.data!.comments!.rows![0].createdDate!)),
                     style: TextStyle(color: Color(0xff949494)),
                   )
                 ],
@@ -1082,7 +1089,7 @@ final signincontroller = Get.find<SignInController>();
               children: [
                 CircleAvatar(
                   backgroundImage:
-                      NetworkImage('https://picsum.photos/id/237/200/300'),
+                      NetworkImage("https://tv-talk.hackerkernel.com/${detailpageController.commentData!.data!.comments!.rows![index].user!.image}"),
                 ),
                 SizedBox(
                   width: 10,
@@ -1096,23 +1103,16 @@ final signincontroller = Get.find<SignInController>();
                           ? Colors.white
                           : Colors.black),
                 )
-              ],                  
-                                    
-                                   
-                                   
+              ],                                        
             ),
             Text(
-              // detailpageController
-              //     .commentData!.data!.comments!.rows![0].createdDate
-                  detailpageController
-                  .commentData!.data!.comments!.rows![index].createdDate
-                  .toString(),
+              timeago.format(DateTime.parse(detailpageController.commentData!.data!.comments!.rows![0].createdDate!)),
               style: TextStyle(color: Color(0xff949494)),
             )
           ],
         ),
         Padding(
-          padding: EdgeInsets.only(
+          padding:const EdgeInsets.only(
             left: 40,
           ),
           child: Column(
@@ -1146,7 +1146,7 @@ final signincontroller = Get.find<SignInController>();
                             width: 20,
                             child: Image(
                                 image: detailpageController.commentData!.data!.comments!.rows![index].commentLikes != 0 
-                                ? AssetImage(
+                                ?  AssetImage(
                                     'assets/icons/icon_heart.png', ): AssetImage(
                                     'assets/icons/icon_interest.png',), 
                                     color: detailpageController.isDark.value == true ? Colors.white: Colors.black,)),
@@ -1237,7 +1237,7 @@ final signincontroller = Get.find<SignInController>();
                                                       },
                                                     ),
                                                   );
-                                                  ScaffoldMessenger.of(context)
+                            ScaffoldMessenger.of(context)
                                                       .showSnackBar(snackBar);
                                                       setState(() {
                                                         
@@ -1245,9 +1245,8 @@ final signincontroller = Get.find<SignInController>();
                           replayController![index].clear();
                             }
                             apiprovider.getComment(widget.postData.id);
-                            
                           },
-                          child: SizedBox(
+                          child:const SizedBox(
                               height: 15,
                               width: 15,
                               child: Image(
@@ -1255,7 +1254,7 @@ final signincontroller = Get.find<SignInController>();
                                       AssetImage("assets/icons/replay.png")))),
                       fillColor: const Color(0xffFEDC5D),
                       border: InputBorder.none,
-                      label: Text(
+                      label: const Text(
                         "Replay.",
                       ),
                     )),
