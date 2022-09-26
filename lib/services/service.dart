@@ -15,6 +15,7 @@ import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/model/all_tags_model.dart';
 import 'package:tvtalk/model/get_comment_model.dart';
 import 'package:tvtalk/model/post_model.dart';
+import 'package:tvtalk/model/saved_articles_model.dart';
 
 class ApiProvider{
 String baseUrl = 'https://tv-talk.hackerkernel.com/api/v1';
@@ -24,6 +25,7 @@ var RegisterResponse;
 String? resetToken;
 var allTags = [];
 List? allPost = [];
+List? savedPost = [];
 Map usertag = {};
   final getallcommment = GetComment();
 // Map? allcomment;
@@ -40,7 +42,7 @@ Future Post(String url, Map<String, String>body) async{
   print(url);
   print(body);
   print(jsonEncode(body));
-  EasyLoading.show(status: 'loading');
+  // EasyLoading.show(status: 'loading');
   try {
   final response = await http.post(
     Uri.parse(baseUrl+url),
@@ -50,7 +52,7 @@ Future Post(String url, Map<String, String>body) async{
     },
     body: jsonEncode(body)
 );
-  EasyLoading.dismiss();
+  // EasyLoading.dismiss();
   RegisterResponse = json.decode(response.body);
   print("resssssss");
   // print(RegisterResponse['data']['reset_token']);
@@ -73,7 +75,7 @@ Future PostSocial(String url, Map<String, String>body) async{
   print(url);
   print(body);
   print(jsonEncode(body));
-  EasyLoading.show(status: 'loading');
+  // EasyLoading.show(status: 'loading');
   try {
   final response = await http.post(
     Uri.parse(baseUrl+url),
@@ -83,7 +85,7 @@ Future PostSocial(String url, Map<String, String>body) async{
     },
     body: jsonEncode(body)
 );
-  EasyLoading.dismiss();
+  // EasyLoading.dismiss();
   RegisterResponse = json.decode(response.body);
   print("resssssss");
   print(response.statusCode);
@@ -101,7 +103,6 @@ Future PostSocial(String url, Map<String, String>body) async{
     print(e);
 }
 }
-
 
 Future postApi(String url, Map<String, dynamic>body) async{
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -141,33 +142,99 @@ Future postApi(String url, Map<String, dynamic>body) async{
 }
 }
 
-//  dioPost(String url , Map<String, dynamic>body)async{
-//   print(jsonEncode(body));
-//   print(resetToken);
-//     // FormData formData = FormData.from
-//   try {
-//     print("trying");
-//     print(baseUrl+url);
-//     final response = await dio.post(baseUrl+url,
-//     data: {
-//       "tags": [12,22,55], 
-//       },
-//     options: Options(
-//       contentType: Headers.formUrlEncodedContentType,
-//       headers: {
-//         "Content-type": "application/x-www-form-urlencoded",
-//         'authorization': "Bearer " + resetToken!}
-//     )
-//     );
-//     print("resposnse");
-//     print(response);
-//     return response.data;
-//   }catch (e) {
-//       print('iiiiiiiiiiiiiiiiiiiiii');
-//       print(e);
-//     }
-// }
+Future removeFcmToken(String url) async{
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
+  print("response ULS");
+  print(resetToken);
+  print(url);
+  // print(body);
+  // print(jsonEncode(body));
+  // EasyLoading.show(status: 'loading');
+  try {
+  final response = await http.post(
+    Uri.parse(baseUrl+url),
+    // /user/signup
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'authorization': 'Bearer ${resetToken!}',
+    },
+    // body: body
+  );
+  // EasyLoading.dismiss();
+  print("remove fcm token");
+  print(response.body);
+  RegisterResponse = json.decode(response.body);
+  statuscode = response.statusCode;
+  print(response.statusCode);
+  // statuscode = response.statusCode;
+  if (response.statusCode == 200) {
+    print("responseee");
+    print(RegisterResponse);
+    print(response.body);
+  }
+    return RegisterResponse;
+} on Exception catch (e) {
+  print("error");
+    print(e);
+}
+}
 
+Future saveArticle(String url, Map<String, dynamic>body) async{
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
+  try {
+  final response = await http.post(
+    Uri.parse(baseUrl+url),
+    headers: <String, String>{
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'authorization': 'Bearer ${resetToken!}',
+    },
+    body: body
+  );
+  print("saved article response");
+  print(response.body);
+  RegisterResponse = json.decode(response.body);
+  statuscode = response.statusCode;
+  if (response.statusCode == 200) {
+    print(RegisterResponse);
+
+  }
+    return RegisterResponse;
+} on Exception catch (e) {
+  print("error");
+    print(e);
+}
+}
+
+
+
+// Future saveFCMToken(String url, Map<String, dynamic>body) async{
+//   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+//   resetToken = sharedPreferences.getString('reset_token');
+//   try {
+//   final response = await http.post(
+//     Uri.parse(baseUrl+url),
+//     headers: <String, String>{
+//       'Content-Type': 'application/x-www-form-urlencoded',
+//       'authorization': 'Bearer ${resetToken!}',
+//     },
+//     body: body
+//   );
+//   print("saved article response");
+//   print(response.body);
+//   RegisterResponse = json.decode(response.body);
+//   statuscode = response.statusCode;
+//   if (response.statusCode == 200) {
+//     print(RegisterResponse);
+
+//   }
+//     return RegisterResponse;
+// } on Exception catch (e) {
+//   print("error");
+//     print(e);
+// }
+// }
 
 get()async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -222,6 +289,37 @@ get()async {
   }
 }
 
+getSavedPost(postId)async{
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
+  try{  
+    // EasyLoading.show(status: 'loading');
+    http.Response response = await http.get(Uri.parse('$siteurl/wp-json/wp/v2/posts?include=$postId'),
+        headers: {'Authorization': 'Bearer $resetToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+    );
+    // EasyLoading.dismiss();
+    if(response.statusCode == 200){
+      var result = jsonDecode(response.body);
+      savedPost = [];
+      homePageController.savedArticles = [];
+      for (var item in result){     
+        savedPost!.add(SavedPostPage.fromJson(item));
+       homePageController.savedArticles = savedPost!;
+       print(homePageController.savedArticles);
+      }
+    }else{
+      print("err");
+    }
+  }catch(e){
+    // EasyLoading.dismiss();
+
+  }finally{
+    print("object");
+  }
+}
+
 getPost(sendingTags)async{
   print("taggggggggggggggg");
   print(sendingTags);
@@ -230,13 +328,13 @@ getPost(sendingTags)async{
   // homepage1controller.allpostdata.clear();
   try{  
     print("111114");
-    EasyLoading.show(status: 'loading');
+    // EasyLoading.show(status: 'loading');
     http.Response response = await http.get(Uri.parse('$siteurl/wp-json/wp/v2/posts/?tags=${sendingTags},'),
         headers: {'Authorization': 'Bearer $resetToken',
         'Content-Type': 'application/json; charset=UTF-8',
         },
     );
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
     if(response.statusCode == 200){
        homepage1controller.allpostdata = [].obs;
       ///data successfully
@@ -275,6 +373,33 @@ getPost(sendingTags)async{
     print("object");
   }
 }
+
+
+getArticleStatus()async {
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
+  try{
+    print("111113");
+    http.Response response = await http.get(Uri.parse('$baseUrl/post/read-status'),
+        headers: {'Authorization': 'Bearer $resetToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+    );
+    if(response.statusCode == 200){
+      var result = jsonDecode(response.body);
+      print("This is user article staus");
+      homePageController.readArticle.value = result;
+      print(result);
+      return result;
+    }else{
+      print("err");
+    }
+  }catch(e){
+    print('Error while getting data is $e');
+  }finally{
+    print("object");
+  }
+}
  
 getTags()async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -294,6 +419,31 @@ getTags()async {
       print(response.body);
       print(result);
       print("data sucessfuly");
+      return result;
+    }else{
+      print("err");
+    }
+  }catch(e){
+    print('Error while getting data is $e');
+  }finally{
+    print("object");
+  }
+}
+
+getSavedArticle(userId)async {
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
+  try{
+    http.Response response = await http.get(Uri.parse('$baseUrl/user/get-saved-articles/$userId'),
+        headers: {'Authorization': 'Bearer $resetToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+    );
+    detailpagecontroller.savedArticlePostId.value = [];
+    if(response.statusCode == 200){
+      var result = jsonDecode(response.body);
+      detailpagecontroller.savedArticlePostId.value = result;
+      print(result);
       return result;
     }else{
       print("err");
@@ -346,11 +496,11 @@ getprofile()async {
 getComment(postId)async {
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   resetToken = sharedPreferences.getString('reset_token');
-    print("comment");
+  print("comment");
   print(postId);
   print(resetToken);
   try{
-    EasyLoading.show(status: "Loading...");
+    // EasyLoading.show(status: "Loading...");
     print("111116");
     // isDataLoading(true);
     http.Response response = await http.get(Uri.parse('$baseUrl/post/get-data?postId=$postId'),
@@ -376,13 +526,13 @@ getComment(postId)async {
       //error
       print("err");
     }
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
   }catch(e){
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
     // log('Error while getting data is $e');
     print('Error while getting data is $e');
   }finally{
-    EasyLoading.dismiss();
+    // EasyLoading.dismiss();
     // isDataLoading(false);
     print("object");
   }

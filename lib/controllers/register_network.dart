@@ -28,12 +28,14 @@ class RegisterNetwork{
           message: "user created successfully and otp sent to mail",
           duration: Duration(seconds: 2),
         ).show(context);
-        print("Responsessssssssss");
+        print("Responsessssssssssres");
        print(RegisterResponse['data']['reset_token']);
         RegisterOtpDialog().showBottomDialog(context, emailController, nameController, passwordController, cnfpasswordController);
         final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
        sharedPreferences.setString("reset_token", RegisterResponse['data']['reset_token']);
        sharedPreferences.setString("name", RegisterResponse['data']['name']);
+       sharedPreferences.setString("userId", RegisterResponse['data']['userId'].toString());
+       print(apiProvider.RegisterResponse);
        signincontroller.userName = RegisterResponse['data']['name'];
        signincontroller.userEmail = RegisterResponse['data']['email'];
       }else if(RegisterResponse['message'] =='User already exist please login.'){

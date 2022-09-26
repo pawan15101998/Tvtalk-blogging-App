@@ -11,6 +11,7 @@ import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/view/home_page.dart';
+import 'package:tvtalk/view/profile_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -46,7 +47,7 @@ List tagdata = [];
     String? resetToken = sharedPreferences.getString('reset_token');
     print("Resettoken");
     print(yourIntrestController.allTagsModel);
-
+     
     print(resetToken);
     if(resetToken != null){
        await apiProvider.getprofile();
@@ -54,10 +55,34 @@ List tagdata = [];
         for(var i= 0; i<tagsss['data'].length; i++){
      tagdata.add(tagsss['data'][i]['tagId']);
   }
-sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
-homepage1controller.userTags.value = sendingTags;
-print(sendingTags);
+   sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
+   homepage1controller.userTags.value = sendingTags;
+   print(sendingTags);
       await apiProvider.getPost(sendingTags);
+      await  apiProvider.getArticleStatus();
+      homePageController.readArticleId.value = [];
+           homePageController.allPostId.value = [];
+     for(int i =0; i<homePageController.readArticle.length; i++){
+        homePageController.readArticleId.add(homePageController.readArticle[i]['articleId']);
+       }
+       for(int i =0; i<homepage1controller.allpostdata.length; i++){
+        homePageController.allPostId.add(homepage1controller.allpostdata[i].id);
+       }
+       for(int i = 0; i<homePageController.allPostId.length; i++){
+        if(homePageController.readArticleId.contains(homePageController.allPostId[i])){
+          homepage1controller.copydata[i].read = true;
+           homepage1controller.allpostdata[i].read = true;
+          print("hjvbdsjfd");
+          print(homepage1controller.copydata[i].read);
+          // homepage1controller.allpostdata.add({"read": true});
+        }else{
+          homepage1controller.copydata[i].read = false;
+          homepage1controller.allpostdata[i].read = false;
+        }
+       }
+        print("djkhaks");
+       print(homepage1controller.copydata[1].read);
+       
     }
       Timer(const Duration(microseconds: 0),()=> finalEmail == null ? 
       Router.neglect(context, () {context.goNamed('SIGNINPAGE');}):

@@ -73,7 +73,7 @@ class _HomePage3State extends State<HomePage3> {
             ),
             CarouselSlider.builder(
               options: CarouselOptions(
-                  height: 400.0,
+                  height: 300.0,
                   // autoPlay: true,
                   onPageChanged: ((index, reason) {
                     // homePage1 = index;
@@ -160,9 +160,12 @@ class _HomePage3State extends State<HomePage3> {
             ),
             ListView.builder(
                     shrinkWrap: true,
+                    physics:const ScrollPhysics(),
                     itemCount: homePage1Controller.allpostdata.length,
                     itemBuilder:(context, index) {
+                      // bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
                       return  BlogCard(
+                        // isread: isread,
                         indexx: index,
                     context: context,
                     blogDetail: homePage1Controller.allpostdata[index]

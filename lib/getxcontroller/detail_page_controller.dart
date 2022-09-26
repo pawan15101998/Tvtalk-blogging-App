@@ -10,9 +10,13 @@ class DetailPageController extends GetxController{
   RxInt activeBorder = 1.obs;
   RxInt fontFamily = 1.obs;
   RxInt fontSize = 16.obs;
+  RxBool saveArticles = false.obs;
   RxBool articleRead = false.obs;
   RxBool islike = false.obs;
   GetComment? commentData;
+  List articleId = [];
+  RxBool isArticleSaved = false.obs;
+  RxList savedArticlePostId = [].obs;
 
  fontfamily(color){
     return TextStyle(

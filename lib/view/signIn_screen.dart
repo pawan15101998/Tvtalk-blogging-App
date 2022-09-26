@@ -36,7 +36,7 @@ class _SignInPageState extends State<SignInPage> {
   Timer? _timer;
   late double _progress;
   var signInNetwork = SignInNetwork();
-    List tagdata = [];
+  List tagdata = [];
   final homepage1controller = Get.find<HomePage1Controller>();
   String sendingTags = "";
 
@@ -153,7 +153,7 @@ class _SignInPageState extends State<SignInPage> {
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         // fontFamily: 'ExtraLight',
-                        color: Color(0xfff0701BF),
+                        color: Color(0xff0701BF),
                         // fontFamily: 'Quicksand'
                       ),
                     ),
@@ -206,15 +206,7 @@ class _SignInPageState extends State<SignInPage> {
                     await provider.googleLogin();
                     String birthday = await provider.getBirthday();
                     // await provider.getGender();
-                    // await provider.getGender();
-                    print("userinfo from googl");
-                    print(provider.user);
-                    print(provider.user.displayName);
-                    print(provider.user.email);
-                    print(provider.user.id);
-                    print(provider.user.photoUrl);
-                    print(signincontroller.googleUserGender);
-                    print(signincontroller.googleUserDob);
+                    // await provider.getGender();           
                     if (provider.user != null) {
                       // context.goNamed("SELECTYOURINTREST");
                       signincontroller.isGuest.value = '';
@@ -229,7 +221,6 @@ class _SignInPageState extends State<SignInPage> {
                             ? '0'
                             : '1'
                       });
-                      print("ssssssddd");
                       final SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
                       sharedPreferences.setString('email', provider.user.email);
@@ -239,15 +230,11 @@ class _SignInPageState extends State<SignInPage> {
                       signincontroller.userEmail = provider.user.email;
                       signincontroller.image = provider.user.photoUrl;
                       var tagsss = await apiProvider.getTags();
-                      print("sd");
-                      print(tagsss);
                       for (var i = 0; i < tagsss['data'].length; i++){
                         tagdata.add(tagsss['data'][i]['tagId']);
                       }
                       sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
                       homepage1controller.userTags.value = sendingTags;
-                      print("tags from google");
-                      print(sendingTags);
                       await apiProvider.getPost(sendingTags);
                       if (apiProvider.RegisterResponse['message'] =='Logged in successfully'){
                         await apiProvider.getprofile();
@@ -268,11 +255,9 @@ class _SignInPageState extends State<SignInPage> {
                 color: facebookColor,
                 textColor: Colors.white,
                 onPress: () async {
-                  final provider =
-                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                   await provider.facebookLogin();
                   if (provider.user != null) {
-                    print("facebook email");
                     signincontroller.isGuest.value = '';
                     await apiProvider.PostSocial("/user/social-login", {
                       "social_login_type": "2",
@@ -281,10 +266,6 @@ class _SignInPageState extends State<SignInPage> {
                       "social_login_id": provider.user['id'],
                       "image": provider.user['picture']['data']['url']
                     });
-                    print("ssssssssss");
-                    print(apiProvider.RegisterResponse['message']);
-                    print(apiProvider.RegisterResponse);
-                    
                     final SharedPreferences sharedPreferences =
                         await SharedPreferences.getInstance();
                     sharedPreferences.setString(
@@ -296,25 +277,21 @@ class _SignInPageState extends State<SignInPage> {
                     signincontroller.userEmail = provider.user['email'];
                     signincontroller.image = provider.user['picture']['data']['url'];
                         var tagsss = await apiProvider.getTags();
-                      print("sd");
-                      print(tagsss);
-                      for (var i = 0; i < tagsss['data'].length; i++){
-                        tagdata.add(tagsss['data'][i]['tagId']);
-                      }
+                      // for (var i = 0; i < tagsss['data'].length; i++){
+                      //   tagdata.add(tagsss['data'][i]['tagId']);
+                      // }
                       sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
                       homepage1controller.userTags.value = sendingTags;
-                      print("tags from google");
-                      print(sendingTags);
                       await apiProvider.getPost(sendingTags);
+                      print("salkdjaskj");
+                      print(apiProvider.RegisterResponse);
                       if (apiProvider.RegisterResponse['message'] ==
-                        'Email already Exist') {
+                        'Logged in successfully') {
                       context.pushNamed("HOMEPAGE");
                     } else if (apiProvider.RegisterResponse['message'] ==
                         'User Added Successfully') {
                       context.goNamed("SELECTYOURINTREST");
                     }
-                    print("facebookdata");
-                    print(provider.user);
                   }
                 },
               ),

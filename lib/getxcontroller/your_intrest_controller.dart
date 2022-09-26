@@ -29,13 +29,16 @@ RxList images = [
   ""
  ].obs;
  RxList<Choice> choices = <Choice>[  
- Choice(title: 'assets/images/intrest1.jpg', icon: Icons.home, select: false.obs),  
- Choice(title: 'assets/images/intrest2.jpg', icon: Icons.contacts, select: false.obs),  
- Choice(title: 'assets/images/intrest3.jpg', icon: Icons.map, select: false.obs),  
- Choice(title: 'assets/images/intrest4.webp', icon: Icons.phone, select: false.obs),  
- Choice(title: 'assets/images/intrest5.jpg', icon: Icons.camera_alt, select: false.obs),  
- Choice(title: 'assets/images/intrest6.jpg', icon: Icons.settings, select: false.obs),  
- Choice(title: 'assets/images/intrest6.jpg', icon: Icons.settings, select: false.obs),  
+ Choice(title: 'assets/images/1000-Sister.png', icon: Icons.home, select: false.obs),  
+ Choice(title: 'assets/images/LittleJohnstone.png', icon: Icons.contacts, select: false.obs),  
+ Choice(title: 'assets/images/Cover_Variation.png', icon: Icons.map, select: false.obs),  
+ Choice(title: 'assets/images/Bold&Beautifull.png', icon: Icons.phone, select: false.obs),  
+ Choice(title: 'assets/images/daysOfOurLife.png', icon: Icons.camera_alt, select: false.obs),  
+ Choice(title: 'assets/images/GeneralHospital.png', icon: Icons.settings, select: false.obs),  
+ Choice(title: 'assets/images/LittlePeopleBigWorld.png', icon: Icons.settings, select: false.obs),  
+ Choice(title: 'assets/images/My600lb.png', icon: Icons.settings, select: false.obs),  
+ Choice(title: 'assets/images/OutDaughter.png', icon: Icons.settings, select: false.obs),  
+ Choice(title: 'assets/images/TheRealHouseWives.png', icon: Icons.settings, select: false.obs),  
 //  Choice(title: 'GPS', icon: Icons.gps_fixed),  
 ].obs;
 }

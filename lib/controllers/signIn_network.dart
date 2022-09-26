@@ -1,4 +1,5 @@
 import 'package:another_flushbar/flushbar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +10,7 @@ import 'package:tvtalk/routers.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/view/dialog/forgot_password_dialog.dart';
 import 'package:tvtalk/view/home_page.dart';
+import 'package:tvtalk/view/profile_page.dart';
 
 class SignInNetwork {
   var apiProvider = ApiProvider();
@@ -138,28 +140,36 @@ class SignInNetwork {
     print(LoginResponse['message']);
     // print(LoginResponse['data']['reset_token']);
     if(LoginResponse['message'] == 'Logged in successfully') {
-      final snackBar = SnackBar(
-        content: const Text('Logged in successfully'),
-        backgroundColor: Colors.green,
-        action: SnackBarAction(
-          label: '',
-          onPressed:(){
-            // Some code to undo the change.
-          },
-        ),
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       String resetToken = LoginResponse['data']['reset_token'];
       String userName = LoginResponse['data']['name'];
       final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
       sharedPreferences.setString('email', loginEmailController);
       sharedPreferences.setString("name", LoginResponse['data']['name']);
       sharedPreferences.setString("reset_token", resetToken);
+      sharedPreferences.setString("userId", LoginResponse['data']['id'].toString());
+      String? token = await FirebaseMessaging.instance.getToken();
+      print("fcm Token//");
+      print(token);
+      apiProvider.postApi("/user/fcm-token", {"fcm_token": token});
+      print("is fcm token save");
+      print(apiProvider.RegisterResponse);
       signincontroller.userName = LoginResponse['data']['name'];
       signincontroller.userEmail = loginEmailController;
-      print("tokennnn");
-      print(resetToken);
+      print("tokennnsdjhsn");
+      print(signincontroller.userId);
       var tagsss=  await apiProvider.getTags();
+       await  apiProvider.getArticleStatus();
+       print(homePageController.readArticle[0]['articleId']);       
+       for(int i =0; i<homePageController.readArticle.length; i++){
+        homePageController.readArticleId.add(homePageController.readArticle[i]['articleId']);
+       }
+       for(int i =0; i<homepage1controller.allpostdata.length; i++){
+        homePageController.allPostId.add(homepage1controller.allpostdata[i].id);
+       }
+
+       print("this is article if");
+       print(homePageController.readArticleId);
+
      print("sd");
      print(tagsss);
     for(var i= 0; i<tagsss['data'].length; i++){
@@ -172,6 +182,38 @@ class SignInNetwork {
       await apiProvider.getprofile();
       // context.pushNamed('HOMEPAGE');
      signincontroller.isGuest.value = '';
+           await  apiProvider.getArticleStatus();
+           homePageController.readArticleId.value = [];
+           homePageController.allPostId.value = [];
+     for(int i =0; i<homePageController.readArticle.length; i++){
+        homePageController.readArticleId.add(homePageController.readArticle[i]['articleId']);
+       }
+       for(int i =0; i<homepage1controller.allpostdata.length; i++){
+        homePageController.allPostId.add(homepage1controller.allpostdata[i].id);
+       }
+       for(int i = 1; i<homePageController.allPostId.length; i++){
+        if(homePageController.readArticleId.contains(homePageController.allPostId[i])){
+          homepage1controller.copydata[i].read = true;
+           homepage1controller.allpostdata[i].read = true;
+          print("hjvbdsjfd");
+          print(homepage1controller.copydata[i].read);
+          // homepage1controller.allpostdata.add({"read": true});
+        }else{
+          homepage1controller.copydata[i].read = false;
+          homepage1controller.allpostdata[i].read = false;
+        }
+       }
+       final snackBar = SnackBar(
+        content: const Text('Logged in successfully'),
+        backgroundColor: Colors.green,
+        action: SnackBarAction(
+          label: '',
+          onPressed:(){
+            // Some code to undo the change.
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Router.neglect(context, () {context.goNamed('HOMEPAGE');});
     } else if(LoginResponse['message'] ==
         'Wrong password entered.'){

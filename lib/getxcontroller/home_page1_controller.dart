@@ -25,11 +25,12 @@ searchFunction(String? val) {
       return;
     }else {
       print('not empty');
+      print(searchArticle.length);
       // print(homePage1Controller.userTags.value);
       allpostdata.forEach((element) {
         if (element.title.rendered.toLowerCase().contains(val)){
           // yourIntrestController.searchTags.value = false;
-          searchArticle = [].obs;
+          // searchArticle = [].obs;
           searchArticle.add(element);
           print(searchArticle);
           print('value');

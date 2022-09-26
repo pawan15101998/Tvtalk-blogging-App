@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:another_flushbar/flushbar.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -141,8 +142,15 @@ class RegisterOtpDialog {
                                         print(email);
                                         // context.pushNamed('HOMEPAGE');
                                         // String resetToken = emailVerify['data'].reset_token;
-                                        print(emailVerify['data'].reset_token);
+                                        // print(emailVerify['data'].reset_token);
                                         sharedPreferences.setString('email', email);
+                                        print("this is fcm");
+                                        String? token = await FirebaseMessaging.instance.getToken();
+                                        print("fcm");
+                                        print(token);
+                                        apiProvider.postApi("/user/fcm-token", {"fcm_token": token});
+                                        print("is fcm token save");
+                                        print(apiProvider.RegisterResponse);
                                         // sharedPreferences.setString("reset_token", resetToken);
                                       }else if(emailVerify['message'] == 'Email already verified.'){
                                         Flushbar(

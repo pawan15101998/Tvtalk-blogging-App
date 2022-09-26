@@ -21,14 +21,23 @@ class _HomePage2State extends State<HomePage2> {
     'assets/images/slider1.png',
     'assets/images/slider2.png',
     'assets/images/slider3.png',
-    'assets/images/slider4.png',
+    'assets/images/slider4.png'
   ];
   final apiprovider = ApiProvider();
   var homepage2Controller = Get.find<HomePage2Controller>();
     var homePage1Controller = Get.find<HomePage1Controller>();
   int activeIndex = 0;
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("jhcbzxckj");
+  //  print(homePageController.allPostId);
+  //  print(homePageController.readArticleId);
+   var isreadd =  homePageController.allPostId.where((elem)=>homePageController.readArticleId.contains(elem));
+  //  print(isreadd);
+  }
+  Widget build(BuildContext context){
     return Scaffold(
       body: Obx(
          () {
@@ -42,11 +51,12 @@ class _HomePage2State extends State<HomePage2> {
                         // scrollDirection: Axis.vertical,
                         itemCount: homePage1Controller.searchArticle.length,
                         itemBuilder: (context, index) {
-                          print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-
-                          print(homePage1Controller.allpostdata.length);
-                          print('obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+                        // bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
+                          print('hemloo');
+                          // print(homePage1Controller.allpostdata.length);
+                          print('dkahishk');
                           return BlogCard(
+                            // isread: isread,
                             indexx: index,
                             context: context,
                             blogDetail:
@@ -84,7 +94,7 @@ class _HomePage2State extends State<HomePage2> {
              const SizedBox(
                   height: 20,
                 ),
-                Obx(() {
+                Obx(() {  
                     return buildIndicator();
                   }
                 ),
@@ -114,7 +124,7 @@ class _HomePage2State extends State<HomePage2> {
                 }else{
                   context.pushNamed('ARTICLEDETAILPAGE', extra: homePage1Controller.copydata[index],queryParams: {"index": "$index"});
                 }
-                        },
+                    },
                         child: Container(
                           height: MediaQuery.of(context).size.height * 19 / 100,
                           decoration: BoxDecoration(color: Color(0xffFFEAC5)),
@@ -128,8 +138,8 @@ class _HomePage2State extends State<HomePage2> {
                                   color: Colors.grey,
                                     image: DecorationImage(
                   image:homePage1Controller.copydata[index].featuredImageSrc != null?
- NetworkImage(homePage1Controller.copydata[index].featuredImageSrc, scale: 0.5):
-  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                  NetworkImage(homePage1Controller.copydata[index].featuredImageSrc, scale: 0.5):
+                  NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
                   fit: BoxFit.cover,),
                                   ),
                                 ),
@@ -148,81 +158,86 @@ class _HomePage2State extends State<HomePage2> {
                             ),
                           ),
                         ),
-                                    // homePage1Controller.copydata[index].title.rendered,
+                        // homePage1Controller.copydata[index].title.rendered,
                       );
                     },
                   ),
                 ),
-                Padding( 
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20,),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
-                                "Hot Shows/Topics",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              Text(
-                                "View All",
-                                style: TextStyle(
-                                    color: Color(0xfff0701BF), fontSize: 14),
-                              )
-                            ],
-                          ),
-                        ),
-                       Padding(
-                         padding: const EdgeInsets.only(left: 20),
-                         child: SizedBox(
-                          height: 150,
-                           child: ListView.separated(
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(width: 12,);
-                            }, 
-                            itemCount: 10,
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: 120,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(8),
-                                    image: DecorationImage(image: AssetImage("assets/images/myint1.png"),fit: BoxFit.cover)),
-                                    child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Align(
-                                        alignment: Alignment.topRight,
-                                        child: Icon(Icons.add,color: Colors.black,)),
-                                    ),
-                                  ),
-                                  Text(
-                                    "The Boys"
-                                  ),
-                                ],
-                              );
-                            }, 
-                            ),
-                         ),
-                       ),
+                // Padding( 
+                //           padding: const EdgeInsets.symmetric(
+                //               horizontal: 20,),
+                //           child: Row(
+                //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //             children: const [
+                //               Text(
+                //                 "Hot Shows/Topics",
+                //                 style: TextStyle(fontSize: 14),
+                //               ),
+                //               Text(
+                //                 "View All",
+                //                 style: TextStyle(
+                //                     color: Color(0xfff0701BF), fontSize: 14),
+                //               )
+                //             ],
+                //           ),
+                //         ),
+                      //  Padding(
+                      //    padding: const EdgeInsets.only(left: 20),
+                      //    child: SizedBox(
+                      //     height: 150,
+                      //      child: ListView.separated(
+                      //       separatorBuilder: (context, index) {
+                      //         return const SizedBox(width: 12,);
+                      //       }, 
+                      //       itemCount: 10,
+                      //       shrinkWrap: true,
+                      //       scrollDirection: Axis.horizontal,
+                      //       itemBuilder: (context, index) {
+                      //         return Column(
+                      //           mainAxisAlignment: MainAxisAlignment.start,
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             Container(
+                      //               height: 120,
+                      //               width: 120,
+                      //               decoration: BoxDecoration(
+                      //                 borderRadius: BorderRadius.circular(8),
+                      //               image: DecorationImage(image: AssetImage("assets/images/myint1.png"),fit: BoxFit.cover)),
+                      //               child: const Padding(
+                      //                 padding: EdgeInsets.all(8.0),
+                      //                 child: Align(
+                      //                   alignment: Alignment.topRight,
+                      //                   child: Icon(Icons.add,color: Colors.black,)),
+                      //               ),
+                      //             ),
+                      //             Text(
+                      //               "The Boys"
+                      //             ),
+                      //           ],
+                      //         );
+                      //       }, 
+                      //       ),
+                      //    ),
+                      //  ),
                        Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 20),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
+                            children: [
                               Text(
                                 "Featured article",
                                 style: TextStyle(fontSize: 14),
                               ),
-                              Text(
-                                "View All",
-                                style: TextStyle(
-                                    color: Color(0xfff0701BF), fontSize: 14),
+                              InkWell(
+                                onTap: () {
+                                  context.pushNamed('FEATUREARTICLEVIEWALL');
+                                },
+                                child:const Text(
+                                  "View All",
+                                  style: TextStyle(
+                                      color: Color(0xff0701BF), fontSize: 14),
+                                ),
                               )
                             ],
                           ),
@@ -233,7 +248,7 @@ class _HomePage2State extends State<HomePage2> {
                       Obx(() {
                             return CarouselSlider.builder(
                                   options: CarouselOptions(
-                                      height: 400.0,
+                                      height: 300.0,
                                       // viewportFraction: 1,
                                       // autoPlay: true,
                                       enableInfiniteScroll: false,
@@ -262,7 +277,7 @@ class _HomePage2State extends State<HomePage2> {
                          }
                        ), 
                       // const SizedBox(height: 50,),
-                Padding(
+                    Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 10),
                           child: Row(
@@ -304,21 +319,26 @@ class _HomePage2State extends State<HomePage2> {
                             buildIndicatorLatest();
                          }
                        ), 
-                       SizedBox(height: 20,),
+                      const SizedBox(height: 20,),
                        Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text(
+                            children:  [
+                             const Text(
                                 "Trending articles",
                                 style: TextStyle(fontSize: 14),
                               ),
-                              Text(
-                                "View All",
-                                style: TextStyle(
-                                color: Color(0xff0701BF), fontSize: 14),
+                              InkWell(
+                                onTap: () {
+                                  context.pushNamed('TRENDINGARTICLEVIEWALL');
+                                },
+                                child:const Text(
+                                  "View All",
+                                  style: TextStyle(
+                                  color: Color(0xff0701BF), fontSize: 14),
+                                ),
                               )
                             ],
                           ),
@@ -327,8 +347,13 @@ class _HomePage2State extends State<HomePage2> {
                       shrinkWrap: true,
                       physics: const ScrollPhysics(),
                         itemCount: homePage1Controller.allpostdata.length,
-                        itemBuilder:(context, index) {
+                        itemBuilder:(context, index){
+                          // bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
+                          // bool isread = false;
+                          
+                          // print(isreadd);
                           return  BlogCard(
+                            // isread: isread,
                             indexx: index,
                         context: context,
                         blogDetail: homePage1Controller.allpostdata[index]
@@ -342,7 +367,7 @@ class _HomePage2State extends State<HomePage2> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
+                                      children:const [
                                         Center (child: Text("No Data Found"),),
                                       ],
                                     ),

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
+import 'package:tvtalk/getxcontroller/home_page_controller.dart';
+import 'package:tvtalk/view/profile_page.dart';
 import 'package:tvtalk/widgets/blog_card.dart';
+import 'package:tvtalk/widgets/saved_blog_card.dart';
 
 class MySavedArticles extends StatefulWidget {
   const MySavedArticles({Key? key}) : super(key: key);
@@ -14,6 +17,7 @@ class MySavedArticles extends StatefulWidget {
 class _MySavedArticlesState extends State<MySavedArticles> {
     var fontSize = const AdaptiveTextSize();
     var homePage1Controller = Get.find<HomePage1Controller>();
+    final homePageController = Get.find<HomePageController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,24 +40,30 @@ class _MySavedArticlesState extends State<MySavedArticles> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body:
+      homePageController.savedArticles.length == 10?
+      Center(child: Text("No saved article found"),):
+       SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 20,),
              ListView.builder(
               shrinkWrap: true,
-                    itemCount: homePage1Controller.allpostdata.length,
-                    itemBuilder:(context, index) {
-                      return  BlogCard(
-                        indexx: index,
+              physics:const ScrollPhysics(),
+              itemCount: homePageController.savedArticles.length,
+              itemBuilder:(context, index) {
+                print("idddddd");
+                print(homePageController.savedArticles);
+                 return  SavedBlogCard(
+                    indexx: index,
                     context: context,
-                    blogDetail: homePage1Controller.allpostdata[index]
+                    blogDetail: homePageController.savedArticles[index]
                   );
                 },
-                ),
+                )
           ],
         ),
-      ),
+      ) ,
     );
   }
 }

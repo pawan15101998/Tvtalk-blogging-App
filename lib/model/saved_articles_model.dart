@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final homePagePost = homePagePostFromJson(jsonString);
+//     final savedPostPage = savedPostPageFromJson(jsonString);
 
 import 'dart:convert';
 
-List<HomePagePost> homePagePostFromJson(String str) => List<HomePagePost>.from(json.decode(str).map((x) => HomePagePost.fromJson(x)));
+List<SavedPostPage> savedPostPageFromJson(String str) => List<SavedPostPage>.from(json.decode(str).map((x) => SavedPostPage.fromJson(x)));
 
-String homePagePostToJson(List<HomePagePost> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String savedPostPageToJson(List<SavedPostPage> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class HomePagePost {
-    HomePagePost({
+class SavedPostPage {
+    SavedPostPage({
         this.id,
         this.read,
         this.date,
@@ -65,7 +65,8 @@ class HomePagePost {
     String? featuredImageSrc;
     Links? links;
 
-    factory HomePagePost.fromJson(Map<String, dynamic> json) => HomePagePost(
+
+factory SavedPostPage.fromJson(Map<String, dynamic> json) => SavedPostPage(
         id: json["id"],
         read: json['read'],
         date: DateTime.parse(json["date"]),
@@ -93,6 +94,7 @@ class HomePagePost {
         featuredImageSrc: json["featured_image_src"],
         links: Links.fromJson(json["_links"]),
     );
+
 
     Map<String, dynamic> toJson() => {
         "id": id,
@@ -258,7 +260,7 @@ class Cury {
         this.templated,
     });
 
-    String? name;
+    String?  name;
     String? href;
     bool? templated;
 
@@ -322,40 +324,19 @@ class WpTerm {
         this.href,
     });
 
-    Taxonomy? taxonomy;
+    String? taxonomy;
     bool? embeddable;
     String? href;
 
     factory WpTerm.fromJson(Map<String, dynamic> json) => WpTerm(
-        taxonomy: taxonomyValues.map[json["taxonomy"]],
+        taxonomy: json["taxonomy"],
         embeddable: json["embeddable"],
         href: json["href"],
     );
 
     Map<String, dynamic> toJson() => {
-        "taxonomy": taxonomyValues.reverse[taxonomy],
+        "taxonomy": taxonomy,
         "embeddable": embeddable,
         "href": href,
     };
-}
-
-enum Taxonomy { CATEGORY, POST_TAG }
-
-final taxonomyValues = EnumValues({
-    "category": Taxonomy.CATEGORY,
-    "post_tag": Taxonomy.POST_TAG
-});
-
-class EnumValues<T> {
-    Map<String, T> map;
-   late Map<T, String> reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String> get reverse {
-        if (reverseMap == null) {
-            reverseMap = map.map((k, v) => new MapEntry(v, k));
-        }
-        return reverseMap;
-    }
 }

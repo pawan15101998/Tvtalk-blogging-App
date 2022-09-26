@@ -8,7 +8,8 @@ import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/theme/text_style.dart';
 import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
-import 'package:tvtalk/view/profile_page.dart';
+import 'package:tvtalk/view/feeds_detail_page.dart';
+// import 'package:tvtalk/view/profile_page.dart';
 import 'package:tvtalk/widgets/blog_card.dart';
 import '../getxcontroller/home_page1_controller.dart';
 import '../getxcontroller/signin_controller.dart';
@@ -19,10 +20,10 @@ class HomePage1 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<HomePage1> createState() => _HomePage1State();
+  State<HomePage1> createState() => HomePage1State();
 }
 
-class _HomePage1State extends State<HomePage1> {
+class HomePage1State extends State<HomePage1> {
   var homePage1Controller = Get.find<HomePage1Controller>();
   final apiprovider = ApiProvider();
   var yourIntrestController = Get.find<YourIntrestController>();
@@ -30,8 +31,24 @@ class _HomePage1State extends State<HomePage1> {
   final signincontroller = Get.find<SignInController>();
   List listModel = [];
 
+refreshWidget(){
+    setState(() {});
+    print("calling");
+}
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // print("is tis");
+  }
 
+  @override
+  void didChangeDependencies() {
+    // TODO: implement initState
+    super.didChangeDependencies();
+    print("is tis");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +79,10 @@ class _HomePage1State extends State<HomePage1> {
                         // scrollDirection: Axis.vertical,
                         itemCount: homePage1Controller.searchArticle.length,
                         itemBuilder: (context, index){
+                        bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
                           return BlogCard(
+                            // isread: isread,
+                            
                             indexx: index,
                             context: context,
                             blogDetail: homePage1Controller.searchArticle[index],
@@ -229,7 +249,7 @@ class _HomePage1State extends State<HomePage1> {
                                         Obx(() {
                                           return CarouselSlider.builder(
                                             options: CarouselOptions(
-                                                height: 400.0,
+                                                height: 300.0,
                                                 enableInfiniteScroll: false,
                                                 // viewportFraction: 1,
                                                 autoPlay: false,
@@ -299,29 +319,31 @@ class _HomePage1State extends State<HomePage1> {
                                             shrinkWrap: true,
                                             physics: const ScrollPhysics(),
                                             // scrollDirection: Axis.vertical,
-                                            itemCount: homePage1Controller
-                                                        .allpostdata.length >
-                                                    9
-                                                ? 9
-                                                : homePage1Controller
-                                                    .allpostdata.length,
+                                            itemCount: homePage1Controller.allpostdata.length,
                                             itemBuilder: (context, index) {
                                               // allpostdata = [].obs;
                                               // homePage1Controller.searchArticle = [].obs;
                                               // homePage1Controller.allpostdata = [].obs;
                                               // homePage1Controller.copydata = [].obs;
+                                              print('leooolo');  
+                                              print(homePageController.allPostId);         
+                                              print(homePageController.readArticleId);         
+                                              bool isread = false;
+                                              if(homePageController.readArticleId.length != 0) {
+                                              // isread = homePageController.allPostId.contains(homePageController.readArticleId[index]);
+                                              }
+                                              print(homePage1Controller.allpostdata.length);
                                               print(
-                                                  'obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-        
-                                              print(homePage1Controller
-                                                  .allpostdata.length);
-                                              print(
-                                                  'obxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                                              return BlogCard(
-                                                indexx: index,
-                                                context: context,
-                                                blogDetail: homePage1Controller
-                                                    .allpostdata[index],
+                                                  'hellloo');
+                                              return Obx(() {
+                                                  return BlogCard(
+                                                    // isread: isread,
+                                                    indexx: index,
+                                                    context: context,
+                                                    blogDetail: homePage1Controller
+                                                        .allpostdata[index],
+                                                  );
+                                                }
                                               );
                                             },
                                           );
@@ -385,10 +407,16 @@ class _HomePage1State extends State<HomePage1> {
           //   extra: homePage1Controller.copydata[index],
           //   queryParams: {"index": "$index"});
           // }
-          print("Moving");
-          print(homePage1Controller.copydata[index].id);
-          print("sddddddddddsdddddd");
-          print(apiprovider.statuscode);
+        await apiprovider.postApi('/post/mark-read', {'postId': "${homePage1Controller.allpostdata[index].id}"});
+        // print(allldata);
+        print("alllpost");
+         homePage1Controller.allpostdata[index].read = true;
+         homePage1Controller.copydata[index].read = true;
+         homePageController.isArticleRead();
+         setState(() {
+           
+         });
+
         },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 12),

@@ -50,7 +50,7 @@ class _HomePage4State extends State<HomePage4> {
                     ),
                     CarouselSlider.builder(
                         options: CarouselOptions(
-                            height: 400.0,
+                            height: 300.0,
                             // autoPlay: true,
                             onPageChanged: ((index, reason) {
                               homepage4Controller.homePage4Slider.value = index;
@@ -141,10 +141,13 @@ class _HomePage4State extends State<HomePage4> {
                     ),
                ListView.builder(
                 shrinkWrap: true,
+                physics:const ScrollPhysics(),
                     itemCount: homePage1Controller.allpostdata.length,
                     itemBuilder:(context, index) {
-                      return  BlogCard(
-                        indexx: index,
+                  // bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
+                        return  BlogCard(
+                    // isread: isread,
+                    indexx: index,
                     context: context,
                     blogDetail: homePage1Controller.allpostdata[index]
                   );

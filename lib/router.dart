@@ -47,7 +47,7 @@ class CustomRouter{
       GoRoute(
       name: 'HOMEPAGE',
         path: homepage,
-        builder: (context, state) => const HomePage(),
+        builder: (context, state) => const  HomePage(),
       ),  
       GoRoute(
       name: 'MYSAVEDARTICLES',
@@ -95,14 +95,14 @@ class CustomRouter{
         builder: (context, state) => const LocalSignPage(),
       ),
       GoRoute(
-      name: 'SELECTYOURINTREST',
+        name: 'SELECTYOURINTREST',
         path: selectyourintrest,
         builder: (context, state) => const SelectYourIntrest(),
       ),
       GoRoute(
-      name: 'ARTICLEDETAILPAGE',
+        name: 'ARTICLEDETAILPAGE',
         path: articledetailpage,
-        builder: (context, state) =>  ArticleDetailPage(postData: state.extra, feedindex: state.queryParams, ),
+        builder: (context, state) =>  ArticleDetailPage(postData: state.extra, feedindex: state.queryParams, from: state.queryParams["from"], ),
       ),
        GoRoute(
       name: 'FUNANDGAMES',

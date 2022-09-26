@@ -86,12 +86,16 @@ facebookLogin()async{
     print("FaceBook");
     try {
       final result =
-          await FacebookAuth.i.login(permissions: ['public_profile', 'email'], );
+          await FacebookAuth.i.login(permissions: ['public_profile', 'email']);
           // 'user_birthday'
+          print("asdhsaghjvcnm");
+          print(result.status);
+          print(LoginStatus.success);
       if (result.status == LoginStatus.success) {
         final userData = await FacebookAuth.i.getUserData();
         _user = userData;
-        // print("facebook user data");
+        print("facebook user data");
+        print(_user);
         // print(userData);
         // print(userData['name']);
       }

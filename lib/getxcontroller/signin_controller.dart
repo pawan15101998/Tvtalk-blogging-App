@@ -5,6 +5,7 @@ class SignInController extends GetxController{
 RxBool passwordVisiblity = false.obs;
 RxBool cnfpasswordVisiblity = false.obs;
 String? userName;
+int? userId;
 String? userEmail;  
 String? image;
 String? googleUserDob;

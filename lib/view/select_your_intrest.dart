@@ -141,9 +141,7 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: GridView.builder(
-                        itemCount: yourIntrestController.allTagsModel.length < 7
-                            ? yourIntrestController.allTagsModel.length
-                            : 7,
+                        itemCount: yourIntrestController.allTagsModel.length,
                         // itemCount: yourIntrestController.allTagsModel.length,
                         shrinkWrap: true,
                         gridDelegate:
@@ -231,7 +229,7 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                                             .allTagsModel[index].name
                                             .toString(),
                                         // "sds",
-                                        style: const TextStyle(fontSize: 16),
+                                        style: const TextStyle(fontSize: 12),
                                       ),
                                       Obx(() {
                                         return Icon(
@@ -285,6 +283,10 @@ print(sendingTags);
                   yourIntrestController.choices[4].select.value = false;
                   yourIntrestController.choices[5].select.value = false;
                   yourIntrestController.choices[6].select.value = false;
+                  yourIntrestController.choices[7].select.value = false;
+                  yourIntrestController.choices[8].select.value = false;
+                  yourIntrestController.choices[9].select.value = false;
+                  yourIntrestController.choices[10].select.value = false;
                   // sendSelectedName = "";
                   // sendSelectedtags = "";
                   print(selectedtags);

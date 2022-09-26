@@ -11,7 +11,7 @@ import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
-import 'package:tvtalk/widgets/blog_card.dart';
+import 'package:tvtalk/widgets/search_blog_card.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -63,9 +63,9 @@ String? sendingTags;
             automaticallyImplyLeading: false,
             backgroundColor: Color(0xfffFFDC5C),
             actions: [
-              Obx(() {
+              Obx((){
                 return homePageController.searchIcon.value
-                    ? SizedBox()
+                    ? const SizedBox()
                     : Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -87,7 +87,6 @@ String? sendingTags;
                                   ),
                                   filled: true,
                                   fillColor: Colors.white,
-                                  
                                   border: OutlineInputBorder(),
                                   hintText: 'Search',
                                 ),
@@ -142,7 +141,7 @@ String? sendingTags;
                         // scrollDirection: Axis.vertical,
                         itemCount: homePage1Controller.searchArticle.length,
                         itemBuilder: (context, index){
-                          return BlogCard(
+                          return SearchBlogCard(
                             indexx: index,
                             context: context,
                             blogDetail: homePage1Controller.searchArticle[index],
@@ -236,7 +235,9 @@ String? sendingTags;
       
                 },
                 child:Obx((){
-                    return Container(
+                    return
+                    yourIntrestController.tagselectfromsearch.isNotEmpty ?
+                     Container(
                         width: MediaQuery.of(context).size.width - 20,
                         height: MediaQuery.of(context).size.height * 6 / 100,
                         decoration: BoxDecoration(
@@ -248,7 +249,7 @@ String? sendingTags;
                             style: TextStyle(
                                 color: Colors.white, fontSize: 16, letterSpacing: 3),
                           ),
-                        ));
+                        )): SizedBox();
                   }
                 ),
               ),
