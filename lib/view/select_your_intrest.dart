@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
@@ -28,6 +29,7 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
     List tagdata = [];
   final homepage1controller = Get.find<HomePage1Controller>();
   String sendingTags = "";
+  final colorconst = ColorConst();
 
   List choice2 = [];
   List selectedtags = [];
@@ -38,11 +40,6 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
 
   getcallapi() async {
     await apiProvider.get();
-    print("alltagsmodelss");
-    print("print data");
-    // print(yourIntrestController.allTagsModel!.data![0].id);
-    print(allTags);
-    print(yourIntrestController.allTagsModel);
     setState(() {});
   }
 
@@ -55,87 +52,79 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
         preferredSize:
             Size.fromHeight(fontSize.getadaptiveTextSize(context, 90)),
         child: AppBar(
           centerTitle: true,
-          iconTheme: const IconThemeData(color: Colors.black),
+          iconTheme:  IconThemeData(color: colorconst.blackColor),
           toolbarHeight: 120.0,
           elevation: 0,
           // automaticallyImplyLeading: false,
-          backgroundColor: Color(0xfffFFDC5C),
-          title: const Text(
+          backgroundColor: colorconst.mainColor,
+          title:  Text(
             "Select Your Interest",
-            style: TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: colorconst.blackColor, fontSize: 20),
           ),
         ),
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: searchtagscontroller,
-            decoration: InputDecoration(
-              suffixIcon: Obx(() {
-                return InkWell(
-                    onTap: () {
-                      // yourIntrestController.activeTextfield.toggle();
-                      FocusScope.of(context).unfocus();
-                    },
-                    child: yourIntrestController.activeTextfield.value
-                        ? InkWell(
-                            onTap: () async {
-                              yourIntrestController.activeTextfield.value =
-                                  false;
-                              FocusScope.of(context).unfocus();
-                              searchtagscontroller.clear();
-                              yourIntrestController.allTagsModel.value = [];
-                              await getcallapi();
-                            },
-                            child: Icon(Icons.cancel))
-                        : Icon(Icons.search));
-              }),
-              filled: true,
-              fillColor: Color(0xfffF2F1F1),
-              hintText: "Search interest",
-              border: InputBorder.none,
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 70),
+        child: Column(
+          children: [
+            TextField(
+              controller: searchtagscontroller,
+              decoration: InputDecoration(
+                suffixIcon: Obx(() {
+                  return InkWell(
+                      onTap: () {
+                        // yourIntrestController.activeTextfield.toggle();
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: yourIntrestController.activeTextfield.value
+                          ? InkWell(
+                              onTap: () async {
+                                yourIntrestController.activeTextfield.value =
+                                    false;
+                                FocusScope.of(context).unfocus();
+                                searchtagscontroller.clear();
+                                yourIntrestController.allTagsModel.value = [];
+                                await getcallapi();
+                              },
+                              child:const Icon(Icons.cancel))
+                          : const Icon(Icons.search));
+                }),
+                filled: true,
+                fillColor:const Color(0xfffF2F1F1),
+                hintText: "Search interest",
+                border: InputBorder.none,
+              ),
+              onTap: () {
+                // yourIntrestController.activeTextfield.toggle();
+                if (yourIntrestController.activeTextfield.value == false) {
+                  yourIntrestController.activeTextfield.value = true;
+                }
+              },
+              onChanged: (value) async {
+                copydata = yourIntrestController.allTagsModel;
+                yourIntrestController.allTagsModel.value = copydata!
+                    .where((i) => i.name
+                        .toString()
+                        .toLowerCase()
+                        .contains(value.toLowerCase()))
+                    .toList();
+                if (searchtagscontroller.text == "") {
+                  yourIntrestController.allTagsModel.value = [];
+                  await getcallapi();
+                }
+              },
             ),
-            onTap: () {
-              // yourIntrestController.activeTextfield.toggle();
-              if (yourIntrestController.activeTextfield.value == false) {
-                yourIntrestController.activeTextfield.value = true;
-              }
-            },
-            onChanged: (value) async {
-              copydata = yourIntrestController.allTagsModel;
-              yourIntrestController.allTagsModel.value = copydata!
-                  .where((i) => i.name
-                      .toString()
-                      .toLowerCase()
-                      .contains(value.toLowerCase()))
-                  .toList();
-              if (searchtagscontroller.text == "") {
-                yourIntrestController.allTagsModel.value = [];
-                await getcallapi();
-              }
-            },
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          if (yourIntrestController.allTagsModel != null)
-            Expanded(
-              child: NotificationListener<UserScrollNotification>(
-                onNotification: (notification) {
-                  if (notification.direction == ScrollDirection.forward) {
-                    if (!isFabVisible) setState(() => isFabVisible = true);
-                  } else if (notification.direction ==
-                      ScrollDirection.reverse) {
-                    if (isFabVisible) setState(() => isFabVisible = false);
-                  }
-                  return true;
-                },
+            const SizedBox(
+              height: 10,
+            ),
+            if (yourIntrestController.allTagsModel != null)
+              Expanded(
                 child: Obx(() {
                   return SingleChildScrollView(
                     child: Padding(
@@ -145,27 +134,21 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                         // itemCount: yourIntrestController.allTagsModel.length,
                         shrinkWrap: true,
                         gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           mainAxisSpacing: 2,
                           crossAxisSpacing: 5,
                         ),
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          print("objecttttttttt");
-                          print(yourIntrestController.allTagsModel.length);
                           return InkWell(
-                            onTap: () {
-                              print("object");
+                            onTap: (){
                               yourIntrestController.choices[index].select.toggle();
                               if (yourIntrestController.choices[index].select ==true) {
                                 selectedtags.add(yourIntrestController.allTagsModel[index].id);
                                 selectedTagsName.add(yourIntrestController.allTagsModel[index].name);
-                                print("object");
                                 sendSelectedName = selectedTagsName.toString().replaceAll("[", "").replaceAll("]", "");
                                 sendSelectedtags = selectedtags.toString().replaceAll("[", "").replaceAll("]", "");
-                                print(sendSelectedName);
-                                print(sendSelectedtags);
                               } else {
                                 selectedtags.remove(yourIntrestController
                                     .allTagsModel[index].id);
@@ -180,12 +163,8 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                                     .replaceAll("[", "")
                                     .replaceAll("]", "");
                                 // selectedtags.remove(yourIntrestController.allTagsModel!.data![index].id);
-                                print(sendSelectedName);
-                                print(sendSelectedtags);
                               }
-                              print(selectedtags);
-                              print(
-                                  yourIntrestController.choices[index].select);
+                              
                             },
                             child: Column(
                               children: [
@@ -213,7 +192,7 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                                             color: yourIntrestController
                                                     .choices[index].select.value
                                                 ? Color(0xfff0FC59A)
-                                                : Colors.black),
+                                                : colorconst.blackColor),
                                       );
                                     })),
                                 Padding(
@@ -236,7 +215,7 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                                           Icons.check_circle_rounded,
                                           color: yourIntrestController
                                                   .choices[index].select.value
-                                              ? Colors.green
+                                              ? colorconst.greenColor
                                               : Colors.grey,
                                         );
                                       })
@@ -251,64 +230,61 @@ class _SelectYourIntrestState extends State<SelectYourIntrest> {
                     ),
                   );
                 }),
-              ),
-            )
-        ],
+              )
+          ],
+        ),
       ),
-      floatingActionButton: isFabVisible == false
-          ? InkWell(
+      floatingActionButton: 
+           InkWell(
               onTap: () async {
                 if (selectedtags.isNotEmpty) {
                   await apiProvider.postApi("/user/assignTags",
                       {"tagId": sendSelectedtags, 'tagname': sendSelectedName});
                  
                         var tagsss=  await apiProvider.getTags();
-     print("sd");
-     print(tagsss);
+
     for(var i= 0; i<tagsss['data'].length; i++){
      tagdata.add(tagsss['data'][i]['tagId']);
     }
-     print("objectTagss");
-    print(sendingTags);
+
 sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
 homepage1controller.userTags.value = sendingTags;
-print(sendingTags);
       await apiProvider.getPost(sendingTags);
       await apiProvider.getprofile();
-                  context.pushNamed('HOMEPAGE');
-                  yourIntrestController.choices[0].select.value = false;
-                  yourIntrestController.choices[1].select.value = false;
-                  yourIntrestController.choices[2].select.value = false;
-                  yourIntrestController.choices[3].select.value = false;
-                  yourIntrestController.choices[4].select.value = false;
-                  yourIntrestController.choices[5].select.value = false;
-                  yourIntrestController.choices[6].select.value = false;
-                  yourIntrestController.choices[7].select.value = false;
-                  yourIntrestController.choices[8].select.value = false;
-                  yourIntrestController.choices[9].select.value = false;
-                  yourIntrestController.choices[10].select.value = false;
-                  // sendSelectedName = "";
-                  // sendSelectedtags = "";
-                  print(selectedtags);
+      for(int i = 0; i<yourIntrestController.choices.length; i++){
+        yourIntrestController.choices[i].select.value = false;
+      }
+
                 } else {
-                  print(selectedtags);
                 }
+
+                  var tagsss =  await apiProvider.getTags();
+              for(var i= 0; i<tagsss['data'].length; i++){
+                      homepage1controller.userTagName.add(tagsss['data'][i]['tagname']);
+                     }
+              for(int i=0; i<yourIntrestController.allTagsModel.length; i++){
+              if(homepage1controller.userTagName.toString().toLowerCase().contains(yourIntrestController.alltagsName[i].toString().toLowerCase()) ){
+              yourIntrestController.allTagsModel[i].activetag = true;
+               }else{
+              yourIntrestController.allTagsModel[i].activetag = false;
+               }
+                 }
+                  context.pushNamed('HOMEPAGE');
               },
               child: Container(
                   width: MediaQuery.of(context).size.width - 20,
                   height: MediaQuery.of(context).size.height * 6 / 100,
                   decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: colorconst.blackColor,
                       borderRadius: BorderRadius.circular(10)),
-                  child: const Center(
+                  child:  Center(
                     child: Text(
                       "Continue",
                       style: TextStyle(
-                          color: Colors.white, fontSize: 16, letterSpacing: 3),
+                          color: colorconst.whiteColor, fontSize: 16, letterSpacing: 3),
                     ),
                   )),
-            )
-          : null,
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

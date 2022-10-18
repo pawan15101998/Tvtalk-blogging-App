@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/getxcontroller/detail_page_controller.dart';
 import 'package:tvtalk/theme/theme.dart';
 
 final detailpageController = Get.find<DetailPageController>();
-
+  final colorconst = ColorConst();
 TextStyle textStyleLogin1 = const TextStyle(
     fontSize: 25, fontWeight: FontWeight.w700, fontFamily: 'Quicksand');
 
-TextStyle textStyleForgot = const TextStyle(
+TextStyle textStyleForgot =  TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w700,
     // fontFamily: 'Quicksand',
-    color: Color(0xfff0701BF));
+    color: colorconst.darkBlue);
 
-TextStyle textStyleForgotMail = const TextStyle(
+TextStyle textStyleForgotMail = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w100,
     // fontFamily: 'Quicksand',
-    color: Colors.black);
+    color: colorconst.blackColor);
 
 TextStyle textStyleButton = TextStyle(
     fontSize: 20,
@@ -30,13 +31,13 @@ TextStyle textStyleButton2 = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w100,
     // fontFamily: 'Quicksand',
-    color: Colors.black);
+    color: colorconst.blackColor);
 
 TextStyle textStyleDetailHead = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.w700,
     // fontFamily: 'Quicksand',
-    color: Colors.black);
+    color: colorconst.blackColor);
 
 TextStyle detailStyle = TextStyle(
   fontSize: 16,
@@ -49,5 +50,5 @@ TextStyle detailStyle = TextStyle(
               : detailpageController.fontFamily == 4
                   ? "VIDALOKA"
                   : "POPPINS",
-  color: detailpageController.isDark.value ? Colors.white : Colors.black,
+  color: detailpageController.isDark.value ? colorconst.whiteColor : colorconst.blackColor,
 );

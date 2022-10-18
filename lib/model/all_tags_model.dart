@@ -11,6 +11,7 @@ String allTagsModelToJson(List<AllTagsModel> data) => json.encode(List<dynamic>.
 class AllTagsModel {
     AllTagsModel({
         this.id,
+        this.activetag,
         this.count,
         this.description,
         this.link,
@@ -22,6 +23,7 @@ class AllTagsModel {
     });
 
     int? id;
+    bool? activetag;
     int? count;
     String? description;
     String? link;
@@ -33,6 +35,7 @@ class AllTagsModel {
 
     factory AllTagsModel.fromJson(Map<String, dynamic> json) => AllTagsModel(
         id: json["id"],
+        activetag: json["activetag"],
         count: json["count"],
         description: json["description"],
         link: json["link"],

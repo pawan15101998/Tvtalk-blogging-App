@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tvtalk/Authencation/google_sign_in.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/controllers/signIn_network.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
@@ -39,6 +40,7 @@ class _SignInPageState extends State<SignInPage> {
   List tagdata = [];
   final homepage1controller = Get.find<HomePage1Controller>();
   String sendingTags = "";
+  final colorconst = ColorConst();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class _SignInPageState extends State<SignInPage> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
+      backgroundColor: colorconst.whiteColor,
       // appBar:
       body: SingleChildScrollView(
         child: SizedBox(
@@ -76,7 +78,7 @@ class _SignInPageState extends State<SignInPage> {
                         AppBar(
                           elevation: 0,
                           // backgroundColor: Col,
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: colorconst.transparentColor,
                           title: Align(
                             alignment: Alignment.centerRight,
                             child: InkWell(
@@ -90,7 +92,7 @@ class _SignInPageState extends State<SignInPage> {
                               child: Text(
                                 "Continue as Guest >>|",
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: colorconst.blackColor,
                                     fontSize: textSize.getadaptiveTextSize(
                                         context, 12)),
                               ),
@@ -183,9 +185,9 @@ class _SignInPageState extends State<SignInPage> {
                     style: textStyleButton,
                   ),
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.transparent,
-                      onSurface: Colors.transparent,
-                      shadowColor: Colors.transparent,
+                      primary: colorconst.transparentColor,
+                      onSurface: colorconst.transparentColor,
+                      shadowColor: colorconst.transparentColor,
                       // padding: EdgeInsets.symmetric(horizontal: width*10/100,),
                       textStyle: const TextStyle(
                           fontSize: 30, fontWeight: FontWeight.bold)),
@@ -198,8 +200,8 @@ class _SignInPageState extends State<SignInPage> {
                   width: width,
                   text: "Continue with Google",
                   image: "assets/icons/google.png",
-                  color: Colors.white,
-                  textColor: Colors.black,
+                  color: colorconst.whiteColor,
+                  textColor: colorconst.blackColor,
                   onPress: () async {
                     final provider = Provider.of<GoogleSignInProvider>(context,
                         listen: false);
@@ -226,6 +228,7 @@ class _SignInPageState extends State<SignInPage> {
                       sharedPreferences.setString('email', provider.user.email);
                       sharedPreferences.setString('name', provider.user.displayName);
                       sharedPreferences.setString('image', provider.user.photoUrl);
+                      // sharedPreferences.setString('userId', provider.user.photoUrl);
                       signincontroller.userName = provider.user.displayName;
                       signincontroller.userEmail = provider.user.email;
                       signincontroller.image = provider.user.photoUrl;
@@ -243,6 +246,16 @@ class _SignInPageState extends State<SignInPage> {
                           'User Added Successfully') {
                         context.goNamed("SELECTYOURINTREST");
                       }
+                      sharedPreferences.setString('userId', apiProvider.RegisterResponse['data']['id'].toString());
+                      print("this is user Res");
+                       for(int i=0; i<yourIntrestController.allTagsModel.length; i++){
+                if(homepage1controller.userTagName.toString().toLowerCase().contains(yourIntrestController.alltagsName[i].toString().toLowerCase()) ){
+              yourIntrestController.allTagsModel[i].activetag = true;
+                    }else{
+                  yourIntrestController.allTagsModel[i].activetag = false;
+                 }
+           }
+                      
                     }
                   }),
               SizedBox(
@@ -253,7 +266,7 @@ class _SignInPageState extends State<SignInPage> {
                 text: "Continue with Facebook",
                 image: "assets/icons/facebook.png",
                 color: facebookColor,
-                textColor: Colors.white,
+                textColor: colorconst.whiteColor,
                 onPress: () async {
                   final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                   await provider.facebookLogin();
@@ -283,8 +296,6 @@ class _SignInPageState extends State<SignInPage> {
                       sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
                       homepage1controller.userTags.value = sendingTags;
                       await apiProvider.getPost(sendingTags);
-                      print("salkdjaskj");
-                      print(apiProvider.RegisterResponse);
                       if (apiProvider.RegisterResponse['message'] ==
                         'Logged in successfully') {
                       context.pushNamed("HOMEPAGE");
@@ -303,8 +314,8 @@ class _SignInPageState extends State<SignInPage> {
               //   width: width,
               //   text: "Continue with Apple",
               //   image: "assets/icons/apple.png",
-              //   color: Colors.black,
-              //   textColor: Colors.white,
+              //   color: colorconst.blackColor,
+              //   textColor: colorconst.whiteColor,
               // ),
               // SizedBox(
               //   height: height * 2 / 100,

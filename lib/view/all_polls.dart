@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tvtalk/constant/color_const.dart';
 
 class AllPolls extends StatelessWidget {
-  const AllPolls({Key? key}) : super(key: key);
+   AllPolls({Key? key}) : super(key: key);
+final colorconst = ColorConst();
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +34,8 @@ class AllPolls extends StatelessWidget {
           // height: MediaQuery.of(context).size.height*50/100,
           width: MediaQuery.of(context).size.width * 90 / 100,
           decoration: BoxDecoration(
-            border: Border.all(color: Color(0xff949494)),
-            // color: Colors.black
+            border: Border.all(color: colorconst.greyColor),
+            // color: colorconst.blackColor
           ),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -42,7 +44,7 @@ class AllPolls extends StatelessWidget {
               children: [
                 Text(
                   "Poll #12345",
-                  style: TextStyle(color: Color(0xff949494)),
+                  style: TextStyle(color: colorconst.greyColor),
                 ),
                 SizedBox(
                   height: 10,
@@ -74,7 +76,7 @@ class AllPolls extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width * 90 / 100,
           decoration: BoxDecoration(
-              border: Border.all(color: Color(0xff949494)),
+              border: Border.all(color: colorconst.greyColor),
               borderRadius: BorderRadius.circular(10)),
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -96,18 +98,19 @@ class AllPolls extends StatelessWidget {
   }
 
   Widget advertisment(context) {
+    final colorconst = ColorConst();
     return Center(
       child: Column(
         children: [
           Container(
             height: MediaQuery.of(context).size.height * 12 / 100,
             width: MediaQuery.of(context).size.width * 90 / 100,
-            color: Colors.black,
+            color: colorconst.blackColor,
             child: Align(
               alignment: Alignment.center,
               child: Text(
                 "This is a very catchy title as it is an advertise.",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(color: colorconst.blackColor),
               ),
             ),
           ),

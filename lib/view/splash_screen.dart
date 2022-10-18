@@ -25,16 +25,11 @@ late final finalEmail;
 final apiProvider = ApiProvider();
   final signincontroller = Get.find<SignInController>();
 final homepage1controller = Get.find<HomePage1Controller>();
- var yourIntrestController = Get.put(YourIntrestController());
+ var yourIntrestController = Get.find<YourIntrestController>();
  String sendingTags = "";
 List tagdata = [];
 // getcallapi()async{
 //     await  apiProvider.get();
-//     print("alltagsmodelss");
-//     print("print data");
-//     // print(yourIntrestController.allTagsModel!.data![0].id);
-//     // print(allTags);
-//     print(yourIntrestController.allTagsModel);
 // }
   @override
   void initState() {
@@ -45,19 +40,33 @@ List tagdata = [];
      await apiProvider.get();
     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? resetToken = sharedPreferences.getString('reset_token');
-    print("Resettoken");
-    print(yourIntrestController.allTagsModel);
-     
-    print(resetToken);
     if(resetToken != null){
-       await apiProvider.getprofile();
-  var tagsss=  await apiProvider.getTags();
-        for(var i= 0; i<tagsss['data'].length; i++){
+      final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String? userid = sharedPreferences.getString('userId');
+     await apiProvider.getprofile();
+     print("This isnuser id");
+    //  print(userid);
+     await apiProvider.postApi("/user/show-notification", {
+     "userID": userid
+      });
+      homePageController.notificationData.value =  apiProvider.RegisterResponse;
+      for(var i = 0; i<homePageController.notificationData.length; i++){
+        if(homePageController.notificationData[i]['is_read'] == false){
+          homePageController.unReadNotification +=1;
+        } 
+      }
+
+     var tagsss =  await apiProvider.getTags();
+     for(var i= 0; i<tagsss['data'].length; i++){
      tagdata.add(tagsss['data'][i]['tagId']);
+     homepage1controller.userTagId.add(tagsss['data'][i]['tagId']);
+  }
+
+    for(var i= 0; i<tagsss['data'].length; i++){
+    homepage1controller.userTagName.add(tagsss['data'][i]['tagname']);
   }
    sendingTags = tagdata.toString().replaceAll("[", "").replaceAll("]", "");
    homepage1controller.userTags.value = sendingTags;
-   print(sendingTags);
       await apiProvider.getPost(sendingTags);
       await  apiProvider.getArticleStatus();
       homePageController.readArticleId.value = [];
@@ -70,18 +79,22 @@ List tagdata = [];
        }
        for(int i = 0; i<homePageController.allPostId.length; i++){
         if(homePageController.readArticleId.contains(homePageController.allPostId[i])){
-          homepage1controller.copydata[i].read = true;
+           homepage1controller.copydata[i].read = true;
            homepage1controller.allpostdata[i].read = true;
-          print("hjvbdsjfd");
-          print(homepage1controller.copydata[i].read);
           // homepage1controller.allpostdata.add({"read": true});
         }else{
           homepage1controller.copydata[i].read = false;
           homepage1controller.allpostdata[i].read = false;
         }
        }
-        print("djkhaks");
-       print(homepage1controller.copydata[1].read);
+
+       for(int i=0; i<yourIntrestController.allTagsModel.length; i++){
+        if(homepage1controller.userTagName.toString().toLowerCase().contains(yourIntrestController.alltagsName[i].toString().toLowerCase()) ){
+              yourIntrestController.allTagsModel[i].activetag = true;
+        }else{
+          yourIntrestController.allTagsModel[i].activetag = false;
+        }
+       }
        
     }
       Timer(const Duration(microseconds: 0),()=> finalEmail == null ? 
@@ -96,14 +109,12 @@ List tagdata = [];
     // setState((){
       finalEmail = obtainedEmail;
     // });
-    print(finalEmail);
-    print(obtainedEmail);
   }
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-
+      body: Center(child: CircularProgressIndicator(),),
     );
   }
 }

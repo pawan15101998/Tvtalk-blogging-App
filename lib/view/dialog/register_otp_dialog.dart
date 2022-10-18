@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/view/dialog/reset_password_dialog.dart';
 import 'package:tvtalk/widgets/text_field.dart';
@@ -12,12 +13,13 @@ import 'package:tvtalk/widgets/text_field.dart';
 class RegisterOtpDialog {
   var submitdialog = SubmitDialog();
   var apiProvider = ApiProvider();
+  final colorconst = ColorConst();
   TextEditingController otpController = TextEditingController();
   void showBottomDialog(BuildContext context, email, name,  password, cnfpassword ) {
     showGeneralDialog(
       barrierLabel: "showGeneralDialog",
       barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: colorconst.blackColor.withOpacity(0.6),
       transitionDuration: const Duration(milliseconds: 400),
       context: context,
       pageBuilder: (BuildContext context, _, __) {
@@ -31,9 +33,9 @@ class RegisterOtpDialog {
                   child: Container(
                     width: double.maxFinite,
                     clipBehavior: Clip.antiAlias,
-                    padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                    padding:  EdgeInsets.all(16),
+                    decoration:  BoxDecoration(
+                      color: colorconst.whiteColor,
                     ),
                     child: Material(
                       child: Column(
@@ -51,20 +53,20 @@ class RegisterOtpDialog {
                             text: TextSpan(
                               // text: "An email has been sent to your email",
                               children: <TextSpan>[
-                               const TextSpan(
+                                TextSpan(
                                   text: 'An OTP has been sent to your email ',
                                   style: TextStyle(
-                                      fontSize: 16, color: Colors.black),
+                                      fontSize: 16, color: colorconst.blackColor),
                                 ),
                                 TextSpan(
                                   text: '$email',
-                                  style:const TextStyle(
-                                      color: Color(0xfffF1B142), fontSize: 16),
+                                  style: TextStyle(
+                                      color: colorconst.lightYellow, fontSize: 16),
                                 ),
-                              const  TextSpan(
+                                TextSpan(
                                   text: ' Please submit the OTP to Verify',
                                   style: TextStyle(
-                                      fontSize: 16, color: Colors.black),
+                                      fontSize: 16, color: colorconst.blackColor),
                                 ),
                               ],
                             ),
@@ -89,20 +91,20 @@ class RegisterOtpDialog {
                                     style: ButtonStyle(
                                         shadowColor:
                                             MaterialStateProperty.all<Color>(
-                                                Colors.transparent),
+                                                colorconst.transparentColor),
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
-                                                Colors.transparent),
+                                                colorconst.transparentColor),
                                         shape: MaterialStateProperty.all<
                                                 RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(12.0),
-                                                side:const BorderSide(
-                                                    color: Colors.black)))),
-                                    child:const Text(
+                                                side: BorderSide(
+                                                    color: colorconst.blackColor)))),
+                                    child: Text(
                                       "Cancel",
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(color: colorconst.blackColor),
                                     )),
                               ),
                               SizedBox(
@@ -115,13 +117,12 @@ class RegisterOtpDialog {
                                         'email': email,
                                         'verification_code': otpController.text
                                       });
-                                       print("emails");
-                                      print(emailVerify['message']);
+                                     
                                       if (emailVerify['message'] ==
                                           'Verification successful.') {
                                         Navigator.pop(context);
                                         final snackBar = SnackBar(
-                                          backgroundColor: Colors.green,
+                                          backgroundColor: colorconst.greenColor,
                                           content: const Text(
                                               "verification Successful"),
                                           action: SnackBarAction(
@@ -138,30 +139,23 @@ class RegisterOtpDialog {
                                         Router.neglect(context, () {
                                           context.goNamed('SELECTYOURINTREST');
                                         });
-                                        print("emailData");
-                                        print(email);
+                                      
                                         // context.pushNamed('HOMEPAGE');
                                         // String resetToken = emailVerify['data'].reset_token;
-                                        // print(emailVerify['data'].reset_token);
                                         sharedPreferences.setString('email', email);
-                                        print("this is fcm");
                                         String? token = await FirebaseMessaging.instance.getToken();
-                                        print("fcm");
-                                        print(token);
                                         apiProvider.postApi("/user/fcm-token", {"fcm_token": token});
-                                        print("is fcm token save");
-                                        print(apiProvider.RegisterResponse);
                                         // sharedPreferences.setString("reset_token", resetToken);
                                       }else if(emailVerify['message'] == 'Email already verified.'){
                                         Flushbar(
-                                          backgroundColor: Colors.red,
+                                          backgroundColor: colorconst.redColor,
                                           message:
                                               "Email already verified.",
                                           duration: Duration(seconds: 2),
                                         ).show(context);
                                       }else if(emailVerify['message'] =='Login validation Verificationcode Empty'){
                                         Flushbar(
-                                          backgroundColor: Colors.red,
+                                          backgroundColor: colorconst.redColor,
                                           message:
                                               "Login validation Verificationcode Empty",
                                           duration: Duration(seconds: 2),
@@ -170,7 +164,7 @@ class RegisterOtpDialog {
                                        else if (emailVerify['message'] ==
                                           'Incorrect verification code.') {
                                         Flushbar(
-                                          backgroundColor: Colors.red,
+                                          backgroundColor: colorconst.redColor,
                                           message:
                                               "Incorrect_verification_code",
                                           duration: Duration(seconds: 2),
@@ -178,7 +172,7 @@ class RegisterOtpDialog {
                                       } else if (emailVerify['message'] ==
                                           'Login validation Verificationcode Min') {
                                         Flushbar(
-                                          backgroundColor: Colors.red,
+                                          backgroundColor: colorconst.redColor,
                                           message:
                                               "Login validation Verificationcode is 6 digit",
                                           duration: Duration(seconds: 2),
@@ -186,33 +180,31 @@ class RegisterOtpDialog {
                                       } else if (emailVerify['message'] ==
                                           'Login validation Verificationcode Max') {
                                         Flushbar(
-                                          backgroundColor: Colors.red,
+                                          backgroundColor: colorconst.redColor,
                                           message:
                                               "Login validation Verificationcode is 6 digit",
                                           duration: Duration(seconds: 2),
                                         ).show(context);
                                       }
-                                      print("EmailVarify");
-                                      // print(
-                                      //     apiProvider.EmailVarify['message']);
+                                  
                                     },
                                     style: ButtonStyle(
                                         shadowColor:
                                             MaterialStateProperty.all<Color>(
-                                                Colors.black),
+                                                colorconst.blackColor),
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(
-                                                Colors.black),
+                                                colorconst.blackColor),
                                         shape: MaterialStateProperty.all<
                                                 RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(12.0),
                                                 side: BorderSide(
-                                                    color: Colors.black)))),
+                                                    color: colorconst.blackColor)))),
                                     child: Text(
                                       "Submit",
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: colorconst.whiteColor),
                                     )),
                               )
                             ],
@@ -226,10 +218,9 @@ class RegisterOtpDialog {
                               TextSpan(
                                   text: "Haven't received email yet? ",
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.black)),
+                                      fontSize: 14, color: colorconst.blackColor)),
                               TextSpan(
                                 recognizer: TapGestureRecognizer()..onTap = ()async{
-                          print("object");
                           if(password == cnfpassword){
                               await apiProvider.Post('/user/signup', {
                                 'name':name,
@@ -239,18 +230,16 @@ class RegisterOtpDialog {
                                  });
                                  if(apiProvider.RegisterResponse['message'] =='Email already exists and otp sent again'){
                                   Flushbar(
-                                      backgroundColor: Colors.green,
+                                      backgroundColor: colorconst.greenColor,
                                       message: "Email already exists and otp sent again",
                                       duration: Duration(seconds: 1),
                                     ).show(context);
                                  }
                           }
-                          print(apiProvider.RegisterResponse['message']);
-                           print("rrgisterrr");
-                           print(apiProvider.RegisterResponse['message']);
+                 
                            if(apiProvider.RegisterResponse['message'] == 'Mail sent successfully.'){
                              Flushbar(
-          backgroundColor: Colors.green,
+          backgroundColor: colorconst.greenColor,
           message: "otp resend to your mail",
           duration: Duration(seconds: 1),
         ).show(context);
@@ -270,7 +259,7 @@ class RegisterOtpDialog {
                               TextSpan(
                                   text: "Wanna change above email? ",
                                   style: TextStyle(
-                                      fontSize: 14, color: Colors.black)),
+                                      fontSize: 14, color: colorconst.blackColor)),
                               TextSpan(
                                   recognizer: TapGestureRecognizer()..onTap = (){
                                   Navigator.pop(context);

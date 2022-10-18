@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tvtalk/Authencation/google_sign_in.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/controllers/register_network.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
@@ -34,6 +35,7 @@ class _RegisterPageState extends State<RegisterPage> {
   var apiProvider = ApiProvider();
   var registerNetwork = RegisterNetwork();
   final signincontroller = Get.find<SignInController>();
+  final colorconst = ColorConst();
 
  
   @override
@@ -41,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colorconst.whiteColor,
       // appBar:
       body: SingleChildScrollView(
         child: SizedBox(
@@ -70,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         AppBar(
                           elevation: 0,
                           // backgroundColor: Col,
-                          backgroundColor: Colors.transparent,
+                          backgroundColor: colorconst.transparentColor,
                           title: Align(
                             alignment: Alignment.centerRight,
                             child: InkWell(
@@ -81,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: Text(
                                 "Continue as Guest >>|",
                                 style: TextStyle(
-                                    color: Colors.black,
+                                    color: colorconst.blackColor,
                                     fontSize: textSize.getadaptiveTextSize(
                                         context, 12)),
                               ),
@@ -159,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Icon(
                 (signincontroller.cnfpasswordVisiblity.value)
                  ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.black,
+                  color: colorconst.blackColor,
                 )
              
                 )
@@ -198,9 +200,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: textStyleButton,
                   ),
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.transparent,
-                      onSurface: Colors.transparent,
-                      shadowColor: Colors.transparent,
+                      primary: colorconst.transparentColor,
+                      onSurface: colorconst.transparentColor,
+                      shadowColor: colorconst.transparentColor,
                       // padding: EdgeInsets.symmetric(horizontal: width*10/100,),
                       textStyle: const TextStyle(
                           fontSize: 30, fontWeight: FontWeight.bold)),
@@ -213,13 +215,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 width: width,
                 text: "Continue with Google",
                 image: "assets/icons/google.png",
-                color: Colors.white,
-                textColor: Colors.black,
+                color: colorconst.whiteColor,
+                textColor: colorconst.blackColor,
                 onPress: ()async{
                   final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                 await  provider.googleLogin();
-                  print("userinfo from google");
-                  print(provider.user.email);
+                
                   if(provider.user != null){
                   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                   sharedPreferences.setString('email', provider.user.email);
@@ -253,13 +254,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 text: "Continue with facebook",
                 image: "assets/icons/facebook.png",
                 color: facebookColor,
-                textColor: Colors.white,
+                textColor: colorconst.whiteColor,
                  onPress: ()async{
                   final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                  await provider.facebookLogin();
                   if(provider.user != null){
-                    print("facebook email");
-                    print(provider.user['email']);
+                   
                     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                     sharedPreferences.setString('email', provider.user['email']);
                     signincontroller.userName = provider.user['name'];
@@ -279,8 +279,7 @@ class _RegisterPageState extends State<RegisterPage> {
                        context.goNamed("SELECTYOURINTREST");
                     }
                     signincontroller.isGuest.value = '';
-                    print("facebookdata");
-                    print(provider.user);
+                  
                   }
                 },
               ),
@@ -291,8 +290,8 @@ class _RegisterPageState extends State<RegisterPage> {
               //   width: width,
               //   text: "Continue with Apple",
               //   image: "assets/icons/apple.png",
-              //   color: Colors.black,
-              //   textColor: Colors.white,
+              //   color: colorconst.blackColor,
+              //   textColor: colorconst.whiteColor,
               // ),
               // SizedBox(
               //   height: height * 2 / 100,

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/getxcontroller/detail_page_controller.dart';
 import 'package:tvtalk/model/post_model.dart';
 import 'package:tvtalk/services/service.dart';
@@ -13,6 +14,7 @@ class ThemeDialog {
   var submitdialog = SubmitDialog();
   var apiProvider = ApiProvider();
   late String otpEmail;
+    final colorconst = ColorConst();
   var detailpageController = Get.find<DetailPageController>();
   TextEditingController otpController = TextEditingController();
   void showThemeDialog(BuildContext context, String email) {
@@ -20,7 +22,7 @@ class ThemeDialog {
     showGeneralDialog(
       barrierLabel: "showGeneralDialog",
       barrierDismissible: false,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: colorconst.blackColor.withOpacity(0.6),
       transitionDuration: const Duration(milliseconds: 400),
       context: context,
       pageBuilder: (context, _, __) {
@@ -54,51 +56,51 @@ class ThemeDialog {
           fontSize,
           style: TextStyle(
               color: detailpageController.isDark.value
-                  ? Colors.white
-                  : Colors.black),
+                  ? colorconst.whiteColor
+                  : colorconst.blackColor),
         )),
         decoration: BoxDecoration(
                   color: (fontSize == '12' && detailpageController.fontSize.value == 12)?
-                   Colors.green :
+                   colorconst.greenColor :
                    (fontSize == '14' && detailpageController.fontSize.value == 14)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '16' && detailpageController.fontSize.value == 16)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '18' && detailpageController.fontSize.value == 18)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '20' && detailpageController.fontSize.value == 20)?
-                   Colors.green : 
+                   colorconst.greenColor : 
                    (fontSize == '22' && detailpageController.fontSize.value == 22)?
-                   Colors.green : 
+                   colorconst.greenColor : 
                    (fontSize == '24' && detailpageController.fontSize.value == 24)?
-                   Colors.green : Colors.transparent,
+                   colorconst.greenColor : colorconst.transparentColor,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
                 color: detailpageController.isDark.value
                     ?(fontSize == '12' && detailpageController.fontSize.value == 12)?
-                   Colors.green :
+                   colorconst.greenColor :
                    (fontSize == '14' && detailpageController.fontSize.value == 14)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '16' && detailpageController.fontSize.value == 16)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '18' && detailpageController.fontSize.value == 18)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '20' && detailpageController.fontSize.value == 20)?
-                   Colors.green : Colors.white
+                   colorconst.greenColor : colorconst.whiteColor
                     :(fontSize == '12' && detailpageController.fontSize.value == 12)?
-                   Colors.green :
+                   colorconst.greenColor :
                    (fontSize == '14' && detailpageController.fontSize.value == 14)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '16' && detailpageController.fontSize.value == 16)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '18' && detailpageController.fontSize.value == 18)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '20' && detailpageController.fontSize.value == 20)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '22' && detailpageController.fontSize.value == 22)?
-                   Colors.green:
+                   colorconst.greenColor:
                    (fontSize == '24' && detailpageController.fontSize.value == 24)?
-                   Colors.green : Colors.black)),
+                   colorconst.greenColor : colorconst.blackColor)),
       ),
     );
   }
@@ -121,9 +123,9 @@ class ThemeDialog {
                              (detailpageController.fontFamily.value == 4 && fontName == "Montserrat") ||
                              (detailpageController.fontFamily.value == 5 && fontName == "VIDALOKA")
                              ) ? 
-                      Colors.green : Colors.grey 
+                      colorconst.greenColor : Colors.grey 
                     ),
-                    primary: Colors.transparent),
+                    primary: colorconst.transparentColor),
                 onPressed: ontap,
                 child: name == 'Hello, friend!'
                     ? Text(
@@ -132,8 +134,8 @@ class ThemeDialog {
                             fontSize: 14,
                             fontFamily: fontName,
                             color: detailpageController.isDark.value
-                                ? Colors.white
-                                : Colors.black),
+                                ? colorconst.whiteColor
+                                : colorconst.blackColor),
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -144,8 +146,8 @@ class ThemeDialog {
                               child: Image(
                                 image: AssetImage(image),
                                 color: detailpageController.isDark.value
-                                    ? Colors.white
-                                    : Colors.black,
+                                    ? colorconst.whiteColor
+                                    : colorconst.blackColor,
                               )),
                           const SizedBox(
                             width: 5,
@@ -155,8 +157,8 @@ class ThemeDialog {
                             style: TextStyle(
                               fontSize: 14,
                               color: detailpageController.isDark.value
-                                  ? Colors.white
-                                  : Colors.black,
+                                  ? colorconst.whiteColor
+                                  : colorconst.blackColor,
                             ),
                           ),
                         ],
@@ -172,16 +174,16 @@ class ThemeDialog {
                       style: TextStyle(
                           fontSize: 12,
                           color: detailpageController.isDark.value
-                              ? Colors.white
-                              : Colors.black),
+                              ? colorconst.whiteColor
+                              : colorconst.blackColor),
                     )
                   : Text(
                       "$name Theme",
                       style: TextStyle(
                           fontSize: 12,
                           color: detailpageController.isDark.value
-                              ? Colors.white
-                              : Colors.black),
+                              ? colorconst.whiteColor
+                              : colorconst.blackColor),
                     ),
               Icon(
                 Icons.check_circle_rounded,
@@ -193,7 +195,7 @@ class ThemeDialog {
                        (detailpageController.fontFamily.value == 4 && fontName == "Montserrat")  ||
                        (detailpageController.fontFamily.value == 5 && fontName == "VIDALOKA")
                     ))
-                    ? Colors.green
+                    ? colorconst.greenColor
                     : (detailpageController.isDark == false && (
                        (detailpageController.fontFamily.value == 1 && fontName == "ROBOTO") ||
                        (detailpageController.fontFamily.value == 2 && fontName == "QUICKSAND")||
@@ -201,9 +203,9 @@ class ThemeDialog {
                        (detailpageController.fontFamily.value == 4 && fontName == "Montserrat")  ||
                        (detailpageController.fontFamily.value == 5 && fontName == "VIDALOKA")
                              )) ?
-                             Colors.green
+                             colorconst.greenColor
                           : detailpageController.isDark.value ?
-                          Colors.white : Colors.black
+                          colorconst.whiteColor : colorconst.blackColor
               ),
             ],
           ),
@@ -227,9 +229,9 @@ class ThemeDialog {
                     side: BorderSide(
                       color:((detailpageController.activeBorder.value == 1 && name == "Light") ||
                              (detailpageController.activeBorder.value == 2 && name == "Dark")) ? 
-                      Colors.green : Colors.grey 
+                      colorconst.greenColor : Colors.grey 
                     ),
-                    primary: Colors.transparent),
+                    primary: colorconst.transparentColor),
                 onPressed: ontap,
                 child: name == 'Hello, friend!'
                     ? Text(
@@ -237,8 +239,8 @@ class ThemeDialog {
                         style: TextStyle(
                             fontSize: 14,
                             color: detailpageController.isDark.value
-                                ? Colors.white
-                                : Colors.black),
+                                ? colorconst.whiteColor
+                                : colorconst.blackColor),
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -249,8 +251,8 @@ class ThemeDialog {
                               child: Image(
                                 image: AssetImage(image),
                                 color: detailpageController.isDark.value
-                                    ? Colors.white
-                                    : Colors.black,
+                                    ? colorconst.whiteColor
+                                    : colorconst.blackColor,
                               )),
                           SizedBox(
                             width: 5,
@@ -260,8 +262,8 @@ class ThemeDialog {
                             style: TextStyle(
                               fontSize: 14,
                               color: detailpageController.isDark.value
-                                  ? Colors.white
-                                  : Colors.black,
+                                  ? colorconst.whiteColor
+                                  : colorconst.blackColor,
                             ),
                           ),
                         ],
@@ -277,27 +279,27 @@ class ThemeDialog {
                       style: TextStyle(
                           fontSize: 12,
                           color: detailpageController.isDark.value
-                              ? Colors.white
-                              : Colors.black),
+                              ? colorconst.whiteColor
+                              : colorconst.blackColor),
                     )
                   : Text(
                       "$name Theme",
                       style: TextStyle(
                           fontSize: 12,
                           color: detailpageController.isDark.value
-                              ? Colors.white
-                              : Colors.black),
+                              ? colorconst.whiteColor
+                              : colorconst.blackColor),
                     ),
               Icon(
                 Icons.check_circle_rounded,
                 size: 16,
                 color:(detailpageController.isDark.value && (detailpageController.activeBorder.value == 1 && name == "Light") ||
                              (detailpageController.activeBorder.value == 2 && name == "Dark") )
-                    ? Colors.green:
+                    ? colorconst.greenColor:
                     (detailpageController.isDark == false && (detailpageController.activeBorder.value == 1 && name == "Light") ||
                               (detailpageController.activeBorder.value == 2 && name == "Dark")
                     ) ?
-                    Colors.green : Colors.black
+                    colorconst.greenColor : colorconst.blackColor
               ),
             ],
           ),
@@ -319,14 +321,14 @@ class ThemeDialog {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: detailpageController.isDark.value
-                    ? Colors.black
-                    : Colors.white,
+                    ? colorconst.blackColor
+                    : colorconst.whiteColor,
               ),
               child: Material(
                 child: Container(
                   color: detailpageController.isDark.value
-                      ? Colors.black
-                      : Colors.white,
+                      ? colorconst.blackColor
+                      : colorconst.whiteColor,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -336,8 +338,8 @@ class ThemeDialog {
                       //   "Select Reading Theme",
                       //   style: TextStyle(
                       //       color: detailpageController.isDark.value
-                                // ? Colors.white
-                      //           : Colors.black,
+                                // ? colorconst.whiteColor
+                      //           : colorconst.blackColor,
                       //       fontWeight: FontWeight.w600,
                       //       fontSize: 16),
                       // ),
@@ -363,8 +365,8 @@ class ThemeDialog {
                       // const SizedBox(height: 16),
                       // Divider(
                       //   color: detailpageController.isDark.value
-                      //       ? Colors.white
-                      //       : Colors.black,
+                      //       ? colorconst.whiteColor
+                      //       : colorconst.blackColor,
                       // ),
                       Text(
                         "Select Font",
@@ -372,8 +374,8 @@ class ThemeDialog {
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                             color: detailpageController.isDark.value
-                                ? Colors.white
-                                : Colors.black),
+                                ? colorconst.whiteColor
+                                : colorconst.blackColor),
                       ),
                       const SizedBox(height: 16),
                       Container(
@@ -423,8 +425,8 @@ class ThemeDialog {
                       ),
                       Divider(
                         color: detailpageController.isDark.value
-                            ? Colors.white
-                            : Colors.black,
+                            ? colorconst.whiteColor
+                            : colorconst.blackColor,
                       ),
                       Text(
                         "Select Font Size",
@@ -432,8 +434,8 @@ class ThemeDialog {
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                             color: detailpageController.isDark.value
-                                ? Colors.white
-                                : Colors.black),
+                                ? colorconst.whiteColor
+                                : colorconst.blackColor),
                       ),
                       const SizedBox(height: 16),
                       Row(
@@ -450,15 +452,15 @@ class ThemeDialog {
                                             Radius.circular(8))),
                                     elevation: 0.0,
                                     side: const BorderSide(color: Colors.grey),
-                                    primary: Colors.transparent),
+                                    primary: colorconst.transparentColor),
                                 onPressed: () {},
                                 child: Text(
                                   "Tiny",
                                   style: TextStyle(
                                       fontSize: 12,
                                       color: detailpageController.isDark.value
-                                          ? Colors.white
-                                          : Colors.black),
+                                          ? colorconst.whiteColor
+                                          : colorconst.blackColor),
                                 ),
                               )),
                           FontSizeBox("12",(){
@@ -492,15 +494,15 @@ class ThemeDialog {
                                             Radius.circular(8))),
                                     elevation: 0.0,
                                     side: const BorderSide(color: Colors.grey),
-                                    primary: Colors.transparent),
+                                    primary: colorconst.transparentColor),
                                 onPressed: () {},
                                 child: Text(
                                   "Big",
                                   style: TextStyle(
                                       fontSize: 12,
                                       color: detailpageController.isDark.value
-                                          ? Colors.white
-                                          : Colors.black),
+                                          ? colorconst.whiteColor
+                                          : colorconst.blackColor),
                                 ),
                               )),
                         ],
@@ -514,8 +516,8 @@ class ThemeDialog {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: detailpageController.isDark.value
-                                  ? Colors.white
-                                  : Colors.black,
+                                  ? colorconst.whiteColor
+                                  : colorconst.blackColor,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10))),
                           onPressed: () {
@@ -525,8 +527,8 @@ class ThemeDialog {
                             "Done",
                             style: TextStyle(
                                 color: detailpageController.isDark.value
-                                    ? Colors.black
-                                    : Colors.white,
+                                    ? colorconst.blackColor
+                                    : colorconst.whiteColor,
                                 letterSpacing: 2),
                           ),
                         ),

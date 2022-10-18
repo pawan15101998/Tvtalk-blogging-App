@@ -1,13 +1,18 @@
+import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:tvtalk/Authencation/google_sign_in.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/router.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:tvtalk/services/helper/dependency_injuctor.dart';
 
 
@@ -19,11 +24,13 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   playSound: true);
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+final colorconst = ColorConst();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
   await Firebase.initializeApp();
   print("A abackground message just show up ${message.messageId}");
 }
+
 
 Future main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +49,7 @@ Future main() async{
   DependencyInjuctor.initializeController();
   runApp(MyApp());
   print("easy");
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 }
 
 void configLoading(){
@@ -50,13 +58,13 @@ void configLoading(){
     ..displayDuration = const Duration(milliseconds: 2000)
     ..indicatorType = EasyLoadingIndicatorType.ring
     ..loadingStyle = EasyLoadingStyle.values[0]
-    ..backgroundColor = Colors.transparent
+    ..backgroundColor = colorconst.transparentColor
     ..indicatorSize = 30.0
     ..radius = 0.0
-    ..progressColor = Colors.transparent
-    ..indicatorColor = Colors.transparent
-    ..textColor = Colors.transparent
-    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..progressColor = colorconst.transparentColor
+    ..indicatorColor = colorconst.transparentColor
+    ..textColor = colorconst.transparentColor
+    ..maskColor = colorconst.blueColor.withOpacity(0.5)
     ..userInteractions = true
     ..dismissOnTap = false;
     // print("lastt");
@@ -76,9 +84,7 @@ class _MyAppState extends State<MyApp> {
    @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-    sendNotification();
-    
+    super.initState();    
     // showNotification();
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
@@ -93,7 +99,7 @@ class _MyAppState extends State<MyApp> {
               channel.id,
               channel.name,
               // channel.description,
-              color: Colors.blue,
+              color: colorconst.blueColor,
               playSound: true,
               icon: '@mipmap/ic_launcher'
             )
@@ -124,6 +130,46 @@ class _MyAppState extends State<MyApp> {
       }
      });
   }
+ 
+//  Future<void> _createDynamicLink(bool short) async{
+//   setState(() {
+//     _iscreatingLink = true;
+//   });
+
+//    final DynamicLinkParameters parameters = DynamicLinkParameters(
+//     link: Uri.parse("https://tvtalk.page.link/helloworld"), 
+//     uriPrefix: "https://tvtalk.page.link",
+//     androidParameters: AndroidParameters(
+//       packageName: "com.example.tvtalk",
+//       minimumVersion: 0
+//     ),
+//     iosParameters: IOSParameters(
+//       bundleId: "",
+//       minimumVersion: "0",
+//     ),
+//     // dynamicLinkParametersOptions: dynamicLinkParametersOptions(
+//     //   ShortDynamicLinkPathLength: ShortDynamicLinkPathLength.short,
+//     // ),
+//     socialMetaTagParameters: SocialMetaTagParameters(
+//       title: "The Title Of the Dynamic Link Says Hello World",
+//       description: "This is a random Description just say hello world"
+//     )
+//     );
+//     Uri url;
+//     if(short){
+//       final ShortDynamicLink shotLink = await parameters.buildShortLink();
+//       print(shotLink.toString());
+//       url = shotLink.shortUrl;
+//     }else{
+//       url = await parameters.buildUrl();
+//     }
+//     setState(() {
+//       _linkMessage = url.toString();
+//       _iscreating = false;
+//     });
+//       // Uri shortLink = await parameters.buildShortLink();
+//  }
+
   int _counter = 0;
 
   void sendNotification()async{
@@ -139,7 +185,7 @@ class _MyAppState extends State<MyApp> {
           channel.id,
           channel.name,
           importance: Importance.high,
-          color: Colors.blue,
+          color: colorconst.blueColor,
           playSound:  true,
           icon: '@mipmap/ic_launcher'
           )
@@ -163,7 +209,7 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo',
         theme: ThemeData(
           fontFamily: 'Poppins',
-          primarySwatch: Colors.blue,
+          primarySwatch: colorconst.blueColor,
         ),
         builder:EasyLoading.init() ,
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),

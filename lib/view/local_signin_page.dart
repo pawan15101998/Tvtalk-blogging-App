@@ -19,8 +19,7 @@ class _LocalSignPageState extends State<LocalSignPage> {
       body: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            print("sanapsjoty");
-            print(snapshot.data);
+       
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -30,8 +29,7 @@ class _LocalSignPageState extends State<LocalSignPage> {
                 child: Text('Something Went wrong'),
               );
             } else if (snapshot.hasData) {
-              // print("faceaurhu");
-              // print(SocialSignin.facebookdata);
+        
               return HomePage();
             } else {
               return SignInPage();

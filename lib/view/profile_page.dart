@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
@@ -14,6 +15,7 @@ class Profilepage extends StatefulWidget {
 }
 final signincontroller = Get.find<SignInController>();
 final homePageController = Get.find<HomePageController>();
+final colorconst = ColorConst();
 class _ProfilepageState extends State<Profilepage> {
 @override
   void initState() {
@@ -22,15 +24,13 @@ class _ProfilepageState extends State<Profilepage> {
   }
   @override
   Widget build(BuildContext context) {
-    print("this is profile image");
-    print(homePageController.userDetails['data']['image']);
     return  Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100),
         child: Container(
           margin: EdgeInsets.only(top: 25),
           child: AppBar(
-            backgroundColor:const Color(0xffFFDC5C),
+            backgroundColor: colorconst.mainColor,
             elevation: 0,
             centerTitle: true,
             title:const Text("Profile"),
@@ -42,7 +42,7 @@ class _ProfilepageState extends State<Profilepage> {
                     Navigator.pop(context, true);
                     context.pushNamed('EDITPROFILE');
                   },
-                  child: Text("Edit", style: TextStyle(color: Colors.white, fontSize: 18),)),
+                  child: Text("Edit", style: TextStyle(color: colorconst.whiteColor, fontSize: 18),)),
               )
             ],
           ),
@@ -50,7 +50,7 @@ class _ProfilepageState extends State<Profilepage> {
         ),
       ),
       body: Container(
-        color:const Color(0xfffFFDC5C),
+        color: colorconst.mainColor,
         width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,8 +73,8 @@ class _ProfilepageState extends State<Profilepage> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height-248,
-              decoration:const BoxDecoration(
-              color: Colors.white,
+              decoration: BoxDecoration(
+              color: colorconst.whiteColor,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(50), topRight: Radius.circular(50) )
               ),
               child: Padding(
@@ -128,14 +128,14 @@ class _ProfilepageState extends State<Profilepage> {
 
     // Scaffold(
     //   appBar: AppBar(
-    //     iconTheme: const IconThemeData(color: Colors.black),
+    //     iconTheme: const IconThemeData(color: colorconst.blackColor),
     //     toolbarHeight: 40.0,
     //     elevation: 0,
     //     // automaticallyImplyLeading: false,
-    //     backgroundColor: Color(0xfffFFDC5C),
+    //     backgroundColor: colorconst.mainColor,
     //     title: const Text(
     //       "My Profile",
-    //       style: TextStyle(color: Colors.black, fontSize: 20),
+    //       style: TextStyle(color: colorconst.blackColor, fontSize: 20),
     //     ),
     //     actions: const [
     //       Padding(
@@ -150,7 +150,7 @@ class _ProfilepageState extends State<Profilepage> {
     //       Container(
     //         height: MediaQuery.of(context).size.height / 6,
     //         width: MediaQuery.of(context).size.width,
-    //         color: Color(0xfffFFDC5C),
+    //         color: colorconst.mainColor,
     //       ),
     //       Align(
     //         alignment: Alignment.bottomCenter,
@@ -213,7 +213,7 @@ class _ProfilepageState extends State<Profilepage> {
   // Container details(BuildContext context,String content, String contentName) {
   //   return Container(
   //     height: MediaQuery.of(context).size.height / 9.3,
-  //     // color: Colors.blue,
+  //     // color: colorconst.blueColor,
   //     child: Align(
   //       alignment: Alignment.center,
   //       child: Column(

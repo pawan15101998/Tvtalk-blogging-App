@@ -11,6 +11,8 @@ class HomePage1Controller extends GetxController {
   RxString userTags = ''.obs;
   RxString nosearch = "".obs;
   RxList allpostdata = [].obs;
+  RxList userTagName = [].obs;
+  RxList userTagId = [].obs;
   RxList copydata = [].obs;
   RxMap userDetails = {}.obs;
   RxList searchArticle = [].obs;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:tvtalk/constant/color_const.dart';
 
 class QuizAlreadytakenPage extends StatefulWidget {
   const QuizAlreadytakenPage({Key? key}) : super(key: key);
@@ -31,6 +32,7 @@ class _QuizAlreadytakenPageState extends State<QuizAlreadytakenPage> {
   }
 
    Widget SingleQuiz(){
+    final colorconst = ColorConst();
     return  Padding(
     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
     child: Row(
@@ -57,10 +59,10 @@ class _QuizAlreadytakenPageState extends State<QuizAlreadytakenPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                   Text(
                     "Quiz",
                     style: TextStyle(
-                      color: Color(0xfffF1B142),
+                      color: colorconst.lightYellow,
                       fontSize: 14
                     ),
                   ),
@@ -100,20 +102,20 @@ class _QuizAlreadytakenPageState extends State<QuizAlreadytakenPage> {
                     height: MediaQuery.of(context).size.height*5/100,
                     child: ElevatedButton(
                       onPressed: (){}, 
-                      child: const Text("My Response",
+                      child:  Text("My Response",
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black
+                        color: colorconst.blackColor
                       ), 
                       ),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                        shadowColor:MaterialStateProperty.all(Colors.transparent),
+                        backgroundColor: MaterialStateProperty.all(colorconst.transparentColor),
+                        shadowColor:MaterialStateProperty.all(colorconst.transparentColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                         side: BorderSide(color: Colors.black)
+                         side: BorderSide(color: colorconst.blackColor)
                     ),
           ))
                       ),

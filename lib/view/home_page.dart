@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tvtalk/Authencation/google_sign_in.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
@@ -21,6 +27,7 @@ import 'package:tvtalk/view/home_page2.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:tvtalk/view/home_page3.dart';
 import 'package:tvtalk/view/home_page4.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 // function check(time) { 
@@ -61,7 +68,7 @@ class HomePageState extends State<HomePage> {
   List? copydata;
   List? datacopy;
   final signincontroller = Get.find<SignInController>();
-
+  final colorconst = ColorConst();
 
   final items = [
   Column(
@@ -107,13 +114,12 @@ class HomePageState extends State<HomePage> {
   ];
 
   final pages = [
-    HomePage1(key: settingState,),
+    HomePage1(  key: settingState,),
     const HomePage2(),
     const FunAndGames(),
     const HomePage3(),
     const HomePage4(),
   ];
-
 
 
 
@@ -128,14 +134,10 @@ class HomePageState extends State<HomePage> {
 
     getUSerDetails();
     datacopy = homePage1Controller.allpostdata;
-    print("nnnnnnnn");
-    // print(userName);
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Google print");
-    print(signincontroller.image);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -148,7 +150,7 @@ class HomePageState extends State<HomePage> {
             toolbarHeight: 100.0,
             elevation: 0,
             automaticallyImplyLeading: false,
-            backgroundColor: Color(0xfffFFDC5C),
+            backgroundColor: colorconst.mainColor,
             title: const SizedBox(
                 width: 110,
                 child: Image(
@@ -175,7 +177,7 @@ class HomePageState extends State<HomePage> {
                       onTap: () {
                          context.goNamed("SIGNINPAGE");
                       },
-                      child: Icon(Icons.login, color: Colors.black,))
+                      child: Icon(Icons.login, color: colorconst.blackColor,))
                   : const SizedBox();
             }),
             actions: [
@@ -192,11 +194,55 @@ class HomePageState extends State<HomePage> {
               Obx(() {
                 return homePageController.searchIcon.value
                     ? IconButton(
-                        onPressed: () {},
-                        icon: const Image(
-                          image: AssetImage("assets/icons/icon_bell.png"),
-                          height: 24,
-                        ))
+                        onPressed: () async{
+                          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                          String? userid = sharedPreferences.getString('userId');
+                          await apiProvider.postApi("/user/show-notification", {
+                            "userID": userid
+                          });
+                        homePageController.notificationData.value =  apiProvider.RegisterResponse;
+                        var postid;
+                        // for(int i=1; i<=homePageController.notificationData.value[0].length; i++){
+                        //  List postData = jsonDecode(homePageController.notificationData.value[i]['jsonData']);
+                        // // postid =  await apiProvider.postApi('/post/mark-read', {'postId': "${jsonDecode(homePageController.notificationData[i]['jsonData'])[0]['postId'][0]}"});
+                        // print(postData);
+                        // }
+
+                        context.pushNamed('NOTIFICATIONLIST');
+                        },
+                        icon: Obx(() {
+                            return Stack(
+                              children: [
+                                homePageController.unReadNotification != 0?
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: Container(
+                                    height: 15,
+                                    width: 15,
+                                    decoration: BoxDecoration(
+                                      color: colorconst.redColor,
+                                      shape: BoxShape.circle
+                                    ),
+                                    child: Center(
+                                      child: Text(homePageController.unReadNotification.toString(),style: TextStyle(
+                                        fontSize: 10
+                                      ),),
+                                    ),
+                                  ),
+                                ) :const SizedBox(),
+                              const Padding(
+                                  padding:  EdgeInsets.all(5.0),
+                                  child: Image(
+                                  image: AssetImage("assets/icons/icon_bell.png"),
+                                  height: 24,
+                              ),
+                                ),
+                              ],
+                            );
+                          }
+                        )
+                        )
                     : Expanded(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -210,7 +256,6 @@ class HomePageState extends State<HomePage> {
                                 onChanged: homePage1Controller.searchFunction,
                                 //  (value) {
                                 //   // homePage1Controller.allpostdata[0].title.rendered = value;
-                                //   print("print");
                                 //   copydata = homePage1Controller.allpostdata;
                                 //   homePage1Controller.allpostdata.value =
                                 //       copydata!
@@ -219,30 +264,26 @@ class HomePageState extends State<HomePage> {
                                 //               .toLowerCase()
                                 //               .contains(value.toLowerCase()))
                                 //           .toList();
-                                //   print("objectssss");
-                                //   print(copydata);
-                                //   print(homePage1Controller.allpostdata);
                                 //   if (searchcontroller.text == "") {
                                 //     apiProvider.getPost(
                                 //         homePage1Controller.userTags.value);
                                 //   }
                                 //   // apiProvider.getPost(homePage1Controller.userTags.value);
                                 //   //  searchcontroller.clear();`
-                                //   // print(homeP);
                                 //   // dataCopy![0].title.rendered = value;
                                 //   // homePage1Controller.allpostdata.value = dataCopy!;
                                 // },
                                 decoration: InputDecoration(
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(color: colorconst.whiteColor),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(color: colorconst.whiteColor),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: colorconst.whiteColor,
                                   // suffixIcon: InkWell(
                                   //     onTap: () {
                                   //       homePageController.searchIcon.toggle();
@@ -268,7 +309,6 @@ class HomePageState extends State<HomePage> {
                 //                     controller: searchcontroller,
                 //                     onChanged: (value) {
                 //                       // homePage1Controller.allpostdata[0].title.rendered = value;
-                //                       print("print");
                 //                       copydata = homePage1Controller.allpostdata;
                 //                       homePage1Controller.allpostdata.value = copydata!
                 //                           .where((i) => i.title.rendered
@@ -276,25 +316,21 @@ class HomePageState extends State<HomePage> {
                 //                               .toLowerCase()
                 //                               .contains(value.toLowerCase()))
                 //                           .toList();
-                //                       print("objectssss");
-                //                       print(copydata);
-                //                       print(homePage1Controller.allpostdata);
                 //                       // searchcontroller.clear();`
-                //                       // print(homeP);
                 //                       // dataCopy![0].title.rendered = value;
                 //                       // homePage1Controller.allpostdata.value = dataCopy!;
                 //                     },
                 //                     decoration: InputDecoration(
                 //                       focusedBorder: OutlineInputBorder(
-                //                         borderSide: BorderSide(color: Colors.white),
+                //                         borderSide: BorderSide(color: colorconst.whiteColor),
                 //                         borderRadius: BorderRadius.circular(10),
                 //                       ),
                 //                       enabledBorder: UnderlineInputBorder(
-                //   borderSide: BorderSide(color: Colors.white),
+                //   borderSide: BorderSide(color: colorconst.whiteColor),
                 //   borderRadius: BorderRadius.circular(10),
                 // ),
                 //                       filled: true,
-                //                       fillColor: Colors.white,
+                //                       fillColor: colorconst.whiteColor,
                 //                       suffixIcon: InkWell(
                 //                           onTap: () {
                 //                             homePageController.searchIcon.toggle();
@@ -333,9 +369,9 @@ class HomePageState extends State<HomePage> {
                               searchcontroller.clear();
                               homePage1Controller.searchArticle.clear();
                             },
-                            child:const Icon(
+                            child: Icon(
                               Icons.cancel,
-                              color: Colors.black,
+                              color: colorconst.blackColor,
                             ),
                           ));
               }),
@@ -356,11 +392,8 @@ class HomePageState extends State<HomePage> {
                   // if(sharedPreferences.getString('birthday') != null){
                   // homePageController.birthday.value = sharedPreferences.getString('birthday')!;
                   // }
-                  // print(homePageController.birthday);
                   context.pushNamed("PROFILEPAGE");
-                  print("this is deyails");
-                  print(signincontroller.image);
-                  print(homePageController.userDetails['data']['image']);
+          
                 },
                 child: DrawerHeader(
                     child: Row(
@@ -389,7 +422,7 @@ class HomePageState extends State<HomePage> {
                               ? signincontroller.userName.toString()
                               : "",
                           //  userName != null? userName.toString(): "John Cena",
-                          style: TextStyle(fontSize: 18),
+                          style:const TextStyle(fontSize: 18),
                         ),
                         Text(
                           signincontroller.userEmail != null
@@ -414,18 +447,13 @@ class HomePageState extends State<HomePage> {
                         () async{
                           final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                           String? userid = sharedPreferences.getString('userId');
-                          print(userid);
                         List getSavedArticle =  await apiProvider.getSavedArticle(userid);
                         List articleIdList = [];
                         String articleId;
                         for(int i= 0; i<getSavedArticle.length; i++){
                           articleIdList.add(getSavedArticle[i]['articleId']);
                         }
-                        print("article details");
-                      print(articleIdList);
-                      print(getSavedArticle);
                       articleId = articleIdList.toString().replaceAll('[', '').replaceAll(']', '');
-                      print(articleId);
                       await apiProvider.getSavedPost(articleId);
                       context.pushNamed('MYSAVEDARTICLES');
                     }),
@@ -452,26 +480,50 @@ class HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 10,
                     ),
-                    DrawerItems("assets/icons/icon_interest.png", "My Interests",
-                        () {
-                      context.pushNamed('MYINTEREST');
-                    }),
+                    // DrawerItems("assets/icons/icon_interest.png", "My Interests",
+                    //     () {
+                    //   context.pushNamed('MYINTEREST');
+                    // }),
+                    // const SizedBox(
+                    //   height: 10,
+                    // ),
+                    DrawerItems(
+                        "assets/icons/icon_share.png", "Share App", () async{
+                           await Share.share('https://tvtalk.page.link/hellol');
+                        }),
                     const SizedBox(
                       height: 10,
                     ),
                     DrawerItems(
-                        "assets/icons/icon_share.png", "Share App", () {}),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    DrawerItems(
-                        "assets/icons/icon_rating.png", "Rate App", () {}),
+                        "assets/icons/icon_rating.png", "Rate App", (){
+                          showDialog(context: context, builder: (_)=>AlertDialog(
+                            title:const Text("Do you Want to Rate this App"),
+                            actions: [
+                              TextButton(onPressed: (){
+                                Navigator.pop(context);
+                              }, 
+                              child:const Text("No")),
+                              TextButton(onPressed: (){
+                              launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.hackerkernel.scoreyourrun"));
+                              Navigator.pop(context);
+                              }, 
+                              child:const Text("Yes"))
+                            ],
+                          ));
+                        }),
                     const SizedBox(
                       height: 10,
                     ),
                     DrawerItems("assets/icons/icon_tc.png", "Terms & Conditions",
                         () {
                       context.pushNamed('TERMANDCONDITION');
+                    }),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    DrawerItems("assets/icons/setting.png", "SETTING",
+                        () {
+                      context.pushNamed('SETTING');
                     }),
                     const SizedBox(
                       height: 10,
@@ -483,9 +535,15 @@ class HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 10,
                     ),
+                    DrawerItems("assets/icons/feedback.png", "Feedback",
+                        () {
+                      context.pushNamed('FEEDBACK');
+                    }),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     DrawerItems("assets/icons/icon_logout.png", "Logout",
                         () async {
-                      print("sccccccccccccccccc");
                       final SharedPreferences sharedPreferences =
                       await SharedPreferences.getInstance();
                       sharedPreferences.remove('email');
@@ -496,11 +554,9 @@ class HomePageState extends State<HomePage> {
                       // await apiProvider.removeFcmToken("/user/delete-fcm");
                       final provider = Provider.of<GoogleSignInProvider>(context,
                           listen: false);
-                      print("user details");
                       context.goNamed("SIGNINPAGE");
                       await provider.logout();
                       // provider.user
-                      print("user details--------");
                     }),
                     const SizedBox(
                       height: 10,
@@ -510,7 +566,7 @@ class HomePageState extends State<HomePage> {
               )
             ],
           ),
-          // backgroundColor: Colors.red,
+          // backgroundColor: colorconst.redColor,
         ),
         body: homePage1Controller.allpostdata == [] ?Text("No Feed Found")  :Obx(() {
           return pages[homePageController.bootomNav.value];
@@ -536,10 +592,10 @@ class HomePageState extends State<HomePage> {
                 elevation: 0,
                 selectedFontSize: 10,
                 unselectedFontSize: 10,
-                selectedItemColor: Color(0xffF1B142),
-                selectedIconTheme: IconThemeData(color: Color(0xffF1B142)),
-                backgroundColor: Colors.transparent,
-                // fixedColor: Colors.transparent,\
+                selectedItemColor: colorconst.lightYellow,
+                selectedIconTheme: IconThemeData(color: colorconst.lightYellow),
+                backgroundColor: colorconst.transparentColor,
+                // fixedColor: colorconst.transparentColor,\
                 onTap: (index) {
                   homePageController.bootomNav.value = index;
                 },
@@ -552,8 +608,8 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/icon_myfeed.png",
                           ),
                           color: homePageController.bootomNav.value == 0
-                              ? Color(0xffF1B142)
-                              : Colors.black,
+                              ? colorconst.lightYellow
+                              : colorconst.blackColor,
                         )),
                     label: "Feed",
                   ),
@@ -565,8 +621,8 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/icon_home.png",
                           ),
                           color: homePageController.bootomNav.value == 1
-                              ? Color(0xffF1B142)
-                              : Colors.black,
+                              ? colorconst.lightYellow
+                              : colorconst.blackColor,
                         )),
                     label: "Home",
                   ),
@@ -586,8 +642,8 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/icon_video.png",
                           ),
                           color: homePageController.bootomNav.value == 3
-                              ? Color(0xffF1B142)
-                              : Colors.black,
+                              ? colorconst.lightYellow
+                              : colorconst.blackColor,
                         )),
                     label: "Video",
                   ),
@@ -599,8 +655,8 @@ class HomePageState extends State<HomePage> {
                             "assets/icons/icon_trending.png",
                           ),
                           color: homePageController.bootomNav.value == 4
-                              ? Color(0xffF1B142)
-                              : Colors.black,
+                              ? colorconst.lightYellow
+                              : colorconst.blackColor,
                         )),
                     label: "Trending",
                   ),
@@ -683,13 +739,13 @@ class HomePageState extends State<HomePage> {
               );
         }),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Color(0xfffF1B142),
-          child: const SizedBox(
+          backgroundColor: colorconst.lightYellow,
+          child:  SizedBox(
               height: 40,
               width: 40,
               child: Image(
-                image: AssetImage("assets/icons/dice.png"),
-                color: Colors.white,
+                image:const AssetImage("assets/icons/dice.png"),
+                color: colorconst.whiteColor,
               )),
           onPressed: () {
             context.pushNamed('FUNANDGAMES');
@@ -705,7 +761,7 @@ class HomePageState extends State<HomePage> {
     decoration: BoxDecoration(  
         color: homePage1Controller.topTags.value == name  
             ? Color(0xffFBDC6D)  
-            : Colors.transparent,  
+            : colorconst.transparentColor,  
         borderRadius: BorderRadius.circular(15)),  
     child: Padding(  
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),  
@@ -725,7 +781,6 @@ class HomePageState extends State<HomePage> {
         Icons.video_call,
         Icons.trending_down,
       ],
-      // borderColor: Color(0xffFFDC5C),
       // backgroundColor: Colors.grey,
       activeIndex: homePageController.bootomNav.value,
       gapLocation: GapLocation.center,
@@ -733,7 +788,7 @@ class HomePageState extends State<HomePage> {
           .sharpEdge, //for more curve use NotchSmoothness.verySmoothEdge
       leftCornerRadius: 0,
       rightCornerRadius: 0,
-      activeColor: const Color(0xffFFDC5C),
+      activeColor: colorconst.mainColor,
       onTap: (index) {
         homePageController.bootomNav.value = index;
       },

@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
 import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/view/dialog/select_image.dart';
@@ -38,15 +39,13 @@ class _EditprofilepageState extends State<Editprofilepage> {
       homePageController.userDetails['data']['gender'] == 0 ? "male" : "female";
   final items = ['male', 'female'];
   DateTime date = DateTime(2000, 01, 01);
+  final colorconst = ColorConst();
+
 // date = FormData(map)
   bool showSpinner = false;
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("userdetails");
-    print(date);
-    print(homePageController.userDetails['data']['name']);
-    print(homePageController.userDetails);
     namecontroller.text = homePageController.userDetails['data']['name'];
     emailcontroller.text = homePageController.userDetails['data']['email'];
     gendercontroller.text =
@@ -100,28 +99,14 @@ class _EditprofilepageState extends State<Editprofilepage> {
     String? resetToken = sharedPreferences.getString('reset_token');
     var stream;
     var length;
-    print(image);
-    print("find image");
-    print(resetToken);
-    print(image);
-    print(namecontroller.text);
-    print(DateFormat("MM/dd/yyyy").format(date));
-    print(mobilecontroller.text.toString());
-    print(value);
-    print(homePageController.userDetails);
 
     setState(() {
       showSpinner = true;
     });
     if (image != null) {
       stream = http.ByteStream(image!.openRead());
-      print("imageeeee");
-      print(image);
-      print(stream);
       stream.cast();
       length = await image!.length();
-      print(image);
-      //  print(length);
     }
     var uri =
         Uri.parse('https://tv-talk.hackerkernel.com/api/v1/user/edit-profile');
@@ -142,34 +127,20 @@ class _EditprofilepageState extends State<Editprofilepage> {
       'Content-Type': 'application/x-www-form-urlencoded',
       'authorization': 'Bearer ${resetToken!}',
     });
-    print("hgsdjk,df");
-    print("this is outside");
-    print(image);
     if (image != null) {
-      print("image is : ");
-      print(image);
       request.files.add(await http.MultipartFile.fromPath('file', image!.path));
     }
-// print()
-// return;
-
     var response = await request.send();
-    print("kjdfhsdj");
-    print(image);
-    print(stream);
     if (response.statusCode == 200) {
       setState(() {
         showSpinner = false;
         Flushbar(
-          backgroundColor: Colors.green,
+          backgroundColor: colorconst.greenColor,
           message: "Profile updated sucessfully",
           duration: const Duration(seconds: 1),
         ).show(context);
       });
-      print("image uploaded");
-      print(response.stream);
     } else {
-      // print(response);
       setState(() {
         showSpinner = false;
       });
@@ -192,7 +163,7 @@ class _EditprofilepageState extends State<Editprofilepage> {
             child: Container(
               margin: const EdgeInsets.only(top: 25),
               child: AppBar(
-                backgroundColor: Color(0xffFFDC5C),
+                backgroundColor: colorconst.mainColor,
                 elevation: 0,
                 centerTitle: true,
                 title: const Text("Profile"),
@@ -208,7 +179,7 @@ class _EditprofilepageState extends State<Editprofilepage> {
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Colors.white),
+                              color: colorconst.whiteColor),
                         )),
                   )
                 ],
@@ -217,7 +188,7 @@ class _EditprofilepageState extends State<Editprofilepage> {
           ),
           body: SingleChildScrollView(
             child: Container(
-              color: const Color(0xffFFDC5C),
+              color: colorconst.mainColor,
               width: MediaQuery.of(context).size.width,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -230,7 +201,7 @@ class _EditprofilepageState extends State<Editprofilepage> {
                       height: 100,
                       width: 100,
                       decoration: const BoxDecoration(
-                        // color: Colors.red,
+                        // color: colorconst.redColor,
                         shape: BoxShape.circle,
                         // image: DecorationImage(
                         //   image:  NetworkImage("https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg",),fit: BoxFit.cover,),
@@ -266,8 +237,8 @@ class _EditprofilepageState extends State<Editprofilepage> {
                               child: Container(
                                   height: 30,
                                   width: 30,
-                                  decoration: const BoxDecoration(
-                                      color: Colors.white,
+                                  decoration:  BoxDecoration(
+                                      color: colorconst.whiteColor,
                                       shape: BoxShape.circle),
                                   child: const Icon(Icons.edit, size: 25)),
                             ),
@@ -279,8 +250,8 @@ class _EditprofilepageState extends State<Editprofilepage> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     // height: MediaQuery.of(context).size.height-248,
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
+                    decoration:  BoxDecoration(
+                        color: colorconst.whiteColor,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(50),
                             topRight: Radius.circular(50))),
@@ -335,13 +306,13 @@ class _EditprofilepageState extends State<Editprofilepage> {
                                 underline: Container(
                                   height: 0.5,
                                   width: MediaQuery.of(context).size.width,
-                                  color: Colors.black,
+                                  color: colorconst.blackColor,
                                 ),
                                 items: items.map(buildMenuItem).toList(),
                                 iconSize: 36,
                                 icon: Icon(
                                   Icons.arrow_drop_down,
-                                  color: Colors.black,
+                                  color: colorconst.blackColor,
                                 ),
                                 value: value,
                                 isExpanded: true,
@@ -374,7 +345,7 @@ class _EditprofilepageState extends State<Editprofilepage> {
                             ),
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: Color(0xffFFDC5C),
+                                  primary:colorconst.mainColor,
                                 ),
                                 onPressed: () async {
                                   DateTime? newDate = await showDatePicker(
@@ -386,19 +357,17 @@ class _EditprofilepageState extends State<Editprofilepage> {
                                         return Theme(
                                             data: ThemeData().copyWith(
                                                 colorScheme: ColorScheme.dark(
-                                                  primary: Color(0xffFFDC5C),
-                                                  onPrimary: Colors.black,
-                                                  surface: Color(0xffFFDC5C),
+                                                  primary:colorconst.mainColor,
+                                                  onPrimary: colorconst.blackColor,
+                                                  surface:colorconst.mainColor,
                                                 ),
                                                 dialogBackgroundColor:
-                                                    Colors.black),
+                                                    colorconst.blackColor),
                                             child: child!);
                                       });
                                   if (newDate == null) return;
                                   setState(() {
                                     date = newDate;
-                                    print("shi date");
-                                    print(date);
                                   });
                                 },
                                 child:
@@ -417,14 +386,14 @@ class _EditprofilepageState extends State<Editprofilepage> {
     );
     // Scaffold(
     //   appBar: AppBar(
-    //     iconTheme: const IconThemeData(color: Colors.black),
+    //     iconTheme: const IconThemeData(color: colorconst.blackColor),
     //     toolbarHeight: 40.0,
     //     elevation: 0,
     //     // automaticallyImplyLeading: false,
-    //     backgroundColor: Color(0xfffFFDC5C),
+    //     backgroundColor: colorconst.mainColor,
     //     title: const Text(
     //       "My Profile",
-    //       style: TextStyle(color: Colors.black, fontSize: 20),
+    //       style: TextStyle(color: colorconst.blackColor, fontSize: 20),
     //     ),
     //     actions: const [
     //       Padding(
@@ -439,7 +408,7 @@ class _EditprofilepageState extends State<Editprofilepage> {
     //       Container(
     //         height: MediaQuery.of(context).size.height / 6,
     //         width: MediaQuery.of(context).size.width,
-    //         color: Color(0xfffFFDC5C),
+    //         color: colorconst.mainColor,
     //       ),
     //       Align(
     //         alignment: Alignment.bottomCenter,
@@ -502,7 +471,7 @@ class _EditprofilepageState extends State<Editprofilepage> {
   // Container details(BuildContext context,String content, String contentName) {
   //   return Container(
   //     height: MediaQuery.of(context).size.height / 9.3,
-  //     // color: Colors.blue,
+  //     // color: colorconst.blueColor,
   //     child: Align(
   //       alignment: Alignment.center,
   //       child: Column(
@@ -537,7 +506,7 @@ class _EditprofilepageState extends State<Editprofilepage> {
     showGeneralDialog(
       barrierLabel: "showGeneralDialog",
       barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: colorconst.blackColor.withOpacity(0.6),
       transitionDuration: const Duration(milliseconds: 400),
       context: context,
       pageBuilder: (BuildContext context, _, __) {
@@ -552,8 +521,8 @@ class _EditprofilepageState extends State<Editprofilepage> {
                     width: double.maxFinite,
                     clipBehavior: Clip.antiAlias,
                     padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                    decoration:  BoxDecoration(
+                      color: colorconst.whiteColor,
                     ),
                     child: Material(
                       child: Column(
@@ -567,20 +536,20 @@ class _EditprofilepageState extends State<Editprofilepage> {
                           const SizedBox(height: 16),
                           ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  elevation: 0, primary: Color(0xffFFDC5C)),
+                                  elevation: 0, primary: colorconst.mainColor),
                               onPressed: pickimagegallary,
-                              child: const Text(
+                              child:  Text(
                                 "Select from gallary",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: colorconst.blackColor),
                               )),
                           const SizedBox(height: 16),
                           ElevatedButton(
                               onPressed: pickimagecamera,
                               style: ElevatedButton.styleFrom(
-                                  elevation: 0, primary: Color(0xffFFDC5C)),
+                                  elevation: 0, primary: colorconst.mainColor),
                               child: Text(
                                 "Select from Camera",
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(color: colorconst.blackColor),
                               )),
                           const SizedBox(height: 16),
                         ],

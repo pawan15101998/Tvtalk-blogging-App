@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
@@ -23,22 +24,19 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
 final homePageController = Get.find<HomePageController>();
 TextEditingController searchcontroller = TextEditingController();
-  var homePage1Controller = Get.find<HomePage1Controller>();
-  var fontSize = AdaptiveTextSize();
-  final signincontroller = Get.find<SignInController>();
-    var scaffoldKey = GlobalKey<ScaffoldState>();
-  final yourIntrestController = Get.find<YourIntrestController>();
+var homePage1Controller = Get.find<HomePage1Controller>();
+var fontSize = AdaptiveTextSize();
+final signincontroller = Get.find<SignInController>();
+var scaffoldKey = GlobalKey<ScaffoldState>();
+final yourIntrestController = Get.find<YourIntrestController>();
 String? sendingTags;
+final colorconst = ColorConst();
 
 
 @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("modelll");
-    print(yourIntrestController.alltagsDetails);
-    print(yourIntrestController.alltagsName);
-    print(yourIntrestController.allTagsModel);
   }
 
 
@@ -61,7 +59,7 @@ String? sendingTags;
             toolbarHeight: 100.0,
             elevation: 0,
             automaticallyImplyLeading: false,
-            backgroundColor: Color(0xfffFFDC5C),
+            backgroundColor: colorconst.mainColor,
             actions: [
               Obx((){
                 return homePageController.searchIcon.value
@@ -78,15 +76,15 @@ String? sendingTags;
                                 onChanged: homePage1Controller.searchFunction,
                                 decoration: InputDecoration(
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(color: colorconst.whiteColor),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.white),
+                                    borderSide: BorderSide(color: colorconst.whiteColor),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   filled: true,
-                                  fillColor: Colors.white,
+                                  fillColor: colorconst.whiteColor,
                                   border: OutlineInputBorder(),
                                   hintText: 'Search',
                                 ),
@@ -115,9 +113,9 @@ String? sendingTags;
                               searchcontroller.clear();
                               homePage1Controller.searchArticle.clear();
                             },
-                            child:const Icon(
+                            child: Icon(
                               Icons.cancel,
-                              color: Colors.black,
+                              color: colorconst.blackColor,
                             ),
                           ));
               }),
@@ -172,7 +170,7 @@ String? sendingTags;
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              color:const Color(0xffFFDC5C),
+                              color: colorconst.mainColor,
                               height: 50,
                               width: MediaQuery.of(context).size.width,
                               child: Center(child: Text(homePage1Controller.searchArticle[ind], style: 
@@ -241,13 +239,13 @@ String? sendingTags;
                         width: MediaQuery.of(context).size.width - 20,
                         height: MediaQuery.of(context).size.height * 6 / 100,
                         decoration: BoxDecoration(
-                            color:yourIntrestController.tagselectfromsearch.isNotEmpty ? Colors.black: Colors.grey,
+                            color:yourIntrestController.tagselectfromsearch.isNotEmpty ? colorconst.blackColor: Colors.grey,
                             borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
+                        child:  Center(
                           child: Text(
                             "Search",
                             style: TextStyle(
-                                color: Colors.white, fontSize: 16, letterSpacing: 3),
+                                color: colorconst.whiteColor, fontSize: 16, letterSpacing: 3),
                           ),
                         )): SizedBox();
                   }
@@ -264,10 +262,11 @@ String? sendingTags;
 
 
 Widget _titleContainer(String Mytitle){
+    final colorconst = ColorConst();
 return Text(
   Mytitle,
   style: TextStyle(
-    color: Colors.black,
+    color: colorconst.blackColor,
     fontSize: 24,
     fontWeight: FontWeight.bold
   ),
@@ -287,12 +286,13 @@ class _filterChipWidgetState extends State<filterChipWidget> {
   var _isSelected = false;
   List selectedtag = [];
   // int? allTags;
+    final colorconst = ColorConst();
     final yourIntrestController = Get.find<YourIntrestController>();
   @override
   Widget build(BuildContext context) {
     return FilterChip(
       label: Text(widget.chipName), 
-      labelStyle: TextStyle(color: Colors.black,),
+      labelStyle: TextStyle(color: colorconst.blackColor,),
       disabledColor: Color.fromARGB(255, 144, 144, 144),
       selected: _isSelected,
       onSelected: (isSelected){
@@ -308,7 +308,7 @@ class _filterChipWidgetState extends State<filterChipWidget> {
           }
         });
       },
-      selectedColor: Color(0xfffFFDC5C),
+      selectedColor: colorconst.mainColor,
       );
   }
 }

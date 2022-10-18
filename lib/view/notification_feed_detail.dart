@@ -26,17 +26,17 @@ import 'package:url_launcher/url_launcher.dart';
 import '../model/get_comment_model.dart';
 
 final settingState = GlobalKey<HomePage1State>();
-class ArticleDetailPage extends StatefulWidget {
+class NotificationDetailPage extends StatefulWidget {
   dynamic postData;
   Map feedindex;
   final from;
-  ArticleDetailPage({Key? key, this.postData,  required this.feedindex, this.from }) : super(key: key);
+  NotificationDetailPage({Key? key, this.postData,  required this.feedindex, this.from }) : super(key: key);
 
   @override
-  State<ArticleDetailPage> createState() => _ArticleDetailPageState();
+  State<NotificationDetailPage> createState() => _NotificationDetailPageState();
 }
 
-class _ArticleDetailPageState extends State<ArticleDetailPage> {
+class _NotificationDetailPageState extends State<NotificationDetailPage> {
   final urlImages = [
     'assets/images/slider1.png',
     'assets/images/slider2.png',
@@ -73,10 +73,9 @@ final signincontroller = Get.find<SignInController>();
     int indexint = int.parse(widget.feedindex['index']);
     pageController = PageController(initialPage: indexint);
   }
-  final homepage1controller = Get.find<HomePage1Controller>();
-  final colorconst = ColorConst();
-
-  Future<bool>willpop()async{
+final homepage1controller = Get.find<HomePage1Controller>();
+final colorconst = ColorConst();
+Future<bool>willpop()async{
 context.goNamed("HOMEPAGE");
 return Future.value(false);
   }
@@ -89,9 +88,8 @@ return Future.value(false);
         onPageChanged: (value)async {
          await apiprovider.getComment(homepage1controller.copydata[value].id);
          await apiprovider.postApi('/post/mark-read', {'postId': "${homepage1controller.copydata[value].id}"});
-         homepage1controller.allpostdata[value].read = true;
-         homepage1controller.copydata[value].read = true;
-         homePageController.isArticleRead();
+         
+        //  homePageController.isArticleRead();
          settingState.currentState!.refreshWidget();
          setState((){});
         },
@@ -126,13 +124,8 @@ return Future.value(false);
                           background: Container(
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                      image: homepage1controller.allpostdata[pageindex].featuredImageSrc != null?
-                      widget.feedindex['from'] == 'SavedArticle'?
-                   NetworkImage(homePageController.savedArticles[pageindex].featuredImageSrc, scale: 0.5):
-                widget.feedindex['from'] == 'SearchArticle'?
-                NetworkImage(homepage1controller.searchArticle[pageindex].featuredImageSrc, scale: 0.5):
-                NetworkImage(homepage1controller.allpostdata[pageindex].featuredImageSrc, scale: 0.5):
-                const NetworkImage('https://newhorizon-department-of-computer-science-engineering.s3.ap-south-1.amazonaws.com/nhengineering/department-of-computer-science-engineering/wp-content/uploads/2020/01/13103907/default_image_01.png'),
+                      image: 
+                   NetworkImage(homePageController.notificationArticle[pageindex].featuredImageSrc, scale: 0.5),
                       fit: BoxFit.cover,)
                       ),
                           ),
@@ -161,8 +154,8 @@ return Future.value(false);
                            Padding(
                             padding:const EdgeInsets.symmetric(horizontal: 5),
                             child: InkWell(
-                              onTap: () {
-                               
+                              onTap: (){
+                                // .commentData!.data!.comments!.rows![0].user!.name);
                               },
                               child: SizedBox(
                                   height: 25,
@@ -244,11 +237,8 @@ return Future.value(false);
                                         children: [
                                           Html(
                                             data: "<p>${
-                                            widget.feedindex['from'] == 'SavedArticle'? 
-                                            homePageController.savedArticles[pageindex].title.rendered:
-                                            widget.feedindex['from'] == 'SearchArticle'? 
-                                             homepage1controller.searchArticle[pageindex].title.rendered:
-                                             homepage1controller.copydata[pageindex].title.rendered}</p>",    
+                                            homePageController.notificationArticle[pageindex].title.rendered
+                                           }</p>",    
                                             style:{
                                                 'p': Style(
                                                   margin: EdgeInsets.zero,
@@ -296,11 +286,8 @@ return Future.value(false);
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
-                                            Text(widget.feedindex['from'] == 'SavedArticle' ?
-                                              homePageController.savedArticles[pageindex].date.toString().split(" ").first:
-                                              widget.feedindex['from'] == 'SearchArticle' ?
-                                                  homepage1controller.searchArticle[pageindex].date.toString().split(" ").first:
-                                                  homepage1controller.copydata[pageindex].date.toString().split(" ").first,
+                                            Text(
+                                              homePageController.notificationArticle[pageindex].date.toString().split(" ").first,
                                                 style:  TextStyle(color: colorconst.greyColor,
                                                 fontSize: 12
                                                 ),
@@ -309,9 +296,12 @@ return Future.value(false);
                                                 children: [
                                                   InkWell(
                                                     onTap: (){
+                                                     
+                                                      // if(scrollController.hasClients){
                                                         scrollController.animateTo(scrollController.position.maxScrollExtent-300,
                                                      duration: const Duration(milliseconds: 500),
                                                      curve: Curves.easeInOut);
+                                                      // }
                                                     },
                                                     child: Text(
                                                       "${detailpageController.commentData?.data?.comments?.rows?.length} Comments",
@@ -337,18 +327,19 @@ return Future.value(false);
                                                   return Row(
                                                     children: [
                                                      InkWell(
-                                                      onTap: ()async{
+                                                      onTap: ()async {
                                                         widget.postData.read == true;
                                                         detailpageController.isArticleSaved.toggle();
                                                           final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                                                            String? userid = sharedPreferences.getString('userId');
+                                                           
                                                         await apiprovider.saveArticle('/user/save-articles', {
                                                           'articleId': homepage1controller.copydata[pageindex].id.toString(),
                                                           'userId': userid
                                                         });
-                                                     
+                                                 
                                                         if(apiprovider.RegisterResponse['message']== 'Article Add Sucessfully'){
-                                                        Flushbar(
+                                                          Flushbar(
                                                            backgroundColor: colorconst.greenColor,
                                                            message: "Article Saved to My saved Article Section",
                                                             duration: Duration(seconds: 2),
@@ -360,7 +351,6 @@ return Future.value(false);
                                                             duration: Duration(seconds: 2),
                                                             ).show(context);
                                                         }else{
-                                                          
                                                         }
                                                       },
                                                        child: detailpageController.isArticleSaved.value == true ? Text(
@@ -370,9 +360,9 @@ return Future.value(false);
                                                         ) : detailpageController.isArticleSaved.value == false ? Text("Save", 
                                                         style:
                                                               TextStyle(color: colorconst.greyColor),
-                                                        ):const SizedBox(),
+                                                        ): SizedBox(),
                                                      ),
-                                                    detailpageController.saveArticles == true ?
+                                                     detailpageController.saveArticles == true ?
                                                     const Image(image: AssetImage("assets/icons/iconsave.png")):
                                                     const Image(image: AssetImage("assets/icons/iconsave.png"))
                                                     ],
@@ -398,11 +388,8 @@ return Future.value(false);
                                             height: 10,
                                           ),
                                           Html(
-                                              data:widget.feedindex['from'] == 'SavedArticle' ? 
-                                              homePageController.savedArticles[pageindex].content.rendered :
-                                              widget.feedindex['from'] == 'SearchArticle'?
-                                                homepage1controller.searchArticle[pageindex].content.rendered:
-                                               homepage1controller.copydata[pageindex].content.rendered,
+                                              data:
+                                              homePageController.notificationArticle[pageindex].content.rendered,
                                               style: {
                                                 'blockquote P': Style(
                                                   fontWeight: FontWeight.w900,
@@ -559,19 +546,19 @@ return Future.value(false);
                                               },
                                               onAnchorTap:
                                                   (url, context, attributes, element)async {
-                                        
+
                                                      if(await canLaunchUrl(Uri.parse(url!))){
                                                       await  launchUrl(Uri.parse(url));
                                                     }else{
                                                       throw 'Could  not launch $url';
                                                     }
-                                                   
+               
                                                   },
                                               onLinkTap: (String? url,
                                                   RenderContext context,
                                                   Map<String, String> attributes,
                                                   dom.Element? element){
-                                  
+                                             
                                                 //open URL in webview, or launch URL in browser, or any other logic here
                                               }),
                                         ],

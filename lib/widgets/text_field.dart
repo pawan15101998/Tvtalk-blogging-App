@@ -38,7 +38,7 @@ class _HomePageTextFieldState extends State<HomePageTextField> {
         icon: Icon(
         (passwordController.passwordVisiblity.value && (widget.textName == 'Password' || widget.textName == "New Password"))
          ? Icons.visibility : Icons.visibility_off,
-          color: Colors.black,
+          color: colorconst.blackColor,
         ),
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(),
@@ -79,12 +79,12 @@ class _HomePageTextFieldState extends State<HomePageTextField> {
                       }else if(widget.textName == 'New Password'){
                       passwordController.passwordVisiblity.toggle();
                       }
-                      print("toggle");
                     }
                     )
                       // textfieldLogic.sufixIcon(widget.textName, _passwordVisible)
                       )
                       ),
-        ));
+        )
+        );
   }
 }

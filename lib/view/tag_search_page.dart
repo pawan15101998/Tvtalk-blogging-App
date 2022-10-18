@@ -27,15 +27,11 @@ class _TagSearchPageState extends State<TagSearchPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print("Tagggggggeee");
-    print(widget.tagName['tagName']);
   }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: ()async{
-        print("object");
-        print(homePage1Controller.userTags);
         apiprovider.allPost = [];
         homePage1Controller.allpostdata.clear();
         homePage1Controller.copydata.clear();
@@ -135,12 +131,10 @@ class _TagSearchPageState extends State<TagSearchPage> {
                       children: [
                         InkWell(
                           onTap: () async {
-                            // print(widget.blogDetail.link);
                             // await Share.share(widget.blogDetail.link);
                           },
                           child: InkWell(
                             onTap: () async{
-                              print(homePage1Controller.allpostdata[index].link);
                             await Share.share(homePage1Controller.allpostdata[index].link);
                             },
                             child: Row(

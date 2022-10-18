@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/model/get_comment_model.dart';
 
 class DetailPageController extends GetxController{
@@ -17,6 +18,7 @@ class DetailPageController extends GetxController{
   List articleId = [];
   RxBool isArticleSaved = false.obs;
   RxList savedArticlePostId = [].obs;
+  final colorconst = ColorConst();
 
  fontfamily(color){
     return TextStyle(
@@ -54,9 +56,9 @@ class DetailPageController extends GetxController{
                     "Montserrat": 
                     fontFamily.value == 5 ?
                     "VIDALOKA": "POPPINS",
-                   color: color == Colors.green ? Colors.green : isDark.value
-                                    ? Colors.white
-                                    : Colors.black,
+                   color: color == colorconst.greenColor ? colorconst.greenColor : isDark.value
+                                    ? colorconst.whiteColor
+                                    : colorconst.blackColor,
                   );
   }
 }

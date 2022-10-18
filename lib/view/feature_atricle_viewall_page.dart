@@ -110,12 +110,9 @@ class _FeatureArticleViewAllState extends State<FeatureArticleViewAll> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          // print(widget.blogDetail.link);
-                          // await Share.share(widget.blogDetail.link);
                         },
                         child: InkWell(
                           onTap: () async{
-                            print(homePage1Controller.allpostdata[index].link);
                           await Share.share(homePage1Controller.allpostdata[index].link);
                           },
                           child: Row(

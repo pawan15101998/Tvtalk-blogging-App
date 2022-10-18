@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tvtalk/constant/color_const.dart';
 
 class FunAndGames extends StatefulWidget {
   const FunAndGames({Key? key}) : super(key: key);
@@ -12,6 +13,8 @@ class FunAndGames extends StatefulWidget {
 }
 
 class _FunAndGamesState extends State<FunAndGames> {
+    final colorconst = ColorConst();
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -21,19 +24,18 @@ class _FunAndGamesState extends State<FunAndGames> {
           margin:const EdgeInsets.only(top: 20),
           child: AppBar(title: 
          const Text("Fun & Games"),
-          backgroundColor:const Color(0xffFFDC5C),
+          backgroundColor: colorconst.mainColor,
           elevation: 0,
           ),
         ),
       ),
       body: Container(
-        color:const Color(0xffFFDC5C),
+        color: colorconst.mainColor,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               funAndGames('Quize', "assets/images/quize.png", (){
-                print("object");
                 context.pushNamed('QUIZES');}),
               const SizedBox(height: 30,),
               funAndGames('Pools', "assets/images/pools.png",(){

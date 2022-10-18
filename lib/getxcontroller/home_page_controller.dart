@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
 
@@ -6,11 +8,24 @@ RxInt bootomNav = 0.obs;
 RxString birthday = "".obs;
 RxMap userDetails = {}.obs;
 List savedArticles = [];
+List notificationArticle = [];
 RxList readArticle = [].obs;
 RxList readArticleId = [].obs;
 RxList allPostId  = [].obs;
+RxList notificationData = [].obs;
+RxInt unReadNotification = 0.obs;
 RxBool searchIcon = true.obs; 
+RxString notificationPostId = ''.obs;
 
+
+
+notification(index)async{
+var postID = json.decode(notificationData[index]['jsonData']);
+print("postIDe");
+notificationPostId.value =  postID[0]['postId'].toString().replaceAll("[", "").replaceAll("]", "");
+print(notificationPostId);
+ await apiprovider.getNotificationPost(notificationPostId);
+}
 
 isArticleRead()async{
   await  apiprovider.getArticleStatus();

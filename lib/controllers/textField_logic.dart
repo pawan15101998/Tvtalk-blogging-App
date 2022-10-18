@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tvtalk/constant/color_const.dart';
 
 class TextFieldLogic {
+  final colorconst = ColorConst();
     obscureText(textName,_passwordVisible) {
     if ((textName == "Password" ||
             textName == "Confirm Password" ||
@@ -19,7 +21,7 @@ class TextFieldLogic {
       return IconButton(
         icon: Icon(
           passwordVisible ? Icons.visibility : Icons.visibility_off,
-          color: Colors.black,
+          color: colorconst.blackColor,
         ),
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(),

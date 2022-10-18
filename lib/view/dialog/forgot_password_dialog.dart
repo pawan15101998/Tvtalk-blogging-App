@@ -5,6 +5,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/view/dialog/reset_password_dialog.dart';
 import 'package:tvtalk/widgets/text_field.dart';
@@ -12,6 +13,8 @@ import 'package:tvtalk/widgets/text_field.dart';
 class BottomDialog {
   var submitdialog = SubmitDialog();
   var apiProvider = ApiProvider();
+  final colorconst = ColorConst();
+
   late String otpEmail;
   TextEditingController otpController = TextEditingController();
   void showBottomDialog(BuildContext context, String email) {
@@ -19,7 +22,7 @@ class BottomDialog {
     showGeneralDialog(
       barrierLabel: "showGeneralDialog",
       barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: colorconst.blackColor.withOpacity(0.6),
       transitionDuration: const Duration(milliseconds: 400),
       context: context,
       pageBuilder: (context, _, __) {
@@ -52,8 +55,8 @@ class BottomDialog {
             width: double.maxFinite,
             clipBehavior: Clip.antiAlias,
             padding: const EdgeInsets.all(16),
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration:  BoxDecoration(
+              color: colorconst.whiteColor,
             ),
             child: Material(
               child: Column(
@@ -72,16 +75,16 @@ class BottomDialog {
                       children: <TextSpan>[
                         TextSpan(
                           text: 'An email has been sent to your email ',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
+                          style: TextStyle(fontSize: 16, color: colorconst.blackColor),
                         ),
                         TextSpan(
                           text: '${otpEmail}',
                           style:
-                              TextStyle(color: Color(0xfffF1B142), fontSize: 16),
+                              TextStyle(color: colorconst.lightYellow, fontSize: 16),
                         ),
                         TextSpan(
                           text: ' Please submit the OTP to Reset Password.',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
+                          style: TextStyle(fontSize: 16, color: colorconst.blackColor),
                         ),
                       ],
                     ),
@@ -105,17 +108,17 @@ class BottomDialog {
                             },
                             style: ButtonStyle(
                                 shadowColor: MaterialStateProperty.all<Color>(
-                                    Colors.transparent),
+                                    colorconst.transparentColor),
                                 backgroundColor: MaterialStateProperty.all<Color>(
-                                    Colors.transparent),
+                                    colorconst.transparentColor),
                                 shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12.0),
-                                        side: BorderSide(color: Colors.black)))),
+                                        side: BorderSide(color: colorconst.blackColor)))),
                             child: Text(
                               "Cancel",
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: colorconst.blackColor),
                             )),
                       ),
                       SizedBox(
@@ -123,7 +126,6 @@ class BottomDialog {
                         width: 130,
                         child: ElevatedButton(
                             onPressed: () async{
-                              // print(VerifyForgotPass);
                                   if (otpController.text != "") {
                                  var VerifyForgotPass= await apiProvider.Post('/user/verify-forgot-password', {
                                       'email':otpEmail.trim(),
@@ -131,34 +133,33 @@ class BottomDialog {
                                     }
                                         );
                                         // otpEmail.trim(),otpController.text.trim()
-                                        print(VerifyForgotPass);
                                     if (VerifyForgotPass['message'] ==
                                         'OTP verified successfully.') {
                                           Navigator.pop(context);
                                       submitdialog.showBottomDialog(context, otpEmail);
                                       Flushbar(
-                                    backgroundColor: Colors.green,
+                                    backgroundColor: colorconst.greenColor,
                                     message: "OTP verified successfully",
                                     duration: Duration(seconds: 1),
                                   ).show(context);
                                     } else if (VerifyForgotPass['message'] ==
                                         'Input validation. Verificationcode Min') {
                                       Flushbar(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: colorconst.redColor,
                                     message: "Input validation Verificationcode Min",
                                     duration: Duration(seconds: 1),
                                   ).show(context);
                                     }else if (VerifyForgotPass['message'] ==
                                         'Input validation. Verificationcode Max'){
                                       Flushbar(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: colorconst.redColor,
                                     message: "Input validation Verificationcode Max",
                                     duration: Duration(seconds: 1),
                                   ).show(context);
                                     }else if(VerifyForgotPass['message'] ==
                                         'Incorrect OTP.') {
                                       Flushbar(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: colorconst.redColor,
                                     message: "Incorrect OTP.",
                                     duration: Duration(seconds: 1),
                                   ).show(context);
@@ -166,14 +167,14 @@ class BottomDialog {
                                     else if (VerifyForgotPass['message'] ==
                                         'Input validation Email Email') {
                                       Flushbar(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: colorconst.redColor,
                                     message: "OTP not valid",
                                     duration: Duration(seconds: 1),
                                   ).show(context);
                                     }
                                   } else {
                                     Flushbar(
-                                    backgroundColor: Colors.red,
+                                    backgroundColor: colorconst.redColor,
                                     message: "Enter OTP",
                                     duration: Duration(seconds: 1),
                                   ).show(context);
@@ -181,17 +182,17 @@ class BottomDialog {
                             },
                             style: ButtonStyle(
                                 shadowColor: MaterialStateProperty.all<Color>(
-                                    Colors.black),
+                                    colorconst.blackColor),
                                 backgroundColor: MaterialStateProperty.all<Color>(
-                                    Colors.black),
+                                    colorconst.blackColor),
                                 shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                     RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12.0),
-                                        side: BorderSide(color: Colors.black)))),
+                                        side: BorderSide(color: colorconst.blackColor)))),
                             child: Text(
                               "Submit",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(color: colorconst.whiteColor),
                             )),
                       )
                     ],
@@ -204,18 +205,16 @@ class BottomDialog {
                         text: TextSpan(children: [
                       TextSpan(
                           text: "Haven't received email yet?",
-                          style: TextStyle(fontSize: 14, color: Colors.black)),
+                          style: TextStyle(fontSize: 14, color: colorconst.blackColor)),
                       TextSpan(
                         recognizer: TapGestureRecognizer()..onTap = ()async{
-                          print("object");
                          await apiProvider.Post('/user/forgot-password', {
                            'email': otpEmail
                            });
-                           print("rrgisterrr");
-                           print(apiProvider.RegisterResponse['message']);
+                        
                            if(apiProvider.RegisterResponse['message'] == 'Mail sent successfully.'){
                              Flushbar(
-          backgroundColor: Colors.green,
+          backgroundColor: colorconst.greenColor,
           message: "otp resend to your mail",
           duration: Duration(seconds: 1),
         ).show(context);
@@ -234,7 +233,7 @@ class BottomDialog {
                         text: TextSpan(children: [
                       TextSpan(
                           text: "Wanna change above email?",
-                          style: TextStyle(fontSize: 14, color: Colors.black)),
+                          style: TextStyle(fontSize: 14, color: colorconst.blackColor)),
                       TextSpan(
                           recognizer: TapGestureRecognizer()..onTap = (){
                             Navigator.pop(context);

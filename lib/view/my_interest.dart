@@ -7,6 +7,8 @@ import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/getxcontroller/my_intrest_controller.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
 import 'package:tvtalk/model/notification_toggle.dart';
+import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
+import 'package:tvtalk/view/profile_page.dart';
 
 class MyInterest extends StatefulWidget {
   const MyInterest({Key? key}) : super(key: key);
@@ -19,17 +21,6 @@ class _MyInterestState extends State<MyInterest> {
   var fontSize = AdaptiveTextSize();
   bool switchvalue = true;
   var myintrest = Get.find<MyIntrestController>();
-// 'assets/images/1000-Sister.png'
-// 'assets/images/LittleJohnstone.png'
-// 'assets/images/Cover_Variation.png'
-// 'assets/images/Bold&Beautifull.png'  
-// 'assets/images/daysOfOurLife.png',  
-// 'assets/images/GeneralHospital.png',  
-// 'assets/images/LittlePeopleBigWorld.png',  
-// 'assets/images/My600lb.png',
-// 'assets/images/OutDaughter.png',  
-// 'assets/images/TheRealHouseWives.png'  
-
 
   final myIntrestnotify = [
   MyIntrestNotification(title: "1000-Lb Sisters", image: "assets/images/1000-Sister.png"),
@@ -52,143 +43,227 @@ class _MyInterestState extends State<MyInterest> {
           preferredSize:
               Size.fromHeight(fontSize.getadaptiveTextSize(context, 90)),
           child: AppBar(
-            iconTheme:const IconThemeData(color: Colors.black),
+            iconTheme: IconThemeData(color: colorconst.blackColor),
             toolbarHeight: 120.0,
             elevation: 0,
             // automaticallyImplyLeading: false,
-            backgroundColor: Color(0xfffFFDC5C),
-            title:const Text(
+            backgroundColor: colorconst.mainColor,
+            title: Text(
               "My Interests",
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: TextStyle(color: colorconst.blackColor, fontSize: 20),
             ),
           ),
         ),
-        body: Column(
-          children: [
-            const TextField(
-              decoration: InputDecoration(
-                  suffixIcon: Icon(Icons.search),
-                  filled: true,
-                  fillColor: Color(0xfffF2F1F1),
-                  hintText: "Search interests to add",
-                  border: InputBorder.none,
-                  ),
-            ),
-           Expanded(
-                 child: ListView.builder(
-                  itemCount:yourIntrestController.allTagsModel.length,
-                   itemBuilder: (context, snapshot) {
-                     return Column(
-                      children: [
-                      // SizedBox(height: 20,),
-                      // buildSingleNotify()
-                      ...myIntrestnotify.map(buildSingleNotify).toList()
-                      ],
-                     );
-                   }
-                 ),
-               )            
-          ],
-        ));
-  }
-
-   Widget buildSingleNotify(MyIntrestNotification notification)=>
-   myInterestBox(
-    notification: notification,
-    onClicked: (){
-        myintrest.intrest.toggle();
-        final newvalue = !notification.value;
-        notification.value =  myintrest.intrest.value;
-    }
-   );
-  Widget myInterestBox({
-    required MyIntrestNotification notification,
-    required VoidCallback onClicked,
-  }){
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color:const Color(0xffE5E5E5)),
-          borderRadius: BorderRadius.circular(8)
-        ),
-        child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height:100,
-              width:  100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(image: AssetImage(notification.image),fit: BoxFit.cover)
-              ),
-            ),
-            SizedBox(
-              height:MediaQuery.of(context).size.height*12/100,
-              width: MediaQuery.of(context).size.width-150,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+        body: 
+             SingleChildScrollView(
+               child: Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        notification.title,
-                        style:const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600
+                  const TextField(
+                    decoration: InputDecoration(
+                        suffixIcon: Icon(Icons.search),
+                        filled: true,
+                        fillColor: Color(0xffF2F1F1),
+                        hintText: "Search interests to add",
+                        border: InputBorder.none,
                         ),
-                      ),
-                      // SizedBox(width: 100,),
-                      Container(
-                        height: 20,
-                        width: 20,
-                       decoration:  const BoxDecoration(
-                        image: DecorationImage(image: AssetImage('assets/icons/myinticon.png'), fit: BoxFit.cover)
-                       ),
-                      )
-                    ],
                   ),
-                  const Divider(), 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Show Notifications",
-                        style: TextStyle(
-                          color: Color(0xfff949494)
-                        ),
-                      ),
-                      Obx((){
-                          return buildSwitch(onClicked, notification.value, myintrest.intrest.value);
-                        }
-                      )
-                    ],
-                  )
+                    
+                     ListView.builder(
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                       itemCount: myIntrestnotify.length,
+                       itemBuilder: (context, index) {
+                         return Column(
+                          children: [
+                          // SizedBox(height: 20,),
+                          // buildSingleNotify()
+                          // ...myIntrestnotify.map(buildSingleNotify).toList()
+                                 Padding(
+                                   padding: const EdgeInsets.all(8.0),
+                                   child: Container(
+                                   decoration: BoxDecoration(
+                                   border: Border.all(color:const Color(0xffE5E5E5)),
+                                   borderRadius: BorderRadius.circular(8)
+                                 ),
+                                 child: Padding(
+                                 padding: const EdgeInsets.all(8.0),
+                                 child: Row(
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     Container(
+                                       height:100,
+                                       width:  100,
+                                       decoration: BoxDecoration(
+                                       borderRadius: BorderRadius.circular(8),
+                                       image: DecorationImage(image: AssetImage(myIntrestnotify[index].image),fit: BoxFit.cover)
+                                       ),
+                                     ),
+                                     SizedBox(
+                                       height:MediaQuery.of(context).size.height*12/100,
+                                       width: MediaQuery.of(context).size.width-150,
+                                       child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                                     Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                       children: [
+                                 Text(
+                           yourIntrestController.alltagsName[index],
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600
+                            ),
+                          ),
+                          // SizedBox(width: 100,),
+                          Container(
+                            height: 20,
+                            width: 20,
+                           decoration:  const BoxDecoration(
+                            image: DecorationImage(image: AssetImage('assets/icons/myinticon.png'), fit: BoxFit.cover)
+                           ),
+                          )
+                                       ],
+                                     ),
+                                     const Divider(), 
+                                     Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                       children:[
+                           Text(
+                            "Show Notifications",
+                            style: TextStyle(
+                              color: colorconst.greyColor
+                            ),
+                          ),
+                          if(yourIntrestController.allTagsModel.isNotEmpty)
+                            buildSwitch(index)
+                                ],
+                            )
+                          ],
+                                       ),
+                                     )
+                                   ],
+                                 ),
+                                    ),
+                                   ),
+                                 )
+                          ],
+                         );
+                       }
+                     )
+                             
                 ],
               ),
-            )
-          ],
-        ),
-       ),
-      ),
-    );
+             )
+        );
   }
 
- Widget buildSwitch(onclick, notification, intrestToggle){
+  //  Widget buildSingleNotify(MyIntrestNotification notification)=>
+  //  myInterestBox(
+  //   notification: notification,
+  //   onClicked: ()async{
+  //       myintrest.intrest.toggle();
+  //       final newvalue = !notification.value;
+  //       notification.value =  myintrest.intrest.value;
+  //   }
+  //  );
+  // Widget myInterestBox({
+  //   required MyIntrestNotification notification,
+  //   required VoidCallback onClicked,
+  // }){
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         border: Border.all(color:const Color(0xffE5E5E5)),
+  //         borderRadius: BorderRadius.circular(8)
+  //       ),
+  //       child: Padding(
+  //       padding: const EdgeInsets.all(8.0),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //         crossAxisAlignment: CrossAxisAlignment.start,
+  //         children: [
+  //           Container(
+  //             height:100,
+  //             width:  100,
+  //             decoration: BoxDecoration(
+  //               borderRadius: BorderRadius.circular(8),
+  //               image: DecorationImage(image: AssetImage(notification.image),fit: BoxFit.cover)
+  //             ),
+  //           ),
+  //           SizedBox(
+  //             height:MediaQuery.of(context).size.height*12/100,
+  //             width: MediaQuery.of(context).size.width-150,
+  //             child: Column(
+  //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Text(
+  //                       notification.title,
+  //                       style:const TextStyle(
+  //                         fontSize: 16,
+  //                         fontWeight: FontWeight.w600
+  //                       ),
+  //                     ),
+  //                     // SizedBox(width: 100,),
+  //                     Container(
+  //                       height: 20,
+  //                       width: 20,
+  //                      decoration:  const BoxDecoration(
+  //                       image: DecorationImage(image: AssetImage('assets/icons/myinticon.png'), fit: BoxFit.cover)
+  //                      ),
+  //                     )
+  //                   ],
+  //                 ),
+  //                 const Divider(), 
+  //                 Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     const Text(
+  //                       "Show Notifications",
+  //                       style: TextStyle(
+  //                         color: Color(0xfff949494)
+  //                       ),
+  //                     ),
+  //                     // Obx((){
+  //                     //     return buildSwitch(onClicked, notification.value, myintrest.intrest.value);
+  //                     //   }
+  //                     // )
+  //                   ],
+  //                 )
+  //               ],
+  //             ),
+  //           )
+  //         ],
+  //       ),
+  //      ),
+  //     ),
+  //   );
+  // }
+
+ Widget buildSwitch(index){
     return CupertinoSwitch(
       trackColor:const Color(0xffFFC7C5),
       activeColor:const Color(0xffB5EFE1),
-      thumbColor: notification ?const  Color(0xff00C462) :const Color(0xffDE2D28),
-      // inactiveThumbColor: Color(0xfffDE2D28),
-      // inactiveTrackColor:Color(0xfffFFC7C5) ,
-      value: notification,
-      onChanged: (value)=>onclick(),
+      thumbColor: yourIntrestController.allTagsModel[index].activetag ?const  Color(0xff00C462) : const Color(0xffDE2D28),
+      value: yourIntrestController.allTagsModel[index].activetag, 
+      onChanged: (value)async{
+       await apiprovider.postApi("/user/toggle-user-tags", {
+          "tag":yourIntrestController.alltagsId[index].toString(),
+          "tagName":yourIntrestController.alltagsName[index].toString()
+        });
+        yourIntrestController.allTagsModel[index].activetag = value;
+        setState(() {
+          
+        });
+      },
       );
   }
 

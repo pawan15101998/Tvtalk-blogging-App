@@ -35,13 +35,11 @@ class GoogleSignInProvider extends ChangeNotifier{
   );
   await FirebaseAuth.instance.signInWithCredential(credential);
   // EasyLoading.dismiss();
-  print("jdhsdjsbfhs");
-  // print(googleSignIn.currentUser?.authHeaders);
+
   // final header = await googleSignIn.currentUser!.authHeaders;
   // final r = await http.get(Uri.parse("https://people.googleapis.com/v1/people/me?personFields=genders&key="), headers: { "Authorization": header["Authorization"]! } );
   // final response = json.decode(r.body);   
-  // print("dhsgdgsahdch");
-  // print(response["genders"][0]["formattedValue"]);
+
 } on Exception catch (e) {
   // TODO
   EasyLoading.dismiss();
@@ -58,9 +56,7 @@ Future<String> getBirthday() async {
     String birthday;
     String gender;
     final headers = await googleSignIn.currentUser!.authHeaders;
-    print("hello hope");
-    print(headers);
-    print(headers["Authorization"]);
+
     final r = await http.get(Uri.parse("https://people.googleapis.com/v1/people/me?personFields=birthdays,genders,phoneNumbers&key="),
       headers: {
         "Authorization": headers["Authorization"]!
@@ -75,29 +71,19 @@ Future<String> getBirthday() async {
     birthday = "$month/$day/$year";
     signincontroller.googleUserDob = birthday;
     signincontroller.googleUserGender = gender;
-    print("phoneNumber");
-    print(gender);
-    print(response);
-    // print(response['birthdays'][0]['date']['month']);
+
     return "";
   }
 
 facebookLogin()async{
-    print("FaceBook");
     try {
       final result =
           await FacebookAuth.i.login(permissions: ['public_profile', 'email']);
-          // 'user_birthday'
-          print("asdhsaghjvcnm");
-          print(result.status);
-          print(LoginStatus.success);
+
       if (result.status == LoginStatus.success) {
         final userData = await FacebookAuth.i.getUserData();
         _user = userData;
-        print("facebook user data");
-        print(_user);
-        // print(userData);
-        // print(userData['name']);
+
       }
     } catch (error) {
       print(error);
@@ -108,8 +94,7 @@ facebookLogin()async{
   Future logout() async{
    await googleSignIn.disconnect();
    await FirebaseAuth.instance.signOut();
-    print("google logout");
-    print(user);
+
     //  Router.neglect(context, () {
                       // context.goNamed('SIGNINPAGE');
                     // });

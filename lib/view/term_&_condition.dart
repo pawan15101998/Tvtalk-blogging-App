@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/widgets/blog_card.dart';
 
@@ -13,6 +14,7 @@ class TermAndCondition extends StatefulWidget {
 
 class _TermAndConditionState extends State<TermAndCondition> {
     var fontSize = AdaptiveTextSize();
+      final colorconst = ColorConst();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,15 +23,15 @@ class _TermAndConditionState extends State<TermAndCondition> {
             Size.fromHeight(fontSize.getadaptiveTextSize(context, 90)),
         child: AppBar(
           iconTheme: IconThemeData(
-            color: Colors.black
+            color: colorconst.blackColor
           ),
           toolbarHeight: 120.0,
           elevation: 0,
           // automaticallyImplyLeading: false,
-          backgroundColor: Color(0xfffFFDC5C),
+          backgroundColor: colorconst.mainColor,
           title: Text("My Saved Articles",
           style: TextStyle(
-            color: Colors.black,
+            color: colorconst.blackColor,
             fontSize: 20
           ),
           ),

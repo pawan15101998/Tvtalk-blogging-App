@@ -4,6 +4,7 @@ import 'package:tvtalk/model/post_model.dart';
 import 'package:tvtalk/routers.dart';
 import 'package:tvtalk/view/alllquiz_tab_page.dart';
 import 'package:tvtalk/view/edit_profile_page.dart';
+import 'package:tvtalk/view/enter_quiz_page.dart';
 import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
 import 'package:tvtalk/view/feeds_detail_page.dart';
 import 'package:tvtalk/view/fun_&_games.dart';
@@ -11,6 +12,9 @@ import 'package:tvtalk/view/home_page.dart';
 import 'package:tvtalk/view/local_signin_page.dart';
 import 'package:tvtalk/view/my_interest.dart';
 import 'package:tvtalk/view/my_saved_articles.dart';
+import 'package:tvtalk/view/notification_feed_detail.dart';
+import 'package:tvtalk/view/notification_list.dart';
+import 'package:tvtalk/view/notification_page.dart';
 import 'package:tvtalk/view/poles_page.dart';
 import 'package:tvtalk/view/privacy_policy.dart';
 import 'package:tvtalk/view/profile_page.dart';
@@ -18,12 +22,14 @@ import 'package:tvtalk/view/quiz_already_taken_page.dart';
 import 'package:tvtalk/view/quizes_page.dart';
 import 'package:tvtalk/view/search_page.dart';
 import 'package:tvtalk/view/select_your_intrest.dart';
+import 'package:tvtalk/view/setting_page.dart';
 import 'package:tvtalk/view/signIn_screen.dart';
 import 'package:tvtalk/view/register_page.dart';
 import 'package:tvtalk/view/splash_screen.dart';
 import 'package:tvtalk/view/tag_search_page.dart';
 import 'package:tvtalk/view/term_&_condition.dart';
 import 'package:tvtalk/view/trending_article_viewall_page.dart';
+import 'package:tvtalk/view/user_feedback.dart';
 
 class CustomRouter{
   GoRouter goRouter = GoRouter(
@@ -138,6 +144,36 @@ class CustomRouter{
         name: 'SEARCHPAGE',
         path: searchpage,
         builder: (context, state) =>const SearchPage()
+      ),
+      GoRoute(
+        name: 'FEEDBACK',
+        path: userfeedback,
+        builder: (context, state) =>const userFeedback()
+      ),
+      GoRoute(
+        name: 'NOTIFICATION',
+        path: notification,
+        builder: (context, state) =>const notificationPage()
+      ),
+      GoRoute(
+        name: 'NOTIFICATIONLIST',
+        path: notificationlist,
+        builder: (context, state) =>const notificationList()
+      ),
+      GoRoute(
+        name: 'NOTIFICATIONDETAILPAGE',
+        path: notificationdetailpage,
+        builder: (context, state) => NotificationDetailPage(postData: state.extra, feedindex: state.queryParams, from: state.queryParams["from"],)
+      ),
+      GoRoute(
+        name: 'ENTERQUIZPAGE',
+        path: enterquizpage,
+        builder: (context, state) =>const EnterQuizPage()
+      ),
+      GoRoute(
+        name: 'SETTING',
+        path: settingpage,
+        builder: (context, state) =>const SettingPage()
       ),
     ]
     );

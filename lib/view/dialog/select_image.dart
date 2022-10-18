@@ -4,21 +4,22 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/widgets/text_field.dart';
 
 class SelectImageDialog {
   File? image;
+    final colorconst = ColorConst();
   Future pickimage()async{
   final image =  await ImagePicker().pickImage(source: ImageSource.gallery);
   if(image == null) return;
   final imageTemporary = File(image.path);
-  // print()
   }
   void showImageDialog(BuildContext context) {
     showGeneralDialog(
       barrierLabel: "showGeneralDialog",
       barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: colorconst.blackColor.withOpacity(0.6),
       transitionDuration: const Duration(milliseconds: 400),
       context: context,
       pageBuilder: (BuildContext context, _, __) {
@@ -33,8 +34,8 @@ class SelectImageDialog {
                     width: double.maxFinite,
                     clipBehavior: Clip.antiAlias,
                     padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
+                    decoration:  BoxDecoration(
+                      color: colorconst.whiteColor,
                     ),
                     child: Material(
                       child: Column(

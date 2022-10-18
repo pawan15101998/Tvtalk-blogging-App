@@ -35,7 +35,7 @@
 //               toolbarHeight: 120.0,
 //               elevation: 0,
 //               // automaticallyImplyLeading: false,
-//               backgroundColor: Color(0xfffFFDC5C),
+//               backgroundColor: colorconst.mainColor,
 //               title: SizedBox( width: 110, child: Image(image: AssetImage("assets/images/logo.png",),)),
 //               leading: IconButton(
 //                 icon: const Image(
@@ -165,7 +165,6 @@
 //                         ),
 //                         DrawerItems("assets/icons/icon_logout.png", "Logout",
 //                             () async {
-//                           print("sccccccccccccccccc");
 //                           final SharedPreferences sharedPreferences =
 //                               await SharedPreferences.getInstance();
 //                           sharedPreferences.remove('email');
@@ -182,7 +181,7 @@
 //                 )
 //               ],
 //             ),
-//             // backgroundColor: Colors.red,
+//             // backgroundColor: colorconst.redColor,
 //           ),
 //           body:pages[pageIndex],
 //           bottomNavigationBar: buildMyNavBar(context),
@@ -213,7 +212,7 @@
 //     return Container(
 //       height: 60,
 //       decoration: BoxDecoration(
-//         color: Colors.white,
+//         color: colorconst.whiteColor,
 //         borderRadius: const BorderRadius.only(
 //           topLeft: Radius.circular(20),
 //           topRight: Radius.circular(20),
@@ -229,7 +228,7 @@
 //             child: Text(
 //               "Feeds for me",
 //               style: TextStyle(
-//                 backgroundColor: Color(0xfffFFDC5C),
+//                 backgroundColor: colorconst.mainColor,
 //                 fontSize:16,
 //                 fontWeight:  pageIndex == 0? FontWeight.bold: FontWeight.normal
 //               ),
@@ -242,7 +241,7 @@
 //             child: Text(
 //               "HomePage",
 //               style: TextStyle(
-//                 backgroundColor: Color(0xfffFFDC5C),
+//                 backgroundColor: colorconst.mainColor,
 //                 fontSize:16,
 //                 fontWeight: pageIndex == 1? FontWeight.bold: FontWeight.normal
 //               ),

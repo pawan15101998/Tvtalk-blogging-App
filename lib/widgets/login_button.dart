@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tvtalk/Authencation/google_sign_in.dart';
+import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 
 class loginButton extends StatelessWidget {
@@ -22,6 +23,7 @@ class loginButton extends StatelessWidget {
   String image;
   var onPress;
  var textSize = AdaptiveTextSize();
+   final colorconst = ColorConst();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +34,7 @@ class loginButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           border: text == "Continue with Google"
               ? Border.all()
-              : Border.all(color: Colors.transparent)),
+              : Border.all(color: colorconst.transparentColor)),
       child: ElevatedButton(
         onPressed: onPress,
         child: Row(
@@ -46,7 +48,7 @@ class loginButton extends StatelessWidget {
             ),
             // const Icon(
             //   Icons.golf_course,
-            //   color: Colors.black,
+            //   color: colorconst.blackColor,
             // ),
             SizedBox(
               width: width * 10 / 100,
@@ -61,9 +63,9 @@ class loginButton extends StatelessWidget {
           ],
         ),
         style: ElevatedButton.styleFrom(
-            primary: Colors.transparent,
-            onSurface: Colors.transparent,
-            shadowColor: Colors.transparent,
+            primary: colorconst.transparentColor,
+            onSurface: colorconst.transparentColor,
+            shadowColor: colorconst.transparentColor,
             // padding: EdgeInsets.symmetric(horizontal: width*10/100,),
             textStyle:
                 const TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
