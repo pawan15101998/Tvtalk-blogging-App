@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -8,6 +10,7 @@ import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
 import 'package:tvtalk/services/service.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class notificationList extends StatefulWidget {
   const notificationList({Key? key}) : super(key: key);
@@ -21,6 +24,7 @@ final fontSize = const AdaptiveTextSize();
 final apiProvider = ApiProvider();
 final homePageController = Get.find<HomePageController>();
 final colorconst = ColorConst();
+
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +73,29 @@ final colorconst = ColorConst();
                           //     homePageController.unReadNotification +=1;
                           //    } 
                           //     }
-                          
                           await homePageController.notification(index);
                           await apiProvider.postApi("/user/isnotification-read",{
                             "userID": userid.toString(),
                             "notificationID":homePageController.notificationData[index]['id'].toString()
                           });
-
-                          //  homePageController.notification();
+                          // print("this is notigfication data");
+                        var Decodedata = json.decode(homePageController.notificationData[index]['jsonData']);
+                        // print(Decodedata[0]['postId']);
+                        // print(homePageController.notificationArticle[0]);
+                        // print(Decodedata[0]['postId'].length);
+                        if(Decodedata[0]['postId'].length == 1){
+                          print("hello usee");
+                          context.pushNamed('NOTIFICATIONDETAILPAGE', 
+                          extra: homePageController.notificationArticle[0],
+                          queryParams: {
+                          "from": "",
+                          "index": "${0}"}
+                          );
+                        }else{
+                          print("running else condition");
                           context.pushNamed('NOTIFICATION');
+                        }
+                          //  homePageController.notification();
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -119,12 +137,15 @@ final colorconst = ColorConst();
                                   fontSize: 15
                                 ),
                                 ),
-                                Text(
-                                  homePageController.notificationData[index]['content'],
-                                  style: const TextStyle(
-                                    fontSize: 12
-                                  ),
-                                  ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width-180,
+                                  child: Text(
+                                    homePageController.notificationData[index]['content'],
+                                    style: const TextStyle(
+                                      fontSize: 12
+                                    ),
+                                    ),
+                                ),
                                 const SizedBox(height: 20,)
                               ],
                             ),
@@ -132,15 +153,15 @@ final colorconst = ColorConst();
                             ),
                             Column(
                               children: [
-                              const Text("42m ago", style: TextStyle(
-                                  fontSize: 10
+                               Text(timeago.format(DateTime.parse(homePageController.notificationData[index]['createdAt']),locale: 'en_short'), style: TextStyle(
+                                    fontSize: 10
                                 ),),
                                  Container(
                               height: 50,
                               width: 50,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(image: AssetImage("assets/images/Detail.png"),fit: BoxFit.cover
+                                image: DecorationImage(image: NetworkImage('https://tv-talk.hackerkernel.com/assets/images/${homePageController.notificationData[index]['image']}',),fit: BoxFit.cover
                                 )
                               ),
                               // child: Image.asset("assets/images/Detail.png", fit: BoxFit.cover,)

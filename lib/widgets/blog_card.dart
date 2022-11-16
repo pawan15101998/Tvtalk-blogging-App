@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tvtalk/admob_service.dart';
 import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
@@ -13,6 +15,8 @@ import 'package:tvtalk/getxcontroller/signin_controller.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/theme/text_style.dart';
 import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
+
+const maxfailLoadAttempt = 3;
 
 class BlogCard extends StatefulWidget{
    BlogCard(
@@ -53,18 +57,65 @@ getReadStatus(){
 
 
 class _BlogCardState extends State<BlogCard> {
+  final adMobService  = AdMobService();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // getReadStatus();
+    _createInterstitialAd();
   }
+
+   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _interstitialAd?.dispose();
+  }
+  InterstitialAd? _interstitialAd;
+  int _interstitialLoadAttempt =0;
+
+  void _createInterstitialAd(){
+  InterstitialAd.load(
+    adUnitId: adMobService.interstitialADUnitId, 
+    request: AdRequest(), 
+    adLoadCallback: InterstitialAdLoadCallback(
+      onAdLoaded: (InterstitialAd ad){
+        _interstitialAd =ad;
+        _interstitialLoadAttempt = 0;
+      }, 
+      onAdFailedToLoad: (LoadAdError error) {
+        _interstitialLoadAttempt += 1;
+          _interstitialAd = null;
+          if(_interstitialLoadAttempt>=maxfailLoadAttempt){
+            _createInterstitialAd();
+            }
+      }));
+}
+
+void _showInterstitialAd(){
+  if(_interstitialAd!= null){
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (InterstitialAd ad){
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+  }
+}
+
     final colorconst = ColorConst();
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
+        _showInterstitialAd();
         await apiprovider.getComment(widget.indexx);
         if (signincontroller.isGuest.value == 'guest'){
           context.pushNamed('ARTICLEDETAILPAGE',
@@ -90,10 +141,11 @@ class _BlogCardState extends State<BlogCard> {
        List savedArticleId = await apiprovider.getSavedArticle(userid);
         for(int i=0; i<savedArticleId.length; i++){
 
-          detailpageController.articleId.add(savedArticleId[i]['articleId']);
+        detailpageController.articleId.add(savedArticleId[i]['articleId']);
         }
       detailpageController.articleId.forEach((element) {
-
+        print("this is all details");
+        print(element.toString().contains(widget.blogDetail.id.toString()));
       if(element.toString().contains(widget.blogDetail.id.toString())){
         detailpageController.isArticleSaved.value = true;
       }else{

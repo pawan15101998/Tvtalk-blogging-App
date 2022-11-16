@@ -308,7 +308,8 @@ class ThemeDialog {
     );
   }
 
-  Widget _buildDialogContent(context) {
+
+Widget _buildDialogContent(context) {
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: BackdropFilter(
@@ -333,41 +334,40 @@ class ThemeDialog {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // const SizedBox(height: 16),
-                      // Text(
-                      //   "Select Reading Theme",
-                      //   style: TextStyle(
-                      //       color: detailpageController.isDark.value
-                                // ? colorconst.whiteColor
-                      //           : colorconst.blackColor,
-                      //       fontWeight: FontWeight.w600,
-                      //       fontSize: 16),
-                      // ),
-                      // const SizedBox(height: 16),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     theamingButtons(
-                      //         "assets/icons/icon_light.png",  "Light", "" ,(){
-                      //           detailpageController.isDarkButton.value = false;
-                      //           detailpageController.isDark.value = false;
-                      //           detailpageController.activeBorder.value = 1;
-
-                      //         }),
-                      //     theamingButtons(
-                      //         "assets/icons/icon_dark.png", "Dark", "",(){
-                      //           detailpageController.isDarkButton.value = true;
-                      //           detailpageController.isDark.value = true;
-                      //           detailpageController.activeBorder.value = 2;
-                      //         })
-                      //   ],
-                      // ),
-                      // const SizedBox(height: 16),
-                      // Divider(
-                      //   color: detailpageController.isDark.value
-                      //       ? colorconst.whiteColor
-                      //       : colorconst.blackColor,
-                      // ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "Select Reading Theme",
+                        style: TextStyle(
+                            color: detailpageController.isDark.value
+                                ? colorconst.whiteColor
+                                : colorconst.blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          theamingButtons(
+                              "assets/icons/icon_light.png",  "Light", "" ,(){
+                                detailpageController.isDarkButton.value = false;
+                                detailpageController.isDark.value = false;
+                                detailpageController.activeBorder.value = 1;
+                              }),
+                          theamingButtons(
+                              "assets/icons/icon_dark.png", "Dark", "",(){
+                                detailpageController.isDarkButton.value = true;
+                                detailpageController.isDark.value = true;
+                                detailpageController.activeBorder.value = 2;
+                              })
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Divider(
+                        color: detailpageController.isDark.value
+                            ? colorconst.whiteColor
+                            : colorconst.blackColor,
+                      ),
                       Text(
                         "Select Font",
                         style: TextStyle(

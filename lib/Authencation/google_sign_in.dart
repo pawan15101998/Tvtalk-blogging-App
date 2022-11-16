@@ -23,11 +23,16 @@ class GoogleSignInProvider extends ChangeNotifier{
    get user => _user;
   var facebookdata;
   Future googleLogin() async{
+    print("Inside google signIn");
     try {
       // EasyLoading.show(status: 'loading');
   final googleUser = await googleSignIn.signIn();
+  print('after sign in inside fn');
+  print(googleUser);
   if(googleUser == null) return;
   _user = googleUser; 
+  print("this is google user");
+  print(_user);
   final googleAuth = await googleUser.authentication;
   final credential = GoogleAuthProvider.credential(
     accessToken: googleAuth.accessToken,
@@ -35,11 +40,9 @@ class GoogleSignInProvider extends ChangeNotifier{
   );
   await FirebaseAuth.instance.signInWithCredential(credential);
   // EasyLoading.dismiss();
-
   // final header = await googleSignIn.currentUser!.authHeaders;
   // final r = await http.get(Uri.parse("https://people.googleapis.com/v1/people/me?personFields=genders&key="), headers: { "Authorization": header["Authorization"]! } );
   // final response = json.decode(r.body);   
-
 } on Exception catch (e) {
   // TODO
   EasyLoading.dismiss();
@@ -71,7 +74,6 @@ Future<String> getBirthday() async {
     birthday = "$month/$day/$year";
     signincontroller.googleUserDob = birthday;
     signincontroller.googleUserGender = gender;
-
     return "";
   }
 

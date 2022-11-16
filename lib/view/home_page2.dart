@@ -4,6 +4,11 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:taboola_sdk/publisher_info.dart';
+import 'package:taboola_sdk/standard/taboola_standard.dart';
+import 'package:taboola_sdk/standard/taboola_standard_builder.dart';
+import 'package:taboola_sdk/standard/taboola_standard_listener.dart';
+import 'package:taboola_sdk/taboola.dart';
 import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page2_controller.dart';
@@ -35,7 +40,53 @@ class _HomePage2State extends State<HomePage2> {
     super.initState();
    var isreadd =  homePageController.allPostId.where((elem)=>homePageController.readArticleId.contains(elem));
   }
+
+  //Taboola Standard listeners
+void taboolaDidShow(String placement) {
+  print("taboolaDidShow");
+}
+
+void taboolaDidResize(String placement, double height) {
+  print("publisher did get height $height");
+}
+
+void taboolaDidFailToLoad(String placement, String error) {
+  print("publisher placement:$placement did fail with an error:$error");
+}
+
+bool taboolaDidClickOnItem(
+    String placement, String itemId, String clickUrl, bool organic) {
+  print(
+      "publisher did click on item: $itemId with clickUrl: $clickUrl in placement: $placement of organic: $organic");
+  if (organic) {
+    //_showToast("Publisher opted to open click but didn't actually open it.");
+    print("organic");
+  } else {
+    // _showToast("Publisher opted to open clicks but the item is Sponsored, SDK retains control.");
+    print("SC");
+  }
+  return false;
+}
+
   Widget build(BuildContext context){
+
+    Taboola.init(PublisherInfo("sdk-tester-rnd"));
+
+    TaboolaStandardBuilder taboolaStandardBuilder =
+        Taboola.getTaboolaStandardBuilder("http://www.example.com", "article");
+
+    TaboolaStandardListener taboolaStandardListener = TaboolaStandardListener(
+        taboolaDidResize,
+        taboolaDidShow,
+        taboolaDidFailToLoad,
+        taboolaDidClickOnItem);
+
+    TaboolaStandard taboolaStandard = taboolaStandardBuilder.build(
+        "Feed without video", "thumbs-feed-01", true, taboolaStandardListener);
+        
+    TaboolaStandard taboolaStandardWidget = taboolaStandardBuilder.build(
+        "mid article widget", "alternating-1x2-widget", true, taboolaStandardListener);
+
     return WillPopScope(
       onWillPop: () async{
       //  pages.animateTo(1, duration: Duration(milliseconds: 500),);
@@ -75,6 +126,7 @@ class _HomePage2State extends State<HomePage2> {
             SingleChildScrollView(
               child: Column(
                 children: [
+                  // taboolaStandard,
                   Stack(
                     children: [
                       CarouselSlider.builder(
@@ -342,22 +394,24 @@ class _HomePage2State extends State<HomePage2> {
                               ],
                             ),
                           ),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const ScrollPhysics(),
-                          itemCount: homePage1Controller.allpostdata.length,
-                          itemBuilder:(context, index){
-                            // bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
-                            // bool isread = false;
-                            
-                         
-                            return  BlogCard(
-                              // isread: isread,
-                              indexx: index,
-                          context: context,
-                          blogDetail: homePage1Controller.allpostdata[index]
-                        );
-                          },),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal:12 ),
+                        child: ListView.builder(
+                          controller: taboolaStandard.scrollController,
+                          shrinkWrap: true,
+                          physics: const ScrollPhysics(),
+                            itemCount: homePage1Controller.allpostdata.length,
+                            itemBuilder:(context, index){
+                              // bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
+                              // bool isread = false;
+                              return  BlogCard(
+                                // isread: isread,
+                                indexx: index,
+                            context: context,
+                            blogDetail: homePage1Controller.allpostdata[index]
+                          );
+                            },),
+                      ),
                 ],
               ),
             )

@@ -26,3 +26,4 @@ const String notificationlist = '/Notificationlist';
 const String notificationdetailpage = '/Notificationdetailpage';
 const String enterquizpage = '/Enterquizpage';
 const String settingpage = '/Settingpage';
+const String webviewpage = '/Webviewpage';

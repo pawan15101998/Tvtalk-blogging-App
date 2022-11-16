@@ -16,6 +16,7 @@ RxList notificationData = [].obs;
 RxInt unReadNotification = 0.obs;
 RxBool searchIcon = true.obs; 
 RxString notificationPostId = ''.obs;
+bool notificationToggle = true; 
 
 
 

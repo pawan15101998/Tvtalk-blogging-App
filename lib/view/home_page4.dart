@@ -154,19 +154,22 @@ class _HomePage4State extends State<HomePage4> {
                           ],
                         ),
                       ),
-                 ListView.builder(
-                  shrinkWrap: true,
-                  physics:const ScrollPhysics(),
-                      itemCount: homePage1Controller.allpostdata.length,
-                      itemBuilder:(context, index) {
-                    // bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
-                          return  BlogCard(
-                      // isread: isread,
-                      indexx: index,
-                      context: context,
-                      blogDetail: homePage1Controller.allpostdata[index]
-                    );
-                  },),
+                 Padding(
+                   padding: const EdgeInsets.symmetric(horizontal: 12),
+                   child: ListView.builder(
+                    shrinkWrap: true,
+                    physics:const ScrollPhysics(),
+                        itemCount: homePage1Controller.allpostdata.length,
+                        itemBuilder:(context, index) {
+                      // bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
+                            return  BlogCard(
+                        // isread: isread,
+                        indexx: index,
+                        context: context,
+                        blogDetail: homePage1Controller.allpostdata[index]
+                      );
+                    },),
+                 ),
             ],
           ),
         ),

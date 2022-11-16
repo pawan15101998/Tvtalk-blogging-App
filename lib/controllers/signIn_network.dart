@@ -131,7 +131,8 @@ class SignInNetwork {
       'email': loginEmailController,
       'password': loginpasswordController
     });
-
+  //   print("hello");
+  // print(LoginResponse['message']);
     if(LoginResponse['message'] == 'Logged in successfully') {
       String resetToken = LoginResponse['data']['reset_token'];
       String userName = LoginResponse['data']['name'];
@@ -142,7 +143,7 @@ class SignInNetwork {
       sharedPreferences.setString("userId", LoginResponse['data']['id'].toString());
       String? token = await FirebaseMessaging.instance.getToken();
 
-      apiProvider.postApi("/user/fcm-token", {"fcm_token": token});
+      // apiProvider.postApi("/user/fcm-token", {"fcm_token": token});
 
       signincontroller.userName = LoginResponse['data']['name'];
       signincontroller.userEmail = loginEmailController;

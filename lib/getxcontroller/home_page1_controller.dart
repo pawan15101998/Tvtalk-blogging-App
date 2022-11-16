@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
+import 'package:tvtalk/model/ad_model.dart';
 import 'package:tvtalk/model/like_model.dart';
 import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
 
@@ -12,12 +13,14 @@ class HomePage1Controller extends GetxController {
   RxString nosearch = "".obs;
   RxList allpostdata = [].obs;
   RxList userTagName = [].obs;
+  var allAdsData;
   RxList userTagId = [].obs;
   RxList copydata = [].obs;
   RxMap userDetails = {}.obs;
   RxList searchArticle = [].obs;
   RxString topTags = "All".obs;
    var yourIntrestController = Get.put(YourIntrestController());
+  bool appbar = false;
 
 searchFunction(String? val) {
     searchArticle.clear();

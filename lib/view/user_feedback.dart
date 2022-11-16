@@ -109,9 +109,9 @@ class _userFeedbackState extends State<userFeedback> {
               //   child: Text("okBtnText"),
               //   onPressed: (){},
               // ),
-              FlatButton(
-                  child: Text("Ok"),
-                  onPressed: () => context.goNamed('HOMEPAGE'))
+              // FlatButton(
+              //     child: Text("Ok"),
+              //     onPressed: () => context.goNamed('HOMEPAGE'))
             ],
           )
                 ));

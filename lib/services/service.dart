@@ -12,6 +12,7 @@ import 'package:tvtalk/getxcontroller/detail_page_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page1_controller.dart';
 import 'package:tvtalk/getxcontroller/home_page_controller.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
+import 'package:tvtalk/model/ad_model.dart';
 import 'package:tvtalk/model/all_tags_model.dart';
 import 'package:tvtalk/model/get_comment_model.dart';
 import 'package:tvtalk/model/notification_post_model.dart';
@@ -93,7 +94,7 @@ Future PostSocial(String url, Map<String, String>body) async{
 Future postApi(String url, Map<String, dynamic>body) async{
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   resetToken = sharedPreferences.getString('reset_token');
-
+print("api hit");
   // EasyLoading.show(status: 'loading');
   try {
   final response = await http.post(
@@ -110,8 +111,11 @@ Future postApi(String url, Map<String, dynamic>body) async{
   RegisterResponse = json.decode(response.body);
   statuscode = response.statusCode;
   // statuscode = response.statusCode;
+  print("api response");
+  print(RegisterResponse);
   if (response.statusCode == 200) {
-
+    print("respose by api");
+    print(RegisterResponse);
   }
     return RegisterResponse;
 } on Exception catch (e) {
@@ -293,7 +297,6 @@ getNotificationPost(postId)async{
 }
 
 getPost(sendingTags)async{
-
   final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   resetToken = sharedPreferences.getString('reset_token');
   // homepage1controller.allpostdata.clear();
@@ -318,6 +321,34 @@ getPost(sendingTags)async{
        homepage1controller.copydata.value = allPost!;
       }
       // yourIntrestController.allTagsModel = allTags;
+    }else{
+      //error
+    }
+  }catch(e){
+    EasyLoading.dismiss();
+    // log('Error while getting data is $e');
+  }finally{
+    // isDataLoading(false);
+  }
+}
+
+getAllAds()async{
+  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  resetToken = sharedPreferences.getString('reset_token');
+  var ads = AdClass();
+  try{  
+    http.Response response = await http.get(Uri.parse('$baseUrl/user/get-All-Ads'),
+        headers: {'Authorization': 'Bearer $resetToken',
+        'Content-Type': 'application/json; charset=UTF-8',
+        },
+    );
+    if(response.statusCode == 200){
+      // print(jsonDecode(response.body));
+      // print(response);
+     homepage1controller.allAdsData =  AdClass.fromJson(jsonDecode(response.body));
+      print("this response is from ads api");
+      print(homepage1controller.allAdsData.markRead[0].title);
+      // homepage1controller.allAdsData = ads.markRead;
     }else{
       //error
     }

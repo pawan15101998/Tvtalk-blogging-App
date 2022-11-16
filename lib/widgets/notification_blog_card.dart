@@ -33,7 +33,8 @@ class _NotificationBlogCardState extends State<NotificationBlogCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-
+        print("tis is blog");
+        print(widget.blogDetail);
         await apiprovider.getComment(widget.indexx);
         if(signincontroller.isGuest.value == 'guest'){
           context.pushNamed('NOTIFICATIONDETAILPAGE',
@@ -44,7 +45,7 @@ class _NotificationBlogCardState extends State<NotificationBlogCard> {
           // Router.neglect(context, () {
           //   context.goNamed('SIGNINPAGE');
           // });
-        } else {
+        }else {
           context.pushNamed('NOTIFICATIONDETAILPAGE',
               extra: widget.blogDetail,
               queryParams: {

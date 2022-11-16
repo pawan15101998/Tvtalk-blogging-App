@@ -4,10 +4,11 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tvtalk/constant/color_const.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class FunAndGames extends StatefulWidget {
   const FunAndGames({Key? key}) : super(key: key);
-  
   @override
   State<FunAndGames> createState() => _FunAndGamesState();
 }
@@ -42,7 +43,10 @@ class _FunAndGamesState extends State<FunAndGames> {
                 context.pushNamed('POLES');
               }),
               const SizedBox(height: 30,),
-              funAndGames('Puzzles', "assets/images/puzzle.png",(){}),
+              funAndGames('Puzzles', "assets/images/puzzle.png",(){
+                context.pushNamed('WEBVIEW');
+                // await launchUrl(Uri.parse('https://www.jigsawplanet.com/'));
+              }),
               const SizedBox(height: 30,),
               funAndGames('Guess Who', "assets/images/quize.png",(){
                 context.pushNamed('QUIZES');

@@ -30,7 +30,7 @@ class NotificationDetailPage extends StatefulWidget {
   dynamic postData;
   Map feedindex;
   final from;
-  NotificationDetailPage({Key? key, this.postData,  required this.feedindex, this.from }) : super(key: key);
+    NotificationDetailPage({Key? key, this.postData,  required this.feedindex, this.from }) : super(key: key);
 
   @override
   State<NotificationDetailPage> createState() => _NotificationDetailPageState();

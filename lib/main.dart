@@ -1,4 +1,5 @@
 import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,13 +8,17 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:tvtalk/Authencation/google_sign_in.dart';
+import 'package:tvtalk/admob_service.dart';
 import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:tvtalk/services/helper/dependency_injuctor.dart';
+import 'package:tvtalk/services/helper/helper_notification.dart';
+import 'package:tvtalk/services/helper/helper_notification.dart';
 
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
@@ -23,29 +28,26 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   importance: Importance.high,
   playSound: true);
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 final colorconst = ColorConst();
-
+final helpernotification = HelperNotification();
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async{
   await Firebase.initializeApp();
   print("A abackground message just show up ${message.messageId}");
 }
-
-
 Future main() async{
+  // scary maze
   WidgetsFlutterBinding.ensureInitialized();
+  AdMobService.initilized();
+  helpernotification.customInit();
+  MobileAds.instance.initialize(); 
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await flutterLocalNotificationsPlugin.
   resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.
   createNotificationChannel(channel);
 
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true
-  );
-  // configLoading();
+  helpernotification.setForegroundNotificationPresentationOptions();
+
   DependencyInjuctor.initializeController();
   runApp(MyApp());
   print("easy");
@@ -86,49 +88,8 @@ class _MyAppState extends State<MyApp> {
     // TODO: implement initState
     super.initState();    
     // showNotification();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification!.android;
-      if(notification != null &&  android !=  null){
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              // channel.description,
-              color: colorconst.blueColor,
-              playSound: true,
-              icon: '@mipmap/ic_launcher'
-            )
-          )
-          );
-      }
-     });
-     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
-      print("A new noMessageOpenApp event was published");
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification!.android;
-      if(notification != null && android != null){
-        showDialog(
-          context: context, 
-          builder: (_){
-            return AlertDialog(
-              title: Text(notification.title!),
-              content: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(notification.body!)
-                  ],
-                ),
-              ),
-            );
-          }); 
-      }
-     });
+    helpernotification.onMessageOpenedApp(context);
+    helpernotification.firebaseOnMessage();
   }
  
 //  Future<void> _createDynamicLink(bool short) async{
@@ -170,35 +131,44 @@ class _MyAppState extends State<MyApp> {
 //       // Uri shortLink = await parameters.buildShortLink();
 //  }
 
-  int _counter = 0;
+// static Future _notificationDetails() async{
+//   final largeIconPath = await
+// }
 
-  void sendNotification()async{
-    setState(() {
-      _counter++;
-    });
-    flutterLocalNotificationsPlugin.show(
-      0,
-      "Testing $_counter",
-      "How are you",
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          channel.id,
-          channel.name,
-          importance: Importance.high,
-          color: colorconst.blueColor,
-          playSound:  true,
-          icon: '@mipmap/ic_launcher'
-          )
-      )
-    );
-    String? token = await FirebaseMessaging.instance.getToken();
-    print("token is hear");
-    print(token);
-  }
+  int _counter = 0;
+    final Styleinformation = const BigPictureStyleInformation(
+    FilePathAndroidBitmap("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDuE2ejpy-CjPVNdAhuIVch-8DRr20pvVwxs2pBWtl&s"),
+    largeIcon: FilePathAndroidBitmap('https://images.ctfassets.net/hrltx12pl8hq/7yQR5uJhwEkRfjwMFJ7bUK/dc52a0913e8ff8b5c276177890eb0129/offset_comp_772626-opt.jpg?fit=fill&w=800&h=300'),
+  );
+
+  // void sendNotification()async{
+  //   setState(() {
+  //     _counter++;
+  //   });
+  //   flutterLocalNotificationsPlugin.show(
+  //     0,
+  //     "Testing $_counter",
+  //     "How are you",
+  //     NotificationDetails(
+  //       android: AndroidNotificationDetails(
+  //         channel.id,
+  //         channel.name,
+  //         importance: Importance.high,
+  //         color: colorconst.blueColor,
+  //         playSound:  true,
+  //         icon: '@mipmap/ic_launcher',
+  //         styleInformation: Styleinformation
+  //         )
+  //     )
+  //   );
+  //   String? token = await FirebaseMessaging.instance.getToken();
+  //   print("token is hear");
+  //   print(token);
+  // }
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return ChangeNotifierProvider(
       create: (context)=> GoogleSignInProvider(),
       child: MaterialApp.router(
@@ -209,7 +179,8 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo',
         theme: ThemeData(
           fontFamily: 'Poppins',
-          primarySwatch: colorconst.blueColor,
+          primarySwatch: Colors.blue,
+          // materialTapTargetSize: 
         ),
         builder:EasyLoading.init() ,
         // home: const MyHomePage(title: 'Flutter Demo Home Page'),

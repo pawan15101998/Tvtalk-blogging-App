@@ -5,9 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:taboola_sdk/publisher_info.dart';
+import 'package:taboola_sdk/standard/taboola_standard.dart';
+import 'package:taboola_sdk/standard/taboola_standard_builder.dart';
+import 'package:taboola_sdk/standard/taboola_standard_listener.dart';
+import 'package:taboola_sdk/taboola.dart';
+import 'package:tvtalk/admob_service.dart';
 import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/constant/front_size.dart';
 import 'package:tvtalk/getxcontroller/detail_page_controller.dart';
@@ -58,35 +65,125 @@ class _ArticleDetailPageState extends State<ArticleDetailPage> {
   // final replayController = TextEditingController();
   var detailpageController = Get.find<DetailPageController>();
   final getallcommment = GetComment();
-  final textSize = AdaptiveTextSize();
+  final textSize =  AdaptiveTextSize();
   final getcomment = GetComment();
   PageController? pageController;
   int? pageindex;
 
-  
+final adMobService  = AdMobService();
 final signincontroller = Get.find<SignInController>();
   @override
   void initState(){
     // TODO: implement initState
     super.initState();
+    _createInterstitialAd();
+    Taboola.setLogsEnabled(true);
     apiprovider.getComment(widget.postData.id);
     int indexint = int.parse(widget.feedindex['index']);
     pageController = PageController(initialPage: indexint);
   }
+
+  void taboolaDidShow(String placement) {
+  print("taboolaDidShow");
+}
+
+void taboolaDidResize(String placement, double height) {
+  print("publisher did get height $height");
+}
+
+void taboolaDidFailToLoad(String placement, String error) {
+  print("publisher placement:$placement did fail with an error:$error");
+}
+
+bool taboolaDidClickOnItem(
+    String placement, String itemId, String clickUrl, bool organic) {
+  print(
+      "publisher did click on item: $itemId with clickUrl: $clickUrl in placement: $placement of organic: $organic");
+  if (organic) {
+    //_showToast("Publisher opted to open click but didn't actually open it.");
+    print("organic");
+  } else {
+    // _showToast("Publisher opted to open clicks but the item is Sponsored, SDK retains control.");
+    print("SC");
+  }
+  return false;
+}
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _interstitialAd?.dispose();
+  }
+  InterstitialAd? _interstitialAd;
+  int _interstitialLoadAttempt =0;
   final homepage1controller = Get.find<HomePage1Controller>();
   final colorconst = ColorConst();
 
-  Future<bool>willpop()async{
+void _createInterstitialAd(){
+  InterstitialAd.load(
+    adUnitId: adMobService.interstitialADUnitId, 
+    request: AdRequest(), 
+    adLoadCallback: InterstitialAdLoadCallback(
+      onAdLoaded: (InterstitialAd ad){
+        _interstitialAd =ad;
+        _interstitialLoadAttempt = 0;
+      }, 
+      onAdFailedToLoad: (LoadAdError error) {
+        _interstitialLoadAttempt += 1;
+          _interstitialAd = null;
+          if(_interstitialLoadAttempt>=maxfailLoadAttempt){
+            _createInterstitialAd();
+      }
+  }));
+}
+
+void _showInterstitialAd(){
+  if(_interstitialAd!= null){
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (InterstitialAd ad){
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+  }
+}
+
+Future<bool>willpop()async{
 context.goNamed("HOMEPAGE");
 return Future.value(false);
   }
-
   @override
   Widget build(BuildContext context) {
+    Taboola.init(PublisherInfo("sdk-tester-rnd"));
+
+    TaboolaStandardBuilder taboolaStandardBuilder =
+        Taboola.getTaboolaStandardBuilder("http://www.example.com", "article");
+
+    TaboolaStandardListener taboolaStandardListener = TaboolaStandardListener(
+        taboolaDidResize,
+        taboolaDidShow,
+        taboolaDidFailToLoad,
+        taboolaDidClickOnItem);
+
+    TaboolaStandard taboolaStandard = taboolaStandardBuilder.build(
+        "Feed without video", "thumbs-feed-01", true, taboolaStandardListener);
+        
+    TaboolaStandard taboolaStandardWidget = taboolaStandardBuilder.build(
+        "mid article widget", "alternating-1x2-widget", true, taboolaStandardListener);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: PageView.builder(
         onPageChanged: (value)async {
+          if((value + 1) % 3 == 0){
+            _showInterstitialAd(); 
+          }
          await apiprovider.getComment(homepage1controller.copydata[value].id);
          await apiprovider.postApi('/post/mark-read', {'postId': "${homepage1controller.copydata[value].id}"});
          homepage1controller.allpostdata[value].read = true;
@@ -125,10 +222,10 @@ return Future.value(false);
                           collapseMode: CollapseMode.parallax,
                           background: Container(
                             decoration: BoxDecoration(
-                                image: DecorationImage(
-                      image: homepage1controller.allpostdata[pageindex].featuredImageSrc != null?
-                      widget.feedindex['from'] == 'SavedArticle'?
-                   NetworkImage(homePageController.savedArticles[pageindex].featuredImageSrc, scale: 0.5):
+                image: DecorationImage(
+                image: homepage1controller.allpostdata[pageindex].featuredImageSrc != null?
+                widget.feedindex['from'] == 'SavedArticle'?
+                NetworkImage(homePageController.savedArticles[pageindex].featuredImageSrc, scale: 0.5):
                 widget.feedindex['from'] == 'SearchArticle'?
                 NetworkImage(homepage1controller.searchArticle[pageindex].featuredImageSrc, scale: 0.5):
                 NetworkImage(homepage1controller.allpostdata[pageindex].featuredImageSrc, scale: 0.5):
@@ -559,7 +656,6 @@ return Future.value(false);
                                               },
                                               onAnchorTap:
                                                   (url, context, attributes, element)async {
-                                        
                                                      if(await canLaunchUrl(Uri.parse(url!))){
                                                       await  launchUrl(Uri.parse(url));
                                                     }else{
@@ -881,26 +977,7 @@ return Future.value(false);
                                       ),
                                     ),
                                     const Divider(),
-                                    Advertisment(12),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Advertisment(12),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Advertisment(12),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Advertisment(12),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Advertisment(12),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
+                                     taboolaStandard,
                                   ],
                                 ),
                               );

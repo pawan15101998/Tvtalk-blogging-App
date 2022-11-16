@@ -30,6 +30,7 @@ import 'package:tvtalk/view/tag_search_page.dart';
 import 'package:tvtalk/view/term_&_condition.dart';
 import 'package:tvtalk/view/trending_article_viewall_page.dart';
 import 'package:tvtalk/view/user_feedback.dart';
+import 'package:tvtalk/view/web_view_page.dart';
 
 class CustomRouter{
   GoRouter goRouter = GoRouter(
@@ -174,6 +175,11 @@ class CustomRouter{
         name: 'SETTING',
         path: settingpage,
         builder: (context, state) =>const SettingPage()
+      ),
+      GoRoute(
+        name: 'WEBVIEW',
+        path: webviewpage,
+        builder: (context, state) =>const WebViewPage()
       ),
     ]
     );

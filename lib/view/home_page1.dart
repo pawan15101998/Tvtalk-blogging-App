@@ -1,21 +1,33 @@
+import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:taboola_sdk/standard/taboola_standard.dart';
+import 'package:taboola_sdk/standard/taboola_standard_listener.dart';
+import 'package:taboola_sdk/taboola.dart';
+import 'package:tvtalk/admob_service.dart';
 import 'package:tvtalk/constant/color_const.dart';
 import 'package:tvtalk/getxcontroller/your_intrest_controller.dart';
+import 'package:tvtalk/model/ad_model.dart';
 import 'package:tvtalk/services/service.dart';
 import 'package:tvtalk/theme/text_style.dart';
 import 'package:tvtalk/view/feature_atricle_viewall_page.dart';
 import 'package:tvtalk/view/feeds_detail_page.dart';
+import 'package:tvtalk/widgets/Ad_blog_card.dart';
 // import 'package:tvtalk/view/profile_page.dart';
 import 'package:tvtalk/widgets/blog_card.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../getxcontroller/home_page1_controller.dart';
 import '../getxcontroller/signin_controller.dart';
+
+
+const maxfailLoadAttempt = 3;
 
 class HomePage1 extends StatefulWidget {
   const HomePage1({
@@ -34,8 +46,16 @@ var yourIntrestController = Get.find<YourIntrestController>();
 final signincontroller = Get.find<SignInController>();
 List listModel = [];
 final colorconst = ColorConst();
+ScrollController? scrollController;
+final adMobService  = AdMobService();
+final adModel = AdClass();
 
-
+int _getlistViewItemIndex(int index){
+  if(index>= _inlineAdIndex){
+    return index-1;
+  }
+  return index;
+}
 refreshWidget(){
     setState(() {});
 }
@@ -44,6 +64,21 @@ refreshWidget(){
   void initState() {
     // TODO: implement initState
     super.initState();
+    _createBottomBannerAd();
+    _createInlineBannerAd();
+    _createInterstitialAd();
+
+    Taboola.setLogsEnabled(true);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _bottomBannerAd.dispose();
+    _inlineBannerAd.dispose();
+    _interstitialAd?.dispose();
+  
   }
 
   @override
@@ -52,27 +87,153 @@ refreshWidget(){
     super.didChangeDependencies();
   }
 
+  void taboolaDidShow(String placement) {
+  print("taboolaDidShow");
+}
+
+void taboolaDidResize(String placement, double height) {
+  print("publisher did get height $height");
+}
+
+void taboolaDidFailToLoad(String placement, String error) {
+  print("publisher placement:$placement did fail with an error:$error");
+}
+
+bool taboolaDidClickOnItem(
+    String placement, String itemId, String clickUrl, bool organic) {
+  print(
+      "publisher did click on item: $itemId with clickUrl: $clickUrl in placement: $placement of organic: $organic");
+  if (organic) {
+    //_showToast("Publisher opted to open click but didn't actually open it.");
+    print("organic");
+  } else {
+    // _showToast("Publisher opted to open clicks but the item is Sponsored, SDK retains control.");
+    print("SC");
+  }
+  return false;
+}
+
+  Widget? displayedScreen;
+  late BannerAd _bottomBannerAd;
+  bool _isbottomBannnerAdLoaded = false;
+  final _inlineAdIndex = 3;
+  late BannerAd _inlineBannerAd;
+  bool _isInlineBannerAdLoaded = false;
+  InterstitialAd? _interstitialAd;
+  int _interstitialLoadAttempt =0;
+
+   _createBottomBannerAd(){
+    _bottomBannerAd = BannerAd(
+      adUnitId: adMobService.bannerAdUnitID,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_){
+          setState(() {
+            _isbottomBannnerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+         ad.dispose(); 
+        }
+      ),
+      size: AdSize.banner,
+    );
+    _bottomBannerAd.load();
+    // return _bottomBannerAd;
+  }
+
+   _createInlineBannerAd(){
+    _inlineBannerAd = BannerAd(
+      size: AdSize.banner, 
+      adUnitId: adMobService.bannerAdUnitID,
+      request: AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (_){
+          setState((){
+            _isInlineBannerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+         ad.dispose(); 
+        }
+      )
+      );
+      _inlineBannerAd.load();
+      return _inlineBannerAd;
+  }
+bool appbar = false;
+void _createInterstitialAd(){
+  InterstitialAd.load(
+    adUnitId: adMobService.interstitialADUnitId, 
+    request: AdRequest(), 
+    adLoadCallback: InterstitialAdLoadCallback(
+      onAdLoaded: (InterstitialAd ad){
+        _interstitialAd =ad;
+        _interstitialLoadAttempt = 0;
+      }, 
+      onAdFailedToLoad: (LoadAdError error) {
+        _interstitialLoadAttempt += 1;
+          _interstitialAd = null;
+          if(_interstitialLoadAttempt>=maxfailLoadAttempt){
+            _createInterstitialAd();
+            }
+      }));
+}
+
+
+void _showInterstitialAd(){
+  if(_interstitialAd!= null){
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (InterstitialAd ad){
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();  
+  }
+}
+
   @override
   Widget build(BuildContext context) {
+    Taboola.init(PublisherInfo("sdk-tester-rnd"));
+
+    TaboolaStandardBuilder taboolaStandardBuilder =
+        Taboola.getTaboolaStandardBuilder("http://www.example.com", "article");
+
+    TaboolaStandardListener taboolaStandardListener = TaboolaStandardListener(
+        taboolaDidResize,
+        taboolaDidShow,
+        taboolaDidFailToLoad,
+        taboolaDidClickOnItem);
+
+    TaboolaStandard taboolaStandard = taboolaStandardBuilder.build(
+        "Feed without video", "thumbs-feed-01", true, taboolaStandardListener);
+        
+    TaboolaStandard taboolaStandardWidget = taboolaStandardBuilder.build(
+        "mid article widget", "alternating-1x2-widget", true, taboolaStandardListener);
+
     return WillPopScope(
       onWillPop: () async{
            showDialog(context: context, builder: (_)=>AlertDialog(
-                              title:const Text("Do you Want to Rate this App"),
-                              actions: [
-                                TextButton(onPressed: (){
-                                 SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-                                }, 
-                                child:const Text("No")),
-                                TextButton(onPressed: (){
-                                launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.hackerkernel.scoreyourrun"));
-                                Navigator.pop(context);
-                                }, 
-                                child:const Text("Yes"))
-                              ],
-                            ));
-                            return false;
-      },
-      child: Scaffold(
+            title:const Text("Do you Want to Rate this App"),
+            actions: [
+              TextButton(onPressed: (){
+               SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+              }, 
+              child:const Text("No")),
+              TextButton(onPressed: (){
+              launchUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.hackerkernel.scoreyourrun"));
+              Navigator.pop(context);
+              }, 
+              child:const Text("Yes"))
+            ],
+         ));
+         return false;        },     
+        child: Scaffold(
           body: RefreshIndicator(
             onRefresh: ()async{
               homePage1Controller.allpostdata = [].obs;
@@ -98,7 +259,6 @@ refreshWidget(){
                           bool isread =  homePageController.allPostId.contains(homePageController.readArticleId[index]);
                             return BlogCard(
                               // isread: isread,
-                              
                               indexx: index,
                               context: context,
                               blogDetail: homePage1Controller.searchArticle[index],
@@ -157,16 +317,15 @@ refreshWidget(){
                                       // return
                                       InkWell(
                                           onTap: () async {
+                                            // _showInterstitialAd();
                                             homePage1Controller.allpostdata =
                                                 [].obs;
                                             homePage1Controller.copydata = [].obs;
                                             apiprovider.allPost = [];
-                                
                                                 homePage1Controller.topTags.value =
                                                 "All";
                                             await apiprovider.getPost(
                                                 homePage1Controller.userTags.value);
-                                            
                                             setState(() {});
                                           },
                                           child: upperList(
@@ -304,7 +463,7 @@ refreshWidget(){
                                               mainAxisAlignment:
                                                   MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Text(
+                                              const  Text(
                                                   "Trending Articles",
                                                   style: TextStyle(fontSize: 14),
                                                 ),
@@ -326,28 +485,111 @@ refreshWidget(){
                                           Obx(() {
                                             return ListView.builder(
                                               shrinkWrap: true,
+                                              controller: scrollController,
+                                              addAutomaticKeepAlives: true,
                                               physics: const ScrollPhysics(),
                                               // scrollDirection: Axis.vertical,
-                                              itemCount: homePage1Controller.allpostdata.length,
+                                              itemCount: homePage1Controller.allpostdata.length +(_isInlineBannerAdLoaded ? 1:0),
                                               itemBuilder: (context, index) {
                                                 // allpostdata = [].obs;
                                                 // homePage1Controller.searchArticle = [].obs;
                                                 // homePage1Controller.allpostdata = [].obs;
                                                 // homePage1Controller.copydata = [].obs;
-                                                      
-                                                bool isread = false;
-                                                if(homePageController.readArticleId.length != 0) {
-                                                // isread = homePageController.allPostId.contains(homePageController.readArticleId[index]);
-                                                }
-                                              
-                                                return Obx(() {
-                                                    return BlogCard(
+                                                 var rng = Random();
+                                                 var random = rng.nextInt(10);
+                                                 print("${homePage1Controller.allAdsData.markRead[1].adType} this is congtent image");
+                                                return
+                                                (_isInlineBannerAdLoaded &&  ((index + 1) % 2 == 0) )? 
+                                                // SizedBox()
+                                                // _getlistViewItemIndex(index)
+                                                Column(
+                                                  children: [
+                                                  if(homePage1Controller.allAdsData.markRead[index].isShow == true)
+                                                  AdBlogCard(
+                                                  index: index,
+                                                  context: context,
+                                                  title: homePage1Controller.allAdsData.markRead[index].title,
+                                                  Content: homePage1Controller.allAdsData.markRead[index].content,
+                                                  link: homePage1Controller.allAdsData.markRead[index].link,
+                                                  adType: homePage1Controller.allAdsData.markRead[index].adType
+                                                ),
+                                                BlogCard(
                                                       // isread: isread,
                                                       indexx: index,
                                                       context: context,
                                                       blogDetail: homePage1Controller
-                                                          .allpostdata[index],
+                                                      .allpostdata[_getlistViewItemIndex(index)],
+                                                    )
+                                                  ],
+                                                ):
+    //                                               (random > 0 && random <5 && homePage1Controller.allAdsData.markRead[2].isShow == true)?
+    //                                               AdBlogCard(
+    //                                               index: index,
+    //                                               context: context,
+    //                                               title: homePage1Controller.allAdsData.markRead[2].title,
+    //                                               Content: homePage1Controller.allAdsData.markRead[2].content,
+    //                                               link: homePage1Controller.allAdsData.markRead[2].link,
+    //                                               adType: homePage1Controller.allAdsData.markRead[2].adType
+    //                                             ): (homePage1Controller.allAdsData.markRead[0].isShow == true)?
+    //                                             AdBlogCard(
+    //                                               index: index,
+    //                                               context: context,
+    //                                               title: homePage1Controller.allAdsData.markRead[2].title,
+    //                                               Content: homePage1Controller.allAdsData.markRead[2].content,
+    //                                               link: homePage1Controller.allAdsData.markRead[2].link,
+    //                                               adType: homePage1Controller.allAdsData.markRead[2].adType
+    //                                             ): SizedBox()
+                                                
+    //                                             //  Container(
+    //                                             //  height: 100.0,
+    //                                             //  alignment: Alignment.center,
+    //                                             //  child: AdWidget(ad:  adMobService.creatBannerAd()..load()),
+    //                                             //     )                                              
+    //                                             // random > 0 && random <5 ?
+    //                                             // AdBlogCard(
+    //                                             //   index: index,
+    //                                             //   context: context,
+    //                                             //   title: homePage1Controller.allAdsData.markRead[0].title,
+    //                                             //   Content: homePage1Controller.allAdsData.markRead[0].content,
+    //                                             //   link: homePage1Controller.allAdsData.markRead[0].link
+    //                                             // ): 
+    //                                             // StatefulBuilder(
+    //   // builder: (context, setState) => 
+    //   // Container(
+    //   //   child: AdWidget(ad:  _inlineBannerAd),
+    //   //   height: 100.0,
+    //   //   alignment: Alignment.center,
+    //   // )
+    // // )
+    //                                             // Container(
+    //                                             //       height: 50,
+    //                                             //       child: AdWidget(
+    //                                             //         key: UniqueKey(),
+    //                                             //         ad: _inlineBannerAd,
+    //                                             //       ),
+    //                                             //     )
+    //                                                 : 
+                                                 Obx((){
+                                                    return
+                                                     BlogCard(
+                                                      // isread: isread,
+                                                      indexx: index,
+                                                      context: context,
+                                                      blogDetail: homePage1Controller
+                                                          .allpostdata[_getlistViewItemIndex(index)],
                                                     );
+                                                  // else{
+                                                  //   final Container adContainer =
+                                                  // Container(
+                                                  //     alignment: Alignment.center,
+                                                  //     child: AdWidget(
+                                                  //       key: UniqueKey(),
+                                                  //       ad: itemList[index] as BannerAd,
+                                                  //     ),
+                                                  //   );
+                                                    // return Container();
+                                                  // }
+                                                    
                                                   }
                                                 );
                                               },
@@ -363,21 +605,25 @@ refreshWidget(){
                                               MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
-                                          children: [
+                                          children:const [
                                             Center(
                                               child: Text("No Data Found"),
                                             ),
+                                            
                                           ],
-                                        ),
-                                      ),
-                              ],
-                            );
+                              ),
+                          ),
+                          taboolaStandard
+                        ],
+                    );
                 }),
+                
               ],
             ),
                 ),
               ),
-          )),
+          ),
+          ),
     );
   }
 
@@ -411,7 +657,6 @@ refreshWidget(){
          setState(() {
            
          });
-
         },
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 12),

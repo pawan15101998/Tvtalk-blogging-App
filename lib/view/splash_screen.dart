@@ -35,7 +35,8 @@ List tagdata = [];
   void initState() {
     // getcallapi();
     // TODO: implement initState
-    getValidation().whenComplete(()async{
+   getValidation().whenComplete(()async{
+     await apiProvider.getAllAds();
      await signincontroller.getuserdata();
      await apiProvider.get();
     final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -46,7 +47,7 @@ List tagdata = [];
      await apiProvider.getprofile();
      print("This isnuser id");
     //  print(userid);
-     await apiProvider.postApi("/user/show-notification", {
+     await apiProvider.postApi("/user/show-notification",{
      "userID": userid
       });
       homePageController.notificationData.value =  apiProvider.RegisterResponse;
@@ -95,7 +96,6 @@ List tagdata = [];
           yourIntrestController.allTagsModel[i].activetag = false;
         }
        }
-       
     }
       Timer(const Duration(microseconds: 0),()=> finalEmail == null ? 
       Router.neglect(context, () {context.goNamed('SIGNINPAGE');}):

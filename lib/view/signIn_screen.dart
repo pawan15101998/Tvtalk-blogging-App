@@ -94,7 +94,7 @@ class _SignInPageState extends State<SignInPage> {
                                 style: TextStyle(
                                     color: colorconst.blackColor,
                                     fontSize: textSize.getadaptiveTextSize(
-                                        context, 12)),
+                                    context, 12)),
                               ),
                             ),
                           ),
@@ -203,9 +203,12 @@ class _SignInPageState extends State<SignInPage> {
                   color: colorconst.whiteColor,
                   textColor: colorconst.blackColor,
                   onPress: () async {
+                    print("starting");
                     final provider = Provider.of<GoogleSignInProvider>(context,
                         listen: false);
                     await provider.googleLogin();
+                    print("after sign in");
+                    print(provider.user);
                     String birthday = await provider.getBirthday();
                     // await provider.getGender();
                     // await provider.getGender();           
@@ -222,7 +225,8 @@ class _SignInPageState extends State<SignInPage> {
                         "gender": signincontroller.googleUserGender == 'male'
                             ? '0'
                             : '1'
-                      });
+                      }); 
+                      print("this is google signin");
                       final SharedPreferences sharedPreferences =
                           await SharedPreferences.getInstance();
                       sharedPreferences.setString('email', provider.user.email);
@@ -254,8 +258,7 @@ class _SignInPageState extends State<SignInPage> {
                     }else{
                   yourIntrestController.allTagsModel[i].activetag = false;
                  }
-           }
-                      
+           }      
                     }
                   }),
               SizedBox(

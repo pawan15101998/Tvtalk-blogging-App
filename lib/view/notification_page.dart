@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -20,6 +22,13 @@ class _notificationPageState extends State<notificationPage> {
 var fontSize = const AdaptiveTextSize();
 final homePageController = Get.find<HomePageController>();
 final colorconst = ColorConst();
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -56,12 +65,11 @@ final colorconst = ColorConst();
                 physics:const ScrollPhysics(),
                 itemCount: homePageController.notificationArticle.length,
                 itemBuilder:(context, index) {
-                 
-                  // return Text("data");
                    return  NotificationBlogCard(
                       indexx: index,
                       context: context,
-                      blogDetail: homePageController.notificationArticle[index]
+                      blogDetail: homePageController.notificationArticle[index],
+                      
                     );
                   },
                   )

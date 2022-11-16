@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -137,9 +136,19 @@ class HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+  bool appbar = false;
+  bool firstclickNotific = true;
+  bool firstclickprofile = true;
+  bool savearticleclick = true;
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
+      child:  Scaffold(
         resizeToAvoidBottomInset: false,
         extendBody: true,
         key: scaffoldKey,
@@ -197,18 +206,23 @@ class HomePageState extends State<HomePage> {
                         onPressed: () async{
                           final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                           String? userid = sharedPreferences.getString('userId');
-                          await apiProvider.postApi("/user/show-notification", {
+                          List notification =  await apiProvider.postApi("/user/show-notification", {
                             "userID": userid
                           });
                         homePageController.notificationData.value =  apiProvider.RegisterResponse;
                         var postid;
+                        
+                        if(firstclickNotific){
+                          firstclickNotific = false;
+                          context.pushNamed('NOTIFICATIONLIST');
+                        }else{
+                          firstclickNotific = true;
+                        }
                         // for(int i=1; i<=homePageController.notificationData.value[0].length; i++){
                         //  List postData = jsonDecode(homePageController.notificationData.value[i]['jsonData']);
                         // // postid =  await apiProvider.postApi('/post/mark-read', {'postId': "${jsonDecode(homePageController.notificationData[i]['jsonData'])[0]['postId'][0]}"});
                         // print(postData);
                         // }
-
-                        context.pushNamed('NOTIFICATIONLIST');
                         },
                         icon: Obx(() {
                             return Stack(
@@ -392,7 +406,12 @@ class HomePageState extends State<HomePage> {
                   // if(sharedPreferences.getString('birthday') != null){
                   // homePageController.birthday.value = sharedPreferences.getString('birthday')!;
                   // }
+                  if(firstclickprofile){
+                    firstclickprofile = false;
                   context.pushNamed("PROFILEPAGE");
+                  }else{
+                    firstclickprofile = true;
+                  }
           
                 },
                 child: DrawerHeader(
@@ -455,7 +474,12 @@ class HomePageState extends State<HomePage> {
                         }
                       articleId = articleIdList.toString().replaceAll('[', '').replaceAll(']', '');
                       await apiProvider.getSavedPost(articleId);
+                      if(savearticleclick){
+                      savearticleclick = false;
                       context.pushNamed('MYSAVEDARTICLES');
+                      }else{
+                        savearticleclick = true;
+                      }
                     }),
                     const SizedBox(
                       height: 10,
@@ -469,8 +493,7 @@ class HomePageState extends State<HomePage> {
                     DrawerItems(
                         "assets/icons/icon_puzzle.png", "Jigsaw Puzzle", () {}),
                     const SizedBox(
-                      height: 10,
-                      
+                      height: 10,  
                     ),
                     DrawerItems("assets/icons/icon_profile.png", "My Profile",
                         () async{
@@ -522,8 +545,19 @@ class HomePageState extends State<HomePage> {
                       height: 10,
                     ),
                     DrawerItems("assets/icons/setting.png", "SETTING",
-                        () {
-                      context.pushNamed('SETTING');
+                        ()async{
+                           // getuserDetails()async{
+                           await apiProvider.getprofile();
+                          print("this is user details");
+                          print(homePageController.userDetails['data']['fcm_token']);
+                          if(homePageController.userDetails['data']['fcm_token'] != null){
+                            homePageController.notificationToggle = true;
+                          }else{
+                            homePageController.notificationToggle = false;
+                          }
+                          print(homePageController.notificationToggle);
+                        // }
+                         context.pushNamed('SETTING');
                     }),
                     const SizedBox(
                       height: 10,
@@ -551,7 +585,10 @@ class HomePageState extends State<HomePage> {
                       sharedPreferences.remove('image');
                       sharedPreferences.remove('reset_token');
                       sharedPreferences.remove('userId');
-                      // await apiProvider.removeFcmToken("/user/delete-fcm");
+                      await apiProvider.postApi(
+                      "/user/delete-fcm",
+                       {}
+                      );
                       final provider = Provider.of<GoogleSignInProvider>(context,
                           listen: false);
                       context.goNamed("SIGNINPAGE");
@@ -568,7 +605,8 @@ class HomePageState extends State<HomePage> {
           ),
           // backgroundColor: colorconst.redColor,
         ),
-        body: homePage1Controller.allpostdata == [] ?Text("No Feed Found")  :Obx(() {
+        body: 
+        homePage1Controller.allpostdata == [] ?Text("No Feed Found")  :Obx(() {
           return pages[homePageController.bootomNav.value];
         }),
         // bottomNavigationBar: Obx(() {
